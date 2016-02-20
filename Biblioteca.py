@@ -32,6 +32,73 @@ def get_id_from_text(comboboxText, text):
         else: posicion = posicion +1
     return 0
 
+class MenuModify(Gtk.Window):
+    def __init__(self, mi_biblioteca):
+        Gtk.Window.__init__(self, title="Modificar biblioteca "+mi_biblioteca)
+        self.mi_biblioteca = mi_biblioteca
+        self.musica = []
+        self.load_biblioteca()
+        self.set_border_width(20)
+        self.grid = Gtk.Grid()
+        self.grid.set_column_homogeneous(True)
+        self.grid.set_row_homogeneous(True)
+        self.add(self.grid)
+
+        self.canciones_lista = Gtk.ListStore(str)
+        for cancion in self.musica:
+            self.canciones_lista.append([cancion])
+
+         #Creating the filter, feeding it with the liststore model
+        self.language_filter = self.canciones_lista.filter_new()
+        #setting the filter function, note that we're not using the
+        self.language_filter.set_visible_func(self.language_filter_func)
+
+        self.treeview = Gtk.TreeView.new_with_model(self.language_filter)
+        for i, column_title in enumerate(["Cancion"]):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+            self.treeview.append_column(column)
+
+        self.buttons = list()
+        for prog_language in ["boton"]:
+            button = Gtk.Button(prog_language)
+            self.buttons.append(button)
+            button.connect("clicked", self.on_selection_button_clicked)
+
+        self.scrollable_treelist = Gtk.ScrolledWindow()
+        self.scrollable_treelist.set_vexpand(True)
+        self.grid.attach(self.scrollable_treelist, 0, 0, 8, 10)
+        self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 1, 1)
+        #for i, button in enumerate(self.buttons[1:]):
+        #    self.grid.attach_next_to(button, self.buttons[i], Gtk.PositionType.RIGHT, 1, 1)
+        self.scrollable_treelist.add(self.treeview)
+
+
+        self.show_all()
+
+    def on_selection_button_clicked(self):
+        a = 1
+
+    def language_filter_func(self, model, iter, data):
+        return True
+
+    def load_biblioteca(self):
+        numero = 1
+        lib_directory = "./bibliotecas/"
+        fichero = open(lib_directory+self.mi_biblioteca+".lib")
+        for line in fichero:
+            if (line.split(":")[0] == 'nombre'):
+                self.nombre = (line.split(":")[1])
+
+            elif (line.split(":")[0] == "items"):
+                items =(line.split(":")[1])
+
+            elif (line.split(":")[0] == 'cancion'):
+                self.musica.append (line.split(":")[1][:-1])
+                numero = numero +1
+
+
+
 class MenuAdd(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Biblioteca")
@@ -162,9 +229,8 @@ class Biblioteca(Gtk.Window):
             os.remove(self.lib_dir+nombre+".lib")
             self.reload_list()
 
-
-    def on_btn_mdf_bilbioteca_clicked(self):
-        a = 0
+    def on_btn_mdf_bilbioteca_clicked(self, widget):
+        MenuModify(str(self.lst_bibliotecas.get_active_text()))
 
     def error_rm_params(self, num):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
