@@ -8,9 +8,9 @@ import Biblioteca
 from Alarma import *
 from Reproductor import *
 from Reloj import *
+from Opciones import *
 
 ###############################################################################
-
 
 class Principal(Gtk.Window):
     def __init__(self):
@@ -88,6 +88,9 @@ class Principal(Gtk.Window):
         btn_alarmas = Gtk.Button(label="Alarmas")
         btn_alarmas.connect("clicked", self.on_btn_alarmas_clicked)
 
+        btn_opciones = Gtk.Button(label="Opciones")
+        btn_opciones.connect("clicked", self.on_btn_opciones_clicked)
+
         btn_play = Gtk.Button()
         btn_play.connect("clicked", self.on_btn_play_clicked)
         pb_play = GdkPixbuf.Pixbuf.new_from_file("./Icons/play2.png")
@@ -133,6 +136,7 @@ class Principal(Gtk.Window):
         table.attach(self.lblhora, 0, 8 ,1, 5)
         table.attach(btn_alarmas, 10, 15, 2, 3)
         table.attach(btn_biblioteca, 10, 15, 4, 5)
+        table.attach(btn_opciones, 10, 15, 6, 7)
         table.attach(self.lst_biblioteca, 0,8, 5,6)
         table.attach(btn_play, 0, 2, 6, 9)
         table.attach(btn_pause, 2, 4, 6, 9)
@@ -146,10 +150,10 @@ class Principal(Gtk.Window):
 
         self.biblioteca = Biblioteca.Biblioteca()
         self.biblioteca.show_all()
-
-
         # self.reproductor.set_biblioteca(self.musica)
 
+    def on_btn_opciones_clicked(self, widget):
+        self.opciones = Opciones()
 
     def on_lst_biblioteca_changed(self, widget):
         lib_file = str(self.lst_biblioteca.get_active_text()) + ".lib"
