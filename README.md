@@ -32,5 +32,14 @@ https://youtu.be/nYv1LNTW3rA
 	relay.
 
 
+# Nota Legal
+El AUTOR no garantiza la fiabilidad del programa ni del sistema, ni se hacen responsables de cualquier 
+tipo de daños que pudieran ser ocasionados por lo que la utilización de este programa por parte del 
+Usuario se lleva a cabo por su propia cuenta y riesgo.
+
+La manipulación de ciertos componentes puede dar lugar a la perdida de garantía de estos. La Manipulación 
+de estos componentes por parte del Usuario se lleva a cabo por su propia cuenta y riesgo.
+
+
 # Creditos
 2016 David Pozos <dpozosc@gmail.com>
