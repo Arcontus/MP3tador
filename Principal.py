@@ -17,6 +17,7 @@ class Principal(Gtk.Window):
         self.lib_dir = "./bibliotecas/"
         mylst = Biblioteca.ObjLstBiblioteca()
         load_alarmas()
+        cargar_parametros()
         self.ultimo_minuto_calculado = -1;
         self.lst_biblioteca = mylst.get_lst_biblioteca()
 
@@ -153,7 +154,7 @@ class Principal(Gtk.Window):
         # self.reproductor.set_biblioteca(self.musica)
 
     def on_btn_opciones_clicked(self, widget):
-        self.opciones = Opciones()
+        self.menu_opciones = MenuOpciones()
 
     def on_lst_biblioteca_changed(self, widget):
         lib_file = str(self.lst_biblioteca.get_active_text()) + ".lib"
