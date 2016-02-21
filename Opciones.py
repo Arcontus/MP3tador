@@ -1,8 +1,13 @@
 import os.path
+import platform
+import re
+
+
 try:
     import RPi.GPIO as GPIO
 except RuntimeError:
     print("Error importing RPi.GPIO!")
+    print("It is correct if it isn't run on a Raspberry pi.")
     print("This is probably because you need superuser privileges.")
     print("You can achieve this by using 'sudo' to run your script")
 
@@ -15,20 +20,64 @@ from gi.repository import Gtk, Gio, GObject, GdkPixbuf
 
 power_speakers = 0
 power_speakers_GPIO = 12
+my_platform = None
+
+def platform_detect():
+    """Detect if running on the Raspberry Pi or Beaglebone Black and return the
+    platform type.  Will return RASPBERRY_PI, BEAGLEBONE_BLACK, or UNKNOWN."""
+    # Handle Raspberry Pi
+    pi = pi_version()
+    if pi is not None:
+        return "RASPBERRY_PI "+str(pi)
+    else:
+        return "OTHER"
+
+def pi_version():
+    """Detect the version of the Raspberry Pi.  Returns either 1, 2 or
+    None depending on if it's a Raspberry Pi 1 (model A, B, A+, B+),
+    Raspberry Pi 2 (model B+), or not a Raspberry Pi.
+    """
+    # Check /proc/cpuinfo for the Hardware field value.
+    # 2708 is pi 1
+    # 2709 is pi 2
+    # Anything else is not a pi.
+    with open('/proc/cpuinfo', 'r') as infile:
+        cpuinfo = infile.read()
+    # Match a line like 'Hardware   : BCM2709'
+    match = re.search('^Hardware\s+:\s+(\w+)$', cpuinfo,
+                      flags=re.MULTILINE | re.IGNORECASE)
+    if not match:
+        # Couldn't find the hardware, assume it isn't a pi.
+        return None
+    if match.group(1) == 'BCM2708':
+        # Pi 1
+        return 1
+    elif match.group(1) == 'BCM2709':
+        # Pi 2
+        return 2
+    else:
+        # Something else, not a pi.
+        return None
 
 def cargar_parametros():
+    global my_platform
     global power_speakers
     global power_speakers_GPIO
-    if (os.path.isfile("opciones.txt") == True):
-        fichero = open("opciones.txt", "r")
-        for line in fichero:
-            if (line.split(":")[0] == 'power_speakers'):
-                if ((line.split(":")[1]) == "True\n"):
-                    power_speakers = True
-                else:
-                    power_speakers = False
-            elif (line.split(":")[0] == "power_speakers_GPIO"):
-                power_speakers_GPIO = int(line.split(":")[1])
+    my_platform = platform_detect()
+    print(my_platform)
+    if (my_platform != "OTHER"):
+        if (os.path.isfile("opciones.txt") == True):
+            fichero = open("opciones.txt", "r")
+            for line in fichero:
+                if (line.split(":")[0] == 'power_speakers'):
+                    if ((line.split(":")[1]) == "True\n"):
+                        power_speakers = True
+                    else:
+                        power_speakers = False
+                elif (line.split(":")[0] == "power_speakers_GPIO"):
+                    power_speakers_GPIO = int(line.split(":")[1])
+    else:
+        power_speakers = False
 
 
 def encender_altavoces():
@@ -72,7 +121,7 @@ class MenuOpciones(Gtk.Window):
         self.lst_GPIO_pinout.connect("changed", self.on_lst_GPIO_pinout)
 
         self.sw_power_speakers= Gtk.Switch()
-        self.lbl_power_speakers = Gtk.Label(label="Encender Altavoces")
+        self.lbl_power_speakers = Gtk.Label(label="Encender Altavoces (Solo para Raspberry)")
         self.sw_power_speakers.connect("notify::active", self.on_sw_power_speakers)
 
         self.load_options()
@@ -81,9 +130,9 @@ class MenuOpciones(Gtk.Window):
         self.btn_guardar.connect("clicked", self.on_btn_guardar_clicked)
 
 
-        self.window.attach(self.lbl_power_speakers, 0,2, 0,1)
+        self.window.attach(self.lbl_power_speakers, 0,3, 0,1)
         self.window.attach(self.sw_power_speakers, 3,4, 0,1)
-        self.window.attach(self.lst_GPIO_pinout, 5,6, 0,1)
+        self.window.attach(self.lst_GPIO_pinout, 4, 5, 0,1)
         self.window.attach(self.btn_guardar, 1,2, 2,3)
 
 
@@ -95,19 +144,24 @@ class MenuOpciones(Gtk.Window):
     def load_options(self):
         global power_speakers
         global power_speakers_GPIO
+        global my_platform
         if (os.path.isfile("opciones.txt") == True):
             fichero = open("opciones.txt", "r")
             for line in fichero:
-                if (line.split(":")[0] == 'power_speakers'):
-                    if ((line.split(":")[1]) == "True\n"):
-                        power_speakers = True
-                    else:
-                        power_speakers = False
-                    self.sw_power_speakers.set_active(power_speakers)
+                if (my_platform != "OTHER"): ##Block to execute only on Raspberry pi
+                    if (line.split(":")[0] == 'power_speakers'):
+                        if ((line.split(":")[1]) == "True\n"):
+                            power_speakers = True
+                        else:
+                            power_speakers = False
+                        self.sw_power_speakers.set_active(power_speakers)
 
-                elif (line.split(":")[0] == "power_speakers_GPIO"):
-                    power_speakers_GPIO = int(line.split(":")[1])
-                    self.lst_GPIO_pinout.set_active(self.get_GPIO_pinout_lst_position_by_num(power_speakers_GPIO))
+                    elif (line.split(":")[0] == "power_speakers_GPIO"):
+                        power_speakers_GPIO = int(line.split(":")[1])
+                        self.lst_GPIO_pinout.set_active(self.get_GPIO_pinout_lst_position_by_num(power_speakers_GPIO))
+                else:
+                    self.sw_power_speakers.set_sensitive(False)
+                    self.lst_GPIO_pinout.set_sensitive(False)
 
         else :
             power_speakers_GPIO = self.lst_GPIO_pinout.get_active_text()[5:]
