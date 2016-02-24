@@ -1,3 +1,6 @@
+###
+
+
 import os.path
 import platform
 import re
@@ -8,8 +11,8 @@ try:
 except RuntimeError:
     print("Error importing RPi.GPIO!")
     print("It is correct if it isn't run on a Raspberry pi.")
-    print("This is probably because you need superuser privileges.")
-    print("You can achieve this by using 'sudo' to run your script")
+    print("If is run on Raspberry, try to run 'sudo python Principal.py'")
+    print("This program need superuser privileges to manage GPIO.")
 
 from time import sleep
 
@@ -23,8 +26,8 @@ power_speakers_GPIO = 12
 my_platform = None
 
 def platform_detect():
-    """Detect if running on the Raspberry Pi or Beaglebone Black and return the
-    platform type.  Will return RASPBERRY_PI, BEAGLEBONE_BLACK, or UNKNOWN."""
+    """Detect if running on the Raspberry Pi and return the platform type.
+    Will return RASPBERRY_PI, or OTHER."""
     # Handle Raspberry Pi
     pi = pi_version()
     if pi is not None:
@@ -59,6 +62,7 @@ def pi_version():
         # Something else, not a pi.
         return None
 
+## Load option parameters.
 def cargar_parametros():
     global my_platform
     global power_speakers
@@ -77,9 +81,9 @@ def cargar_parametros():
                 elif (line.split(":")[0] == "power_speakers_GPIO"):
                     power_speakers_GPIO = int(line.split(":")[1])
     else:
-        power_speakers = False
+        power_speakers = False  #Si no se corre en una Raspberry, mantener a False.
 
-
+## Power on speakers with GPIO Relay
 def encender_altavoces():
     global power_speakers
     global power_speakers_GPIO
@@ -91,7 +95,7 @@ def encender_altavoces():
         GPIO.output(power_speakers_GPIO, True)
         print("Encendiendo altavoces")
 
-
+## Power down speakers with GPIO Relay
 def apagar_altavoces():
     global power_speakers
     global power_speakers_GPIO
@@ -104,7 +108,7 @@ def apagar_altavoces():
         print ("Apagando altavoces")
 
 
-
+## Option window menu
 class MenuOpciones(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Opciones")
@@ -113,6 +117,7 @@ class MenuOpciones(Gtk.Window):
         self.add(self.window)
 
         ##### List of all available GPIO on Raspberry py 2 with integrated touch screen #####
+        ##### If you need any other GPIO ID, please, add in the next list.
         self.GPIO_pinout_list = ["GPIO 5", "GPIO 6", "GPIO 12", "GPIO 13", "GPIO 16", "GPIO 19", "GPIO 20", "GPIO 21", "GPIO 26"]
 
         self.lst_GPIO_pinout = Gtk.ComboBoxText()
