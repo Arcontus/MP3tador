@@ -99,7 +99,7 @@ class Menu_alarma(Gtk.Window):
 
     def on_click_btn_add_quick_allarm15(self, widget):
         alarma = SuenaAlarmaRapida(self.lst_bibliotecas.get_active_text())
-        alarma.retardar(15)
+        alarma.retardar(1)
 
     def on_click_btn_add_quick_allarm30(self, widget):
         alarma = SuenaAlarmaRapida(self.lst_bibliotecas.get_active_text())

@@ -3,6 +3,7 @@ import pygame
 from gi.repository import Gtk, Gio, GObject, GdkPixbuf
 import random
 from Biblioteca import *
+import Opciones
 import eyeD3
 
 class Reproductor (Gtk.Window):
@@ -76,6 +77,7 @@ class Reproductor (Gtk.Window):
         else:
             if (self.pausa == False):
                 pygame.mixer.music.play()
+                Opciones.encender_altavoces()
                 self.reproduciendo = True
 
     def pause(self):
@@ -90,6 +92,7 @@ class Reproductor (Gtk.Window):
         pygame.mixer.music.stop()
         self.reproduciendo = False
         self.pausa = False
+        Opciones.apagar_altavoces()
 
     def set_info(self):
         tag = eyeD3.Tag()
