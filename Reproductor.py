@@ -58,9 +58,10 @@ class Reproductor (Gtk.Window):
     def manager_biblioteca(self):
         self.siguiente_cancion = random.choice(self.musica)
         self.cancion_actual = self.siguiente_cancion
-
-        while self.siguiente_cancion == self.cancion_actual:
-            self.siguiente_cancion = random.choice(self.musica)
+        print(len(self.musica))
+        if (len(self.musica ) > 1):
+            while self.siguiente_cancion == self.cancion_actual:
+                self.siguiente_cancion = random.choice(self.musica)
         pygame.mixer.music.set_endevent(self.fin_cancion)
         pygame.mixer.music.load(self.cancion_actual)
         self.set_info()
@@ -97,5 +98,8 @@ class Reproductor (Gtk.Window):
     def set_info(self):
         tag = eyeD3.Tag()
         tag.link(self.cancion_actual)
-        self.lbl_info.set_text("Cancion: "+tag.getTitle()+"                    Artista: "+tag.getArtist()+"\nAlbum: "+tag.getAlbum()+"                    Ano: "+tag.getYear())
+        if ((tag.getTitle() != None) and (tag.getArtist() != None) and (tag.getAlbum() != None) and (tag.getYear() != None)):
+            self.lbl_info.set_text("Cancion: "+tag.getTitle()+"                    Artista: "+tag.getArtist()+"\nAlbum: "+tag.getAlbum()+"                    Ano: "+tag.getYear())
+        else:
+            self.lbl_info.set_text("")
 

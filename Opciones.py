@@ -134,13 +134,10 @@ class MenuOpciones(Gtk.Window):
         self.btn_guardar = Gtk.Button(label="Guardar")
         self.btn_guardar.connect("clicked", self.on_btn_guardar_clicked)
 
-
         self.window.attach(self.lbl_power_speakers, 0,3, 0,1)
         self.window.attach(self.sw_power_speakers, 3,4, 0,1)
         self.window.attach(self.lst_GPIO_pinout, 4, 5, 0,1)
         self.window.attach(self.btn_guardar, 1,2, 2,3)
-
-
         self.show_all()
 
     def on_btn_guardar_clicked(self, widget):
