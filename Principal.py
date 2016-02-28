@@ -28,7 +28,7 @@ class Principal(Gtk.Window):
 
         self.lbl_reproductor_info = Gtk.Label("")
         self.reproductor = Reproductor(self.lbl_reproductor_info)
-        self.window = Gtk.Window.__init__(self, title="MP3tador,  v0.2")
+        self.window = Gtk.Window.__init__(self, title="MP3tador,  v0.3")
 
         self.set_border_width(20)
 
