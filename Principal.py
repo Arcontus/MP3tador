@@ -154,7 +154,7 @@ class Principal(Gtk.Window):
 
     def on_btn_biblioteca_clicked(self, widget):
 
-        self.biblioteca = Biblioteca.Biblioteca()
+        self.biblioteca = Biblioteca.Biblioteca(self)
         self.biblioteca.show_all()
         # self.reproductor.set_biblioteca(self.musica)
 
@@ -168,11 +168,7 @@ class Principal(Gtk.Window):
             self.reproductor.load_biblioteca(lib_file)
 
     def reload_biblioteca(self, widget, event=None):
-        print "Cambiar biblioteca"
-        lib_file = str(self.lst_biblioteca.get_active_text()) + ".lib"
-        if (lib_file != "None.lib"):
-            self.reproductor.stop()
-            self.reproductor.load_biblioteca(lib_file)
+        self.on_lst_biblioteca_changed(self)
 
     def on_btn_play_clicked(self, widget):
         self.reproductor.play()

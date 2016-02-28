@@ -6,6 +6,7 @@ from gi.repository import Gtk, Gio, GObject, GdkPixbuf
 from datetime import datetime
 import random
 import Alarma
+from Reproductor import Reproductor
 
 lista_bibliotecas = []
 
@@ -31,6 +32,132 @@ def get_id_from_text(comboboxText, text):
         if (var == text): return posicion
         else: posicion = posicion +1
     return 0
+
+class MenuModify(Gtk.Window):
+    def __init__(self, nombre_biblioteca):
+        Gtk.Window.__init__(self, title="Modificar biblioteca "+nombre_biblioteca)
+        self.nombre_biblioteca = nombre_biblioteca
+        self.musica = []
+        self.lbl_reproductor_info = Gtk.Label()
+        self.mi_reproductor = Reproductor(self.lbl_reproductor_info)
+        self.load_biblioteca()
+        self.set_border_width(20)
+        self.grid = Gtk.Grid()
+        self.grid.set_column_homogeneous(True)
+        self.grid.set_row_homogeneous(True)
+        self.add(self.grid)
+
+        self.canciones_lista = Gtk.ListStore(str)
+        self.rellenar_listado()
+
+        self.treeview = Gtk.TreeView(model=self.canciones_lista)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Cancion", renderer, text=0)
+        column.set_sort_column_id(0)
+        self.treeview.append_column(column)
+
+        self.buttons = list()
+        for prog_language in ["Reproducir", "Detener", "Eliminar", "Agregar", "Guardar", "Cancelar"]:
+            button = Gtk.Button(prog_language)
+            self.buttons.append(button)
+            button.connect("clicked", self.on_selection_button_clicked)
+
+        self.scrollable_treelist = Gtk.ScrolledWindow()
+        self.scrollable_treelist.set_vexpand(True)
+        self.grid.attach(self.scrollable_treelist, 0, 0, 6, 8)
+        self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 1, 1)
+        for i, button in enumerate(self.buttons[1:]):
+            self.grid.attach_next_to(button, self.buttons[i], Gtk.PositionType.RIGHT, 1, 1)
+
+        self.scrollable_treelist.add(self.treeview)
+        self.show_all()
+
+    def rellenar_listado(self):
+        for cancion in sorted(self.musica):
+            self.canciones_lista.append([cancion])
+
+    def on_selection_button_clicked(self, widget):
+        self.mi_biblioteca = []
+        self.mi_reproductor.stop()
+        self.tipo_boton = widget.get_label()
+        if (self.tipo_boton == "Reproducir"):
+            model, rows = self.treeview.get_selection().get_selected()
+            if (rows != None):   ## Prevent a empty treelist
+                self.mi_biblioteca.append(model[rows][0])
+                self.mi_reproductor.set_biblioteca(self.mi_biblioteca)
+                self.mi_reproductor.manager_biblioteca()
+                self.mi_reproductor.play()
+        if (self.tipo_boton == "Detener"):
+            self.mi_reproductor.stop()
+
+        if (self.tipo_boton == "Eliminar"):
+            self.mi_reproductor.stop()
+            selection = self.treeview.get_selection()
+            model, rows = selection.get_selected_rows()
+            if (len(rows) > 0): ## Prevent a empty treelist
+                for row in rows:
+                   iter = model.get_iter(row)
+                   # Remove the ListStore row referenced by iter
+                print(model[row][0])
+                self.musica.remove(model[row][0])
+                model.remove(iter)
+
+        if (self.tipo_boton == "Agregar"):
+            biblioteca= FileChooserWindow()
+            biblioteca_aux = self.musica+biblioteca.seleccionar_carpeta()
+            for i in biblioteca_aux:
+                if i not in sorted(self.musica):
+                    self.musica.append(i)
+                    self.canciones_lista.append([i])
+
+        if (self.tipo_boton == "Guardar"):
+            lib_directory = "./bibliotecas/"
+            if not os.path.exists(lib_directory):
+                os.makedirs(lib_directory)
+            if (len(self.musica) > 0):
+                if os.path.exists(lib_directory+self.nombre_biblioteca+".lib"):
+                    os.remove(lib_directory+self.nombre_biblioteca+".lib")
+                fichero = open(lib_directory+self.nombre_biblioteca+".lib", "w")
+                fichero.write("nombre:"+self.nombre_biblioteca+"\n")
+                fichero.write("items:"+str(len(self.musica))+"\n")
+                for i in self.musica:
+                    fichero.write("cancion:"+i+"\n")
+                fichero.close()
+                self.close()
+            else:
+                self.error_params(self)
+        if (self.tipo_boton == "Cancelar"):
+            self.close()
+
+    def error_params(self, widget):
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK, "Error en la modificacion de la biblioteca")
+        dialog.format_secondary_text(
+            "Asegurate de que la biblioteca tenga al menos un fichero de audio")
+        dialog.run()
+        print("Aceptar")
+        dialog.destroy()
+
+
+    def language_filter_func(self, model, iter, data):
+        return True
+
+    def load_biblioteca(self):
+        numero = 1
+        lib_directory = "./bibliotecas/"
+        fichero = open(lib_directory+self.nombre_biblioteca+".lib")
+        for line in fichero:
+            if (line.split(":")[0] == 'nombre'):
+                self.nombre = (line.split(":")[1])
+
+            elif (line.split(":")[0] == "items"):
+                items =(line.split(":")[1])
+
+            elif (line.split(":")[0] == 'cancion'):
+                self.musica.append (line.split(":")[1][:-1])
+                numero = numero +1
+
+
 
 class MenuAdd(Gtk.Window):
     def __init__(self):
@@ -100,12 +227,14 @@ class MenuAdd(Gtk.Window):
 
 
 class Biblioteca(Gtk.Window):
-    def __init__(self):
+    def __init__(self, obj_principal):
         Gtk.Window.__init__(self, title="Biblioteca")
+        self.obj_principal = obj_principal
         window = Gtk.Table(1, 1, True)
         self.set_border_width(20)
         self.add(window)
         self.lib_dir = "./bibliotecas/"
+        self.connect('delete-event', self.delete_event)
         self.lst_bibliotecas = Gtk.ComboBoxText()
         self.reload_list()
 
@@ -162,9 +291,8 @@ class Biblioteca(Gtk.Window):
             os.remove(self.lib_dir+nombre+".lib")
             self.reload_list()
 
-
-    def on_btn_mdf_bilbioteca_clicked(self):
-        a = 0
+    def on_btn_mdf_bilbioteca_clicked(self, widget):
+        MenuModify(str(self.lst_bibliotecas.get_active_text()))
 
     def error_rm_params(self, num):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
@@ -173,6 +301,9 @@ class Biblioteca(Gtk.Window):
         dialog.run()
         print("Aceptar")
         dialog.destroy()
+
+    def delete_event(self, widget, event=None):
+        self.obj_principal.reload_biblioteca(self)
 
 class FileChooserWindow(Gtk.Window):
     def __init__(self):
