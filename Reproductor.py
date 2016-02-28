@@ -6,7 +6,7 @@ from Biblioteca import *
 import Opciones
 import eyeD3
 
-class Reproductor (Gtk.Window):
+class Reproductor(Gtk.Window):
     def __init__(self, lbl_info):
         pygame.mixer.init()
         pygame.init()
@@ -58,7 +58,6 @@ class Reproductor (Gtk.Window):
     def manager_biblioteca(self):
         self.siguiente_cancion = random.choice(self.musica)
         self.cancion_actual = self.siguiente_cancion
-        print(len(self.musica))
         if (len(self.musica ) > 1):
             while self.siguiente_cancion == self.cancion_actual:
                 self.siguiente_cancion = random.choice(self.musica)
