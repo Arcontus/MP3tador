@@ -381,6 +381,9 @@ class ObjLstBiblioteca():
     def __init__(self):
         self.lst_biblioteca = Gtk.ComboBoxText()
         self.lib_dir = "./bibliotecas/"
+        if not os.path.exists(self.lib_dir):
+            os.makedirs(self.lib_dir)
+
         ficheros = os.listdir(self.lib_dir)
         for i in sorted(ficheros):
             self.add_item(i[:-4])
