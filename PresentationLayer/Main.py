@@ -1,24 +1,28 @@
+# -*- coding: utf-8 -*-
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
+import PresentationLayer.PresentationController
 
 
-class Main(Gtk.Window):
+class MainWindow(Gtk.Window):
     def __init__(self):
+        self.myMainScreenController = PresentationLayer.PresentationController.MainScreenController(self)
         self.lbl_player_info = Gtk.Label("")
         self.window = Gtk.Window.__init__(self, title="MP3tador,  v0.3") ## TODO: Implement a variable or function to do this"
         self.set_border_width(20)
         self.font_color = "black"
         self.lblhour = Gtk.Label(label="")
-        self.lbldata = Gtk.Label(label= "")
+        self.lbldate = Gtk.Label(label="")
+        self.font_color = "black"
 
         table = Gtk.Table(8, 5, True)
         self.add(table)
         btn_alarm = Gtk.Button(label="Alarmas")     ## TODO: Implement a variable or function to do this"
         btn_alarm.connect("clicked", self.on_btn_alarmas_clicked)
 
-        btn_options = Gtk.Button(label="Opciones")
-        btn_options.connect("clicked", self.on_btn_opciones_clicked)
+        btn_option = Gtk.Button(label="Opciones")
+        btn_option.connect("clicked", self.on_btn_option_clicked)
 
         btn_play = Gtk.Button()
         btn_play.connect("clicked", self.on_btn_play_clicked)
@@ -55,11 +59,11 @@ class Main(Gtk.Window):
         btn_library = Gtk.Button(label="Biblioteca")
         btn_library.connect("clicked", self.on_btn_biblioteca_clicked)
 
-        table.attach(self.lbldata, 0, 8, 0, 1)
+        table.attach(self.lbldate, 0, 8, 0, 1)
         table.attach(self.lblhour, 0, 8, 1, 5)
         table.attach(btn_alarm, 10, 15, 2, 3)
         table.attach(btn_library, 10, 15, 4, 5)
-        table.attach(btn_options, 10, 15, 6, 7)
+        table.attach(btn_option, 10, 15, 6, 7)
 
         table.attach(btn_play, 0, 2, 6, 9)
         table.attach(btn_pause, 2, 4, 6, 9)
@@ -68,16 +72,16 @@ class Main(Gtk.Window):
         table.attach(self.lbl_player_info, 0, 15, 10, 12)
 
     def on_btn_biblioteca_clicked(self, widget):
-        a = 1
+        self.myMainScreenController.openLibraryManager()
 
-    def on_btn_opciones_clicked(self, widget):
-        a = 1
+    def on_btn_option_clicked(self, widget):
+        self.myMainScreenController.openOptionManager()
 
     def on_lst_biblioteca_changed(self, widget):
         a = 1
 
     def reload_biblioteca(self, widget, event=None):
-        self.on_lst_biblioteca_changed(self)
+        a = 1
 
     def on_btn_play_clicked(self, widget):
         a = 1
@@ -92,5 +96,11 @@ class Main(Gtk.Window):
         a = 1
 
     def on_btn_alarmas_clicked(self, widget):
-        a = 1
+        self.myMainScreenController.openAlarmManager()
+
+    def set_hour(self, hour):
+        self.lblhour.set_markup(str("<span font='50' foreground='"+self.font_color+"'>"+hour)+"</span>")
+
+    def set_date(self, date):
+        self.lbldate.set_markup(str("<span variant='smallcaps'>" + date) + "</span>")
 
