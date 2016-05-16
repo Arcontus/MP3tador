@@ -3,9 +3,14 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 import PresentationLayer.PresentationController
+import EventDispatcher.EventDispatcher
 
 class AlarmManager(Gtk.Window):
-    def __init__(self):
+    def __init__(self, event_dispatcher=None):
+        if (event_dispatcher!=None):
+            self.event_dispatcher=event_dispatcher
+            self.event_dispatcher.add_event_listener( EventDispatcher.EventDispatcher.MyEvent.SET_ALARM_LIST, self.reload_items)
+
         self.myAlarmScreenController = PresentationLayer.PresentationController.AlarmScreenController(self)
         self.window = Gtk.Window.__init__(self, title="Menu de alarms")
 
@@ -47,6 +52,10 @@ class AlarmManager(Gtk.Window):
         table.attach(self.btn_add_quick_allarm1,3,4, 7,8)
         table.attach(self.lst_bibliotecas,4,7, 7,8)
 
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyEvent ( EventDispatcher.EventDispatcher.MyEvent.GET_ALARM_LIST, EventDispatcher.EventDispatcher.MyEvent.SET_ALARM_LIST )
+        )
+
     def on_click_btn_add_quick_allarm15(self, widget):
         a = 1
 
@@ -71,8 +80,8 @@ class AlarmManager(Gtk.Window):
     def on_click_btn_add_alarm(self, widget):
         self.myAlarmScreenController.openAlarmWindow()
 
-    def reload_items(self, widget, widget2):
-        a = 1
+    def reload_items(self, event):
+        print(event.data)
 
     def on_click_btn_rm_alarm(self, widget):
         a = 1

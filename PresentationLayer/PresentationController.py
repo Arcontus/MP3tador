@@ -8,13 +8,17 @@ import PresentationLayer.Main
 import PresentationLayer.Library
 import PresentationLayer.Alarm
 import PresentationLayer.Option
+import EventDispatcher.EventDispatcher
 
-def initializing():
-    win = PresentationLayer.Main.MainWindow()
-    win.connect("delete-event", Gtk.main_quit)
-    win.show_all()
-    Gtk.main()
-    return True
+def initializing(event_dispatcher):
+    if (event_dispatcher!=None):
+        win = PresentationLayer.Main.MainWindow(event_dispatcher)
+        win.connect("delete-event", Gtk.main_quit)
+        win.show_all()
+        Gtk.main()
+        return True
+    else:
+        return False
 
 class Borg:
     _shared_state = {}
@@ -22,17 +26,19 @@ class Borg:
         self.__dict__ = self._shared_state
 
 class MainScreenController(Borg):
-    def __init__(self, main_window=None):
+    def __init__(self, main_window=None , event_dispatcher=None):
         Borg.__init__(self)
         if (main_window != None):
             self.window = main_window
+        if (event_dispatcher != None):
+            self.event_dispatcher=event_dispatcher
 
     def openLibraryManager(self):
         self.my_library = PresentationLayer.Library.LibraryManagerWindow()
         self.my_library.show_all()
 
     def openAlarmManager(self):
-        self.my_alarm = PresentationLayer.Alarm.AlarmManager()
+        self.my_alarm = PresentationLayer.Alarm.AlarmManager(self.event_dispatcher)
         self.my_alarm.show_all()
 
     def openOptionManager(self):

@@ -3,8 +3,10 @@
 
 from PresentationLayer.PresentationController import initializing
 import LogicLayer.LogicController
+import EventDispatcher.EventDispatcher
 
-main = LogicLayer.LogicController.MainLogicController()
+dispatcher = EventDispatcher.EventDispatcher.EventDispatcher()
+main = LogicLayer.LogicController.MainLogicController(dispatcher)
 
 
 

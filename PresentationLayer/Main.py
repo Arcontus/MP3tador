@@ -3,10 +3,17 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 import PresentationLayer.PresentationController
+import EventDispatcher.EventDispatcher
 
 
 class MainWindow(Gtk.Window):
-    def __init__(self):
+    def __init__(self, event_dispatcher=None):
+        ## Set all listeners
+        if (event_dispatcher!=None):
+            self.event_dispatcher=event_dispatcher
+            self.event_dispatcher.add_event_listener( EventDispatcher.EventDispatcher.MyEvent.MAIN_WINDOW_SET_HOUR, self.set_hour)
+            self.event_dispatcher.add_event_listener( EventDispatcher.EventDispatcher.MyEvent.MAIN_WINDOW_SET_DATE, self.set_date)
+
         self.myMainScreenController = PresentationLayer.PresentationController.MainScreenController(self)
         self.lbl_player_info = Gtk.Label("")
         self.window = Gtk.Window.__init__(self, title="MP3tador,  v0.3") ## TODO: Implement a variable or function to do this"
@@ -74,6 +81,7 @@ class MainWindow(Gtk.Window):
     def on_btn_biblioteca_clicked(self, widget):
         self.myMainScreenController.openLibraryManager()
 
+
     def on_btn_option_clicked(self, widget):
         self.myMainScreenController.openOptionManager()
 
@@ -98,9 +106,9 @@ class MainWindow(Gtk.Window):
     def on_btn_alarmas_clicked(self, widget):
         self.myMainScreenController.openAlarmManager()
 
-    def set_hour(self, hour):
-        self.lblhour.set_markup(str("<span font='50' foreground='"+self.font_color+"'>"+hour)+"</span>")
+    def set_hour(self, event):
+        self.lblhour.set_markup(str("<span font='50' foreground='"+self.font_color+"'>"+event.data)+"</span>")
 
-    def set_date(self, date):
-        self.lbldate.set_markup(str("<span variant='smallcaps'>" + date) + "</span>")
+    def set_date(self, event):
+        self.lbldate.set_markup(str("<span variant='smallcaps'>" + event.data) + "</span>")
 
