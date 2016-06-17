@@ -7,12 +7,8 @@ import EventDispatcher.EventDispatcher
 
 
 class MainWindow(Gtk.Window):
-    def __init__(self, event_dispatcher=None):
+    def __init__(self):
         ## Set all listeners
-        if (event_dispatcher!=None):
-            self.event_dispatcher=event_dispatcher
-            self.event_dispatcher.add_event_listener( EventDispatcher.EventDispatcher.MyEvent.MAIN_WINDOW_SET_HOUR, self.set_hour)
-            self.event_dispatcher.add_event_listener( EventDispatcher.EventDispatcher.MyEvent.MAIN_WINDOW_SET_DATE, self.set_date)
 
         self.myMainScreenController = PresentationLayer.PresentationController.MainScreenController(self)
         self.lbl_player_info = Gtk.Label("")

@@ -117,8 +117,12 @@ class MyEvent( Event ):
 
     ASK     = "askMyEvent"
     RESPOND = "respondMyEvent"
+
+class MyDateEvent ( Event ):
     MAIN_WINDOW_SET_HOUR = "setHourOnMainWindow"
     MAIN_WINDOW_SET_DATE = "setDateOnMainWindow"
+
+class MyAlarmEvent ( Event ):
     SET_ALARM_LIST = "setAlarmList"
     GET_ALARM_LIST = "getAlarmList"
 
