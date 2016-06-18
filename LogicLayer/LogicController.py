@@ -12,6 +12,7 @@ class MainLogicController():
         if (event_dispatcher!=None):
             self.event_dispatcher = event_dispatcher
             self.event_dispatcher.add_event_listener( EventDispatcher.EventDispatcher.MyAlarmEvent.GET_ALARM_LIST, self.get_alarm_list)
+            self.event_dispatcher.add_event_listener( EventDispatcher.EventDispatcher.MyLibraryEvent.GET_LIBRARY_LIST, self.get_library_list)
         self.clock = LogicLayer.Clock.Clock()
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
@@ -48,3 +49,15 @@ class MainLogicController():
         self.event_dispatcher.dispatch_event(
             EventDispatcher.EventDispatcher.MyAlarmEvent ( event.data, list_names )
         )
+
+    def get_library_list (self, event):
+        my_list = self.data.get_library_list()
+        list_names = []
+        for i in my_list:
+            list_names.append(i.get_name())
+
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyLibraryEvent ( event.data, list_names )
+        )
+
+

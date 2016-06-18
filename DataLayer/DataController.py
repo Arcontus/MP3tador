@@ -15,4 +15,7 @@ class MainDataController():
     def get_alarm_list(self):
          return DataLayer.Alarm.get_alarm_list()
 
+    def get_library_list(self):
+        return DataLayer.Library.get_library_list()
+
 

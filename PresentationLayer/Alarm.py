@@ -15,17 +15,17 @@ class AlarmManager(Gtk.Window):
         self.add(table)
         self.set_border_width(20)
         self.lst_alarms = Gtk.ComboBoxText()
-        self.lista_botones_alarm = []
+        self.alarm_button_list = []
 
         self.btn_add_alarm = Gtk.Button.new_with_label("Agregar nueva alarma")
         self.btn_add_alarm.connect("clicked", self.on_click_btn_add_alarm)
-        self.btn_modificar = Gtk.Button.new_with_label("Modificar")
-        self.btn_modificar.connect("clicked", self.on_click_modificar)
+        self.btn_modify = Gtk.Button.new_with_label("Modificar")
+        self.btn_modify.connect("clicked", self.on_click_modificar)
         self.btn_rm_alarm = Gtk.Button.new_with_label("Eliminar")
         self.btn_rm_alarm.connect("clicked", self.on_click_btn_rm_alarm)
 
-        self.lbl_alarm_rapida = Gtk.Label(label="Alarma rapida")
-        self.lbl_biblioteca = Gtk.Label(label="Biblioteca")
+        self.lbl_fast_alarm = Gtk.Label(label="Alarma rapida")
+        self.lbl_library = Gtk.Label(label="Biblioteca")
         self.btn_add_quick_allarm15 = Gtk.Button.new_with_label("15 Min")
         self.btn_add_quick_allarm15.connect("clicked", self.on_click_btn_add_quick_allarm15)
         self.btn_add_quick_allarm30 = Gtk.Button.new_with_label("30 Min")
@@ -35,19 +35,19 @@ class AlarmManager(Gtk.Window):
         self.btn_add_quick_allarm1 = Gtk.Button.new_with_label("1 Hora")
         self.btn_add_quick_allarm1.connect("clicked", self.on_click_btn_add_quick_allarm1)
 
-        self.lst_bibliotecas = Gtk.ComboBoxText()
+        self.lst_library = Gtk.ComboBoxText()
 
         table.attach(self.btn_add_alarm, 2, 5, 1, 2)
         table.attach(self.lst_alarms, 2,5, 3,4)
-        table.attach(self.btn_modificar, 6,7, 3,4)
+        table.attach(self.btn_modify, 6, 7, 3, 4)
         table.attach(self.btn_rm_alarm,0,1, 3,4)
-        table.attach(self.lbl_alarm_rapida,0,4, 6,7)
-        table.attach(self.lbl_biblioteca,5,7, 6,7)
+        table.attach(self.lbl_fast_alarm, 0, 4, 6, 7)
+        table.attach(self.lbl_library, 5, 7, 6, 7)
         table.attach(self.btn_add_quick_allarm15,0,1, 7,8)
         table.attach(self.btn_add_quick_allarm30,1,2, 7,8)
         table.attach(self.btn_add_quick_allarm45,2,3, 7,8)
         table.attach(self.btn_add_quick_allarm1,3,4, 7,8)
-        table.attach(self.lst_bibliotecas,4,7, 7,8)
+        table.attach(self.lst_library, 4, 7, 7, 8)
 
     def on_click_btn_add_quick_allarm15(self, widget):
         a = 1
@@ -61,11 +61,17 @@ class AlarmManager(Gtk.Window):
     def on_click_btn_add_quick_allarm1(self, widget):
         a = 1
 
-    def reset_items(self):
-        a = 1
+    def reset_alarm_items(self):
+        self.lst_alarms.remove_all()
 
-    def add_item(self, item):
-        a = 1
+    def reset_library_items(self):
+        self.lst_library.remove_all()
+
+    def add_alarm_item(self, item):
+         self.lst_alarms.append_text(item)
+
+    def add_library_item(self, item):
+         self.lst_library.append_text(item)
 
     def on_click_modificar(self, widget):
         a = 1
@@ -73,8 +79,18 @@ class AlarmManager(Gtk.Window):
     def on_click_btn_add_alarm(self, widget):
         self.myAlarmScreenController.openAlarmWindow()
 
-    def reload_items(self, event):
-        print(event.data)
+    def reload_alarm_items(self, items):
+        self.reset_alarm_items()
+        for i in sorted(items):
+            self.add_alarm_item(i)
+        self.lst_alarms.set_active(0)
+
+    def reload_library_items(self, items):
+        self.reset_library_items()
+        for i in sorted(items):
+            self.add_library_item(i)
+        self.lst_library.set_active(0)
+        print(items)
 
     def on_click_btn_rm_alarm(self, widget):
         a = 1

@@ -126,6 +126,9 @@ class MyAlarmEvent ( Event ):
     SET_ALARM_LIST = "setAlarmList"
     GET_ALARM_LIST = "getAlarmList"
 
+class MyLibraryEvent ( Event ):
+    SET_LIBRARY_LIST = "setLibraryList"
+    GET_LIBRARY_LIST = "getLibraryList"
 
 class WhoAsk( object ):
     """
