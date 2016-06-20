@@ -7,10 +7,9 @@ import EventDispatcher.EventDispatcher
 
 
 class MainWindow(Gtk.Window):
-    def __init__(self):
-        ## Set all listeners
-
-        self.myMainScreenController = PresentationLayer.PresentationController.MainScreenController(self)
+    def __init__(self, presentation_controller=None):
+        if presentation_controller is not None:
+            self.myMainScreenController = presentation_controller
         self.lbl_player_info = Gtk.Label("")
         self.window = Gtk.Window.__init__(self, title="MP3tador,  v0.3") ## TODO: Implement a variable or function to do this"
         self.set_border_width(20)
@@ -22,10 +21,12 @@ class MainWindow(Gtk.Window):
         table = Gtk.Table(8, 5, True)
         self.add(table)
         btn_alarm = Gtk.Button(label="Alarmas")     ## TODO: Implement a variable or function to do this"
-        btn_alarm.connect("clicked", self.on_btn_alarmas_clicked)
+        btn_alarm.connect("clicked", self.on_btn_alarm_clicked)
 
         btn_option = Gtk.Button(label="Opciones")
         btn_option.connect("clicked", self.on_btn_option_clicked)
+
+        self.lst_library = Gtk.ComboBoxText()
 
         btn_play = Gtk.Button()
         btn_play.connect("clicked", self.on_btn_play_clicked)
@@ -68,18 +69,32 @@ class MainWindow(Gtk.Window):
         table.attach(btn_library, 10, 15, 4, 5)
         table.attach(btn_option, 10, 15, 6, 7)
 
+        table.attach(self.lst_library, 0, 8, 5, 6)
         table.attach(btn_play, 0, 2, 6, 9)
         table.attach(btn_pause, 2, 4, 6, 9)
         table.attach(btn_next, 4, 6, 6, 9)
         table.attach(btn_stop, 6, 8, 6, 9)
         table.attach(self.lbl_player_info, 0, 15, 10, 12)
 
+    def reset_library_items(self):
+        self.lst_library.remove_all()
+
+    def reload_library_items(self, items):
+        self.reset_library_items()
+        for i in sorted(items):
+            self.add_library_item(i)
+        self.lst_library.set_active(0)
+        print(items)
+
+    def add_library_item(self, item):
+         self.lst_library.append_text(item)
+
     def on_btn_biblioteca_clicked(self, widget):
-        self.myMainScreenController.openLibraryManager()
+        self.myMainScreenController.open_library_manager()
 
 
     def on_btn_option_clicked(self, widget):
-        self.myMainScreenController.openOptionManager()
+        self.myMainScreenController.open_option_manager()
 
     def on_lst_biblioteca_changed(self, widget):
         a = 1
@@ -99,8 +114,8 @@ class MainWindow(Gtk.Window):
     def on_btn_next_clicked(self, widget):
         a = 1
 
-    def on_btn_alarmas_clicked(self, widget):
-        self.myMainScreenController.openAlarmManager()
+    def on_btn_alarm_clicked(self, widget):
+        self.myMainScreenController.open_alarm_manager()
 
     def set_hour(self, event):
         self.lblhour.set_markup(str("<span font='50' foreground='"+self.font_color+"'>"+event.data)+"</span>")

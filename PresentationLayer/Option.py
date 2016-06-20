@@ -5,15 +5,16 @@ from gi.repository import Gtk, GdkPixbuf
 import PresentationLayer.PresentationController
 
 class OptionWindow(Gtk.Window):
-    def __init__(self):
-        self.myMainScreenController = PresentationLayer.PresentationController.OptionScreenController(self)
+    def __init__(self, my_option_screen_controller=None):
+        if my_option_screen_controller is not None:
+            self.my_option_screen_controller = my_option_screen_controller
         Gtk.Window.__init__(self, title="Opciones")
         self.window = Gtk.Table(1, 1, True)
         self.set_border_width(20)
         self.add(self.window)
 
-        ##### List of all available GPIO on Raspberry py 2 with integrated touch screen #####
-        ##### If you need any other GPIO ID, please, add in the next list.
+        # List of all available GPIO on Raspberry py 2 with integrated touch screen #####
+        # If you need any other GPIO ID, please, add in the next list.
         self.GPIO_pinout_list = ["GPIO 5", "GPIO 6", "GPIO 12", "GPIO 13", "GPIO 16", "GPIO 19", "GPIO 20", "GPIO 21", "GPIO 26"]
 
         self.lst_GPIO_pinout = Gtk.ComboBoxText()

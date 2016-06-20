@@ -9,7 +9,7 @@ class AlarmManager(Gtk.Window):
     def __init__(self, my_alarm_screen_controller = None):
         if (my_alarm_screen_controller != None):
             self.my_alarm_screen_controller = my_alarm_screen_controller
-        self.window = Gtk.Window.__init__(self, title="Menu de alarms")
+        self.window = Gtk.Window.__init__(self, title="Menu de alarmas")
 
         table = Gtk.Table(6, 4, True)
         self.add(table)
