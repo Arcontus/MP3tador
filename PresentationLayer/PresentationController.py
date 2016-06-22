@@ -27,10 +27,8 @@ class MainScreenController(Borg):
         Borg.__init__(self)
         if main_window is not None:
             self.window = main_window
-            print("No configuramos window")
         else:
             self.window = PresentationLayer.Main.MainWindow(self)
-            print("configuramos window")
         if event_dispatcher is not None:
             self.event_dispatcher = event_dispatcher
             self.event_dispatcher.add_event_listener(
@@ -55,7 +53,6 @@ class MainScreenController(Borg):
                 EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST)
         )
 
-
     def open_library_manager(self):
         self.my_library = PresentationLayer.Library.LibraryManagerWindow()
         self.my_library.show_all()
@@ -79,8 +76,45 @@ class MainScreenController(Borg):
     def reload_library_items(self, event):
         self.window.reload_library_items(event.data)
 
+    def set_library_player(self, library):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.SET_LIBRARY,
+                library)
+        )
 
-class AlarmScreenController():
+    def play_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.PLAY_MUSIC,
+            )
+        )
+
+    def stop_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.STOP_MUSIC,
+            )
+        )
+
+    def pause_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.PAUSE_MUSIC,
+            )
+        )
+
+    def next_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.NEXT_SONG,
+            )
+        )
+
+
+
+
+class AlarmScreenController:
     def __init__(self, event_dispatcher=None):
         if event_dispatcher is not None:
             self.event_dispatcher = event_dispatcher

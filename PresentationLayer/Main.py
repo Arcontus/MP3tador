@@ -27,6 +27,7 @@ class MainWindow(Gtk.Window):
         btn_option.connect("clicked", self.on_btn_option_clicked)
 
         self.lst_library = Gtk.ComboBoxText()
+        self.lst_library.connect("changed", self.on_lst_library_changed)
 
         btn_play = Gtk.Button()
         btn_play.connect("clicked", self.on_btn_play_clicked)
@@ -96,23 +97,23 @@ class MainWindow(Gtk.Window):
     def on_btn_option_clicked(self, widget):
         self.myMainScreenController.open_option_manager()
 
-    def on_lst_biblioteca_changed(self, widget):
-        a = 1
+    def on_lst_library_changed(self, widget):
+        self.myMainScreenController.set_library_player(self.lst_library.get_active_text())
 
     def reload_biblioteca(self, widget, event=None):
         a = 1
 
     def on_btn_play_clicked(self, widget):
-        a = 1
+        self.myMainScreenController.play_song()
 
     def on_btn_stop_clicked(self, widget):
-        a = 1
+        self.myMainScreenController.stop_song()
 
     def on_btn_pause_clicked(self, widget):
-        a = 1
+        self.myMainScreenController.pause_song()
 
     def on_btn_next_clicked(self, widget):
-        a = 1
+        self.myMainScreenController.next_song()
 
     def on_btn_alarm_clicked(self, widget):
         self.myMainScreenController.open_alarm_manager()

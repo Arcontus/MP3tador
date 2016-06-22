@@ -118,17 +118,29 @@ class MyEvent( Event ):
     ASK     = "askMyEvent"
     RESPOND = "respondMyEvent"
 
-class MyDateEvent ( Event ):
+
+class MyDateEvent (Event):
     MAIN_WINDOW_SET_HOUR = "setHourOnMainWindow"
     MAIN_WINDOW_SET_DATE = "setDateOnMainWindow"
 
-class MyAlarmEvent ( Event ):
+
+class MyAlarmEvent (Event):
     SET_ALARM_LIST = "setAlarmList"
     GET_ALARM_LIST = "getAlarmList"
 
-class MyLibraryEvent ( Event ):
+
+class MyLibraryEvent (Event):
     SET_LIBRARY_LIST = "setLibraryList"
     GET_LIBRARY_LIST = "getLibraryList"
+
+
+class MyMusicEvent (Event):
+    SET_LIBRARY = "setLibrary"  # It controls the library list loaded to the music player
+    PLAY_MUSIC = "playMusic"
+    PAUSE_MUSIC = "pauseMusic"
+    STOP_MUSIC = "stopMusic"
+    NEXT_SONG = "nextSong"
+
 
 class WhoAsk( object ):
     """
