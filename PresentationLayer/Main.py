@@ -93,15 +93,11 @@ class MainWindow(Gtk.Window):
     def on_btn_biblioteca_clicked(self, widget):
         self.myMainScreenController.open_library_manager()
 
-
     def on_btn_option_clicked(self, widget):
         self.myMainScreenController.open_option_manager()
 
     def on_lst_library_changed(self, widget):
         self.myMainScreenController.set_library_player(self.lst_library.get_active_text())
-
-    def reload_biblioteca(self, widget, event=None):
-        a = 1
 
     def on_btn_play_clicked(self, widget):
         self.myMainScreenController.play_song()

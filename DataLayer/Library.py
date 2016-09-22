@@ -2,11 +2,14 @@ import os
 
 library_list = []   ## List of all library objects
 
+
 def add_library(library):
     library_list.append(library)
 
+
 def rm_library(library):
     library_list.remove(library)
+
 
 def load_library_list():
     library_list = []
@@ -17,24 +20,30 @@ def load_library_list():
     for i in sorted(files):
         add_library(Library(i))
 
-def get_id_from_text(comboboxText, text):
-    model = comboboxText.get_model()
+
+def get_id_from_text(combo_box_text, text):
+    model = combo_box_text.get_model()
     position = 0
     for i in model:
         var = str(i[:])
         var = var.split(",")[0]
         var = var[2:-1]
-        if (var == text): return position
-        else: position = position +1
+        if var == text:
+            return position
+        else:
+            position += +1
     return -1
+
 
 def get_library_item_number():
     return len(library_list)
 
+
 def get_library_list():
     return library_list
 
-class Library():
+
+class Library:
     def __init__(self, myfile=None ):
         self.file_name = myfile
         self.lib_dir = "./bibliotecas/"
@@ -54,15 +63,15 @@ class Library():
         if os.path.isfile(self.lib_dir+self.file_name):
             my_file = open(self.lib_dir+self.file_name, "r")
             for line in my_file:
-                if (line.split(":")[0] == 'items'):
+                if line.split(":")[0] == 'items':
                     self.num_items = int(line.split(":")[1])
-                elif (line.split(":")[0] == "cancion"):
+                elif line.split(":")[0] == "cancion":
                     self.songs.append(line.split(":")[1])
 
     def save_params(self):
         if not os.path.exists(self.lib_dir):
             os.makedirs(self.lib_dir)
-        if (self.num_items > 0):
+        if self.num_items > 0:
             file = open(self.lib_dir+self.file_name, "w")
             file.write("nombre:"+str(self.file_name)[:-4]+"\n")
             file.write("items:"+str(self.num_items)+"\n")

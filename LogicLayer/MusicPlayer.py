@@ -9,6 +9,7 @@ class MusicPlayer:
         pygame.mixer.init()
         pygame.init()
 
+        self.name = ""
         self.is_pause = False
         self.is_playing = False
         self.music = []
@@ -18,22 +19,29 @@ class MusicPlayer:
         GObject.timeout_add(1000, self.check_status_play)
 
     def load_library(self, name_file):
+        if name_file is not None:
+            self.music = []
+            self.is_pause = False
+            self.is_playing = False
+            lib_directory = "./bibliotecas/"
+            my_file = open(lib_directory + name_file +".lib")
+            for line in my_file:
+                if line.split(":")[0] == 'nombre':
+                    self.name = (line.split(":")[1])
+
+                elif line.split(":")[0] == "items":
+                    items = (line.split(":")[1])
+
+                elif line.split(":")[0] == 'cancion':
+                    self.music.append (line.split(":")[1][:-1])
+            self.manager_library()
+        else:
+            self.unload_library()
+
+    def unload_library(self):
+        self.stop()
         self.music = []
-        self.is_pause = False
-        self.is_playing = False
-        lib_directory = "./bibliotecas/"
-        my_file = open(lib_directory + name_file +".lib")
-        for line in my_file:
-            if line.split(":")[0] == 'nombre':
-                self.name = (line.split(":")[1])
-
-            elif line.split(":")[0] == "items":
-                items = (line.split(":")[1])
-
-            elif line.split(":")[0] == 'cancion':
-                self.music.append (line.split(":")[1][:-1])
-
-        self.manager_library()
+        self.name = ""
 
     def check_status_play(self):
         if self.is_playing is True:
@@ -68,13 +76,14 @@ class MusicPlayer:
         self.play()
 
     def play(self):
-        if self.is_playing is True:
-            self.pause()
-        else:
-            if self.is_pause is False:
-                pygame.mixer.music.play()
-                #Opciones.encender_altavoces()
-                self.is_playing = True
+        if len(self.music) > 0:
+            if self.is_playing is True:
+                self.pause()
+            else:
+                if self.is_pause is False:
+                    pygame.mixer.music.play()
+                    #Opciones.encender_altavoces()
+                    self.is_playing = True
 
     def pause(self):
         if self.is_pause is False:

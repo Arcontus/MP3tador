@@ -7,8 +7,8 @@ import PresentationLayer.PresentationController
 import EventDispatcher.EventDispatcher
 
 dispatcher = EventDispatcher.EventDispatcher.EventDispatcher()
-main = LogicLayer.LogicController.MainLogicController(event_dispatcher=dispatcher)
-main_screen = PresentationLayer.PresentationController.MainScreenController(event_dispatcher=dispatcher)
+main_logic = LogicLayer.LogicController.MainLogicController(event_dispatcher=dispatcher)
+main_screen = PresentationLayer.PresentationController.MainScreenController(event_dispatcher=dispatcher, logic_controller=main_logic)
 
 
 
