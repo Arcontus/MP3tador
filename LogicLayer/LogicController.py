@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
 Manage all functions of the logic program and take decisions and events about it:
 * Implements all public functions for the presentation layer.
@@ -8,6 +5,9 @@ Manage all functions of the logic program and take decisions and events about it
 * The communication with DataController is direct, its means that DataController exposes functions
 that is used only by LogicController.
 """
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 __author__ = "David Pozos Cerón"
 
 import DataLayer.DataController
