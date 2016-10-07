@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Module to control all things about the presentation layer:
+* Manage screens.
+* Open new screens.
+* Comuniation with logic controller.
+Author: David Pozos Cerón
+"""
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk

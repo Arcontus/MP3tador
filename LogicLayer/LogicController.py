@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Manage all functions of the logic program and take decisions and events about it:
+* Implements all public functions for the presentation layer.
+* All notifications with presentation layer is used with events.
+* The communication with DataController is direct, its means that DataController exposes functions
+that is used only by LogicController.
+Author: David Pozos Cerón
+"""
+
 import DataLayer.DataController
 import LogicLayer.Clock
 import LogicLayer.MusicPlayer

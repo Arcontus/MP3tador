@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Manage all things about the data and files and exposes some public functions for using on
+LogicController.
+Author: David Pozos Cerón
+"""
+
 import DataLayer.Library
 import DataLayer.Alarm
-import EventDispatcher.EventDispatcher
 
 
 class MainDataController:
