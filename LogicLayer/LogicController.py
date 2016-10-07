@@ -7,14 +7,16 @@ Manage all functions of the logic program and take decisions and events about it
 * All notifications with presentation layer is used with events.
 * The communication with DataController is direct, its means that DataController exposes functions
 that is used only by LogicController.
-Author: David Pozos Cerón
 """
+__author__ = "David Pozos Cerón"
 
 import DataLayer.DataController
 import LogicLayer.Clock
 import LogicLayer.MusicPlayer
 import EventDispatcher.EventDispatcher
 from gi.repository import GObject
+
+
 
 
 class MainLogicController:

@@ -4,8 +4,8 @@
 """
 Manage all things about the data and files and exposes some public functions for using on
 LogicController.
-Author: David Pozos Cerón
 """
+__author__ = "David Pozos Cerón"
 
 import DataLayer.Library
 import DataLayer.Alarm

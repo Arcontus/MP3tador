@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 MP3 Alarm with some advanced options
-Author: David Pozos Cerón
 """
+__author__ = "David Pozos Cerón"
 
 import LogicLayer.LogicController
 import PresentationLayer.PresentationController
