@@ -2,12 +2,11 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
-import PresentationLayer.PresentationController
-import EventDispatcher.EventDispatcher
+
 
 class AlarmManager(Gtk.Window):
-    def __init__(self, my_alarm_screen_controller = None):
-        if (my_alarm_screen_controller != None):
+    def __init__(self, my_alarm_screen_controller=None):
+        if my_alarm_screen_controller:
             self.my_alarm_screen_controller = my_alarm_screen_controller
         else:
             raise NameError("AlarmManager needs alarm_screen_controller instance")
@@ -99,17 +98,22 @@ class AlarmManager(Gtk.Window):
 
 
 class AlarmWindow(Gtk.Window):
-    def __init__(self):
-        self.window = Gtk.Window.__init__(self, title=str("nombre"))
+    def __init__(self, my_alarm_screen_controller=None):
+        if my_alarm_screen_controller:
+            self.my_alarm_screen_controller = my_alarm_screen_controller
+        else:
+            raise NameError("AlarmManager needs alarm_screen_controller instance")
+        self.window = Gtk.Window.__init__(self)
         self.connect('delete-event', self.delete_event)
         table = Gtk.Table(11, 7, True)
-
+        self.alarm_name = self.my_alarm_screen_controller.get_next_alarm_name()
+        self.set_title(self.alarm_name)
         self.set_border_width(20)
         self.add(table)
 
         lbl_name = Gtk.Label("Nombre")
         self.ent_name = Gtk.Entry()
-        self.ent_name.set_text(str("nombre"))
+        self.ent_name.set_text(self.alarm_name)
 
         lbl_active = Gtk.Label("Activa")
         self.sw_active = Gtk.Switch()

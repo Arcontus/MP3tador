@@ -64,6 +64,21 @@ class MainLogicController:
             list_names.append(i.get_name())
         return list_names
 
+    # This method read the list of alarm names, and compare with his pattern.
+    # If the pattern exists, it try with patern(n) where (n) is the next free number.
+    def get_next_alarm_name(self):
+        pattern = "Alarm"
+        number = 1
+        next_name = None
+        my_alarm_list = self.get_alarm_list()
+        while next_name is None:
+            name = pattern + str(number)
+            if name in my_alarm_list:
+                number += 1
+            else:
+                next_name = name
+        return next_name
+
     def set_player_library(self, event):
         print ("bibliotea seleccionada"+str(event.data))
         if event.data is not None:

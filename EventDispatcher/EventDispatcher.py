@@ -159,7 +159,7 @@ class WhoAsk( object ):
         """
         Dispatch the ask event
         """
-        print ">>> I'm instance {0}. Who are listening to me ?".format( self )
+        print(">>> I'm instance {0}. Who are listening to me ?".format( self ))
 
         self.event_dispatcher.dispatch_event(
             MyEvent( MyEvent.ASK, self )
@@ -169,7 +169,7 @@ class WhoAsk( object ):
         """
         Event handler for the RESPOND event type
         """
-        print "<<< Thank you instance {0}".format( event.data )
+        print("<<< Thank you instance {0}".format( event.data ))
 
 
 class WhoRespond( object ):

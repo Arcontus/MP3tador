@@ -132,13 +132,10 @@ class AlarmScreenController:
         self.window.show_all()
 
     def get_items(self):
-        self.event_dispatcher.dispatch_event(
-            EventDispatcher.EventDispatcher.MyAlarmEvent(
-                EventDispatcher.EventDispatcher.MyAlarmEvent.GET_ALARM_LIST,
-                EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST)
-        )
         library = self.logic_controller.get_library_list()
         self.window.reload_library_items(library)
+        alarm = self.logic_controller.get_alarm_list()
+        self.window.reload_alarm_items(alarm)
 
     def reload_alarm_items(self, event):
         self.window.reload_alarm_items(event.data)
@@ -147,8 +144,10 @@ class AlarmScreenController:
         self.window.reload_library_items(event.data)
 
     def open_alarm_window(self):
-        print("hola")
-        self.my_alarm = PresentationLayer.Alarm.AlarmWindow()
+        self.my_alarm = PresentationLayer.Alarm.AlarmWindow(self)
+
+    def get_next_alarm_name(self):
+        return self.logic_controller.get_next_alarm_name()
 
 
 class OptionScreenController():
