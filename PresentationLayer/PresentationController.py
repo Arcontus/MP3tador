@@ -1,5 +1,13 @@
+"""
+Module to control all things about the presentation layer:
+* Manage screens.
+* Open new screens.
+* Comuniation with logic controller.
+"""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+__author__ = "David Pozos Cerón"
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -9,6 +17,8 @@ import PresentationLayer.Library
 import PresentationLayer.Alarm
 import PresentationLayer.Option
 import EventDispatcher.EventDispatcher
+
+
 
 
 def start_gui():
