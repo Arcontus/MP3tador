@@ -8,15 +8,13 @@ that is used only by LogicController.
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = "David Pozos Cerón"
+__author__ = "David Pozos Ceron"
 
 import DataLayer.DataController
 import LogicLayer.Clock
 import LogicLayer.MusicPlayer
 import EventDispatcher.EventDispatcher
 from gi.repository import GObject
-
-
 
 
 class MainLogicController:

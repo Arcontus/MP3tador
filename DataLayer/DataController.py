@@ -5,7 +5,7 @@ LogicController.
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = "David Pozos Cerón"
+__author__ = "David Pozos Ceron"
 
 import DataLayer.Library
 import DataLayer.Alarm
@@ -18,10 +18,19 @@ class MainDataController:
         DataLayer.Library.load_library_list()
         DataLayer.Alarm.load_alarm_list()
 
-    def get_alarm_list(self):
+    @staticmethod
+    def get_alarm_list():
         return DataLayer.Alarm.get_alarm_list()
 
-    def get_library_list(self):
+    @staticmethod
+    def get_library_list():
         return DataLayer.Library.get_library_list()
+
+    @staticmethod
+    def get_alarm(name):
+        if name is None:
+            return None
+        else:
+            return DataLayer.Alarm.get_alarma_by_name(name)
 
 

@@ -7,7 +7,7 @@ Module to control all things about the presentation layer:
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = "David Pozos Cerón"
+__author__ = "David Pozos Ceron"
 
 import gi
 gi.require_version('Gtk', '3.0')

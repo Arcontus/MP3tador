@@ -3,7 +3,9 @@ MP3 Alarm with some advanced options
 """
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "David Pozos Cerón"
+# coding=utf-8
+
+__author__ = "David Pozos Ceron"
 
 import LogicLayer.LogicController
 import PresentationLayer.PresentationController
