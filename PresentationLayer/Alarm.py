@@ -4,6 +4,124 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 
 
+class Alarm:
+    def __init__(self):
+        self.name = ""
+        self.active = False
+        self.days = False
+        self.monday = False
+        self.tuesday = False
+        self.wednesday = False
+        self.thursday = False
+        self.friday = False
+        self.saturday = False
+        self.sunday = False
+        self.hours = 0
+        self.minutes = 0
+        self.library = ""
+        self.snooze = False
+        self.min_snooze = 5
+
+    def set_name(self, name):
+        self.name = name
+
+    def load_params(self):
+        a = 1
+
+    def save_params(self):
+        q = 1
+
+    def get_name(self):
+        return self.name
+
+    def set_name(self, name):
+        self.name = name
+
+    def get_active(self):
+        return self.active
+
+    def set_active(self, activa):
+        self.active = activa
+
+    def get_days(self):
+        return self.days
+
+    def set_days(self, days):
+        self.days= days
+
+    def get_monday(self):
+        return self.monday
+
+    def set_monday(self, monday):
+        self.monday = monday
+
+    def get_tuesday(self):
+        return self.tuesday
+
+    def set_tuesday(self, tuesday):
+        self.tuesday = tuesday
+
+    def get_wednesday(self):
+        return self.wednesday
+
+    def set_wednesday(self, wednesday):
+        self.wednesday = wednesday
+
+    def get_thursday(self):
+        return self.thursday
+
+    def set_thursday(self, thursday):
+        self.thursday = thursday
+
+    def get_friday(self):
+        return self.friday
+
+    def set_friday(self, friday):
+        self.friday = friday
+
+    def get_saturday(self):
+        return self.saturday
+
+    def set_saturday(self, saturday):
+        self.saturday = saturday
+
+    def get_sunday(self):
+        return self.sunday
+
+    def set_sunday(self, sunday):
+        self.sunday = sunday
+
+    def get_hours(self):
+        return self.hours
+
+    def set_hours(self, hours):
+        self.hours = hours
+
+    def get_minutes(self):
+        return self.minutes
+
+    def set_minutes(self, minutes):
+        self.minutes = minutes
+
+    def get_library(self):
+        return self.library
+
+    def set_library(self, library):
+        self.library = library
+
+    def get_snooze(self):
+        return self.snooze
+
+    def set_snooze(self, snooze):
+        self.snooze = snooze
+
+    def get_min_snooze(self):
+        return self.min_snooze
+
+    def set_min_snooze(self, minutes):
+        self.min_snooze = minutes
+
+
 class AlarmManager(Gtk.Window):
     def __init__(self, my_alarm_screen_controller=None):
         if my_alarm_screen_controller:
@@ -105,6 +223,7 @@ class AlarmWindow(Gtk.Window):
             raise NameError("AlarmManager needs alarm_screen_controller instance")
         self.window = Gtk.Window.__init__(self)
         self.connect('delete-event', self.delete_event)
+        self.my_alarm = Alarm()
         table = Gtk.Table(11, 7, True)
         self.alarm_name = self.my_alarm_screen_controller.get_next_alarm_name()
         self.set_title(self.alarm_name)
@@ -244,7 +363,21 @@ class AlarmWindow(Gtk.Window):
         a = 1
 
     def on_click_save(self, button):
-        a = 1
+        self.my_alarm.set_name(self.ent_name.get_text())
+        self.my_alarm.set_active(self.sw_active.get_active())
+        self.my_alarm.set_days(self.sw_days.get_active())
+        self.my_alarm.set_monday(self.chk_monday.get_active())
+        self.my_alarm.set_tuesday(self.chk_tuesday.get_active())
+        self.my_alarm.set_wednesday(self.chk_wednesday.get_active())
+        self.my_alarm.set_thursday(self.chk_thursday.get_active())
+        self.my_alarm.set_friday(self.chk_friday.get_active())
+        self.my_alarm.set_saturday(self.chk_saturday.get_active())
+        self.my_alarm.set_sunday(self.chk_sunday.get_active())
+        self.my_alarm.set_hours(self.spb_hours.get_value_as_int())
+        self.my_alarm.set_minutes(self.spb_minutes.get_value_as_int())
+        #self.my_alarm.set_library()
+        self.my_alarm.set_snooze(self.sw_snooze.get_active())
+        self.my_alarm.set_min_snooze(self.spb_snooze.get_value_as_int())
 
     def delete_event(self, widget, event=None):
         a = 1
