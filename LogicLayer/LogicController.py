@@ -95,6 +95,16 @@ class MainLogicController:
         else:
             self.player.unload_library()
 
+    def save_alarm(self, dict):
+        if self.data.save_alarm(dict):
+            self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyAlarmEvent(
+                        EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST,
+                        self.get_alarm_list()
+                )
+            )
+
+
     def play_song(self, event):
         self.player.play()
 

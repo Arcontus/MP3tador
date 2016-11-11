@@ -24,7 +24,7 @@ def load_alarm_list():
         alarm_list.append(my_alarms)
 
 
-def get_alarma_by_name(name):
+def get_alarm_by_name(name):
     for i in alarm_list:
         if i.get_name() == name:
             return i
@@ -159,7 +159,7 @@ class Alarm():
         file.close()
 
     def save_params(self):
-        fichero = open(self.alarm_dir + self.name + ".alarm", "w")
+        fichero = open(alarm_dir + self.name + ".alarm", "w")
         fichero.write("active:" + str(self.active) + "\n")
         fichero.write("days:" + str(self.days) + "\n")
         fichero.write("monday:" + str(self.monday) + "\n")
@@ -169,9 +169,9 @@ class Alarm():
         fichero.write("friday:" + str(self.friday) + "\n")
         fichero.write("saturday:" + str(self.saturday) + "\n")
         fichero.write("sunday:" + str(self.sunday) + "\n")
-        fichero.write("hora:" + self.hours + "\n")
-        fichero.write("minutes:" + self.minutes + "\n")
-        fichero.write("library:" + self.library + "\n")
+        fichero.write("hora:" + str(self.hours) + "\n")
+        fichero.write("minutes:" + str(self.minutes) + "\n")
+        fichero.write("library:" + str(self.library) + "\n")
         fichero.write("snooze:"+str(self.snooze)+"\n")
         fichero.write("min_snooze:"+str(self.min_snooze)+"\n")
         fichero.close()

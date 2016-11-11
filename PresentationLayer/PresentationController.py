@@ -137,15 +137,18 @@ class AlarmScreenController:
             self.logic_controller = logic_controller
 
     def show_window(self):
-        self.window = PresentationLayer.Alarm.AlarmManager(my_alarm_screen_controller=self)
+        self.window = PresentationLayer.Alarm.AlarmManager(self)
         self.get_items()
         self.window.show_all()
 
     def get_items(self):
-        library = self.logic_controller.get_library_list()
-        self.window.reload_library_items(library)
-        alarm = self.logic_controller.get_alarm_list()
-        self.window.reload_alarm_items(alarm)
+        self.library = self.logic_controller.get_library_list()
+        self.alarm_list = self.logic_controller.get_alarm_list()
+        self.window.reload_library_items(self.library)
+        self.window.reload_alarm_items(self.alarm_list)
+
+    def save_alarm(self, alarm):
+        self.logic_controller.save_alarm(alarm)
 
     def reload_alarm_items(self, event):
         self.window.reload_alarm_items(event.data)
@@ -153,8 +156,9 @@ class AlarmScreenController:
     def reload_library_items(self, event):
         self.window.reload_library_items(event.data)
 
-    def open_alarm_window(self):
+    def open_alarm_config(self):
         self.my_alarm = PresentationLayer.Alarm.AlarmWindow(self)
+        self.my_alarm.reload_library_items(self.library)
 
     def get_next_alarm_name(self):
         return self.logic_controller.get_next_alarm_name()
