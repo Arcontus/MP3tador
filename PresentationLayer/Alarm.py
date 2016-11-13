@@ -76,7 +76,7 @@ class AlarmManager(Gtk.Window):
         self.lst_library.append_text(item)
 
     def on_click_modificar(self, widget):
-        a = 1
+        self.my_alarm_screen_controller.modify_alarm_config(self.lst_alarms.get_active_text())
 
     def on_click_btn_add_alarm(self, widget):
         self.my_alarm_screen_controller.open_alarm_config()
@@ -161,7 +161,6 @@ class AlarmWindow(Gtk.Window):
 
         self.lst_library = Gtk.ComboBoxText()
 
-        self.load_params()
         self.update_sensitives()
 
         table.attach(lbl_name, 0, 2, 0, 1)
@@ -189,12 +188,9 @@ class AlarmWindow(Gtk.Window):
         table.attach(self.btn_cancel, 4, 6, 10, 11)
         self.show_all()
 
-    def on_click_cancel(self, button):
-        a = 1
-
     def update_sensitives(self):
         # Comprobamos el status de la alarm
-        if self.sw_active.get_active() is True:
+        if self.sw_active.get_active():
             self.lbl_days.set_sensitive(True)
             self.sw_days.set_sensitive(True)
             self.lbl_hours.set_sensitive(True)
@@ -202,7 +198,7 @@ class AlarmWindow(Gtk.Window):
             self.lbl_minutes.set_sensitive(True)
             self.spb_minutes.set_sensitive(True)
             self.sw_snooze.set_sensitive(True)
-            if self.sw_days.get_active() is True:
+            if self.sw_days.get_active():
                 self.chk_monday.set_sensitive(False)
                 self.chk_tuesday.set_sensitive(False)
                 self.chk_wednesday.set_sensitive(False)
@@ -218,7 +214,7 @@ class AlarmWindow(Gtk.Window):
                 self.chk_friday.set_sensitive(True)
                 self.chk_saturday.set_sensitive(True)
                 self.chk_sunday.set_sensitive(True)
-            if self.sw_snooze.get_active is True:
+            if self.sw_snooze.get_active():
                 self.spb_snooze.set_sensitive(True)
             else:
                 self.spb_snooze.set_sensitive(False)
@@ -249,8 +245,30 @@ class AlarmWindow(Gtk.Window):
     def on_sw_snooze_activated(self, switch, gparam):
         self.update_sensitives()
 
-    def load_params(self):
-        a = 1
+    def load_params(self, alarm_dict):
+        self.alarm = alarm_dict
+        self.ent_name.set_text(self.alarm['name'])
+        self.sw_active.set_active(self.alarm['active'])
+        self.sw_days.set_active(self.alarm['days'])
+        self.chk_monday.set_active(self.alarm['monday'])
+        self.chk_tuesday.set_active(self.alarm['tuesday'])
+        self.chk_wednesday.set_active(self.alarm['wednesday'])
+        self.chk_thursday.set_active(self.alarm['thursday'])
+        self.chk_friday.set_active(self.alarm['friday'])
+        self.chk_saturday.set_active(self.alarm['saturday'])
+        self.chk_sunday.set_active(self.alarm['sunday'])
+        self.spb_hours.set_value(self.alarm['hours'])
+        self.spb_minutes.set_value(self.alarm['minutes'])
+
+        # This block put the correct active text on comboBox
+        num_items = len(self.lst_library.get_model())
+        for i in range(num_items):
+            self.lst_library.set_active(i)
+            if self.lst_library.get_active_text() == self.alarm['library']:
+                break
+
+        self.sw_snooze.set_active(self.alarm['snooze'])
+        self.spb_snooze.set_value(self.alarm['min_snooze'])
 
     def reload_library_items(self, items):
         self.reset_library_items()
@@ -286,3 +304,6 @@ class AlarmWindow(Gtk.Window):
 
     def delete_event(self, widget, event=None):
         a = 1
+
+    def on_click_cancel(self, button):
+        self.close()

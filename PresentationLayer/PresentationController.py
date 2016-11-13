@@ -160,6 +160,11 @@ class AlarmScreenController:
         self.my_alarm = PresentationLayer.Alarm.AlarmWindow(self)
         self.my_alarm.reload_library_items(self.library)
 
+    def modify_alarm_config(self, alarm_name):
+        self.my_alarm = PresentationLayer.Alarm.AlarmWindow(self)
+        self.my_alarm.reload_library_items(self.library)
+        self.my_alarm.load_params(self.logic_controller.get_alarm_parameters(alarm_name))
+
     def get_next_alarm_name(self):
         return self.logic_controller.get_next_alarm_name()
 

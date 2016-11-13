@@ -32,6 +32,17 @@ class MainDataController:
             return None
         else:
             return DataLayer.Alarm.get_alarm_by_name(name)
+    def get_alarm_parameters(self, name):
+        my_alarm = DataLayer.Alarm.get_alarm_by_name(name)
+        if my_alarm:
+            alarm_dic = {'name': my_alarm.get_name(), 'active': my_alarm.get_active(), 'days': my_alarm.get_days(),
+                         'monday': my_alarm.get_monday(), 'tuesday': my_alarm.get_tuesday(),
+                         'wednesday': my_alarm.get_wednesday(), 'thursday': my_alarm.get_thursday(),
+                         'friday': my_alarm.get_friday(), 'saturday': my_alarm.get_saturday(),
+                         'sunday': my_alarm.get_sunday(), 'hours': my_alarm.get_hours(), 'minutes': my_alarm.get_minutes(),
+                         'library': my_alarm.get_library(), 'snooze': my_alarm.get_snooze(),
+                         'min_snooze': my_alarm.get_min_snooze()}
+        return alarm_dic
 
     @staticmethod
     def save_alarm(alarm_dict):
