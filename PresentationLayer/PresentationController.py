@@ -65,12 +65,15 @@ class MainScreenController(Borg):
         self.window.reload_library_items(library)
 
     def open_library_manager(self):
-        self.my_library = PresentationLayer.Library.LibraryManagerWindow()
-        self.my_library.show_all()
+        if self.my_library is None:
+            self.my_library = LibraryScreenController(event_dispatcher=self.event_dispatcher,
+                                                      logic_controller=self.logic_controller)
+        self.my_library.show_window()
 
     def open_alarm_manager(self):
         if self.my_alarm is None:
-            self.my_alarm = AlarmScreenController(event_dispatcher=self.event_dispatcher, logic_controller=self.logic_controller )
+            self.my_alarm = AlarmScreenController(event_dispatcher=self.event_dispatcher,
+                                                  logic_controller=self.logic_controller)
         self.my_alarm.show_window()
 
     def open_option_manager(self):
@@ -123,6 +126,33 @@ class MainScreenController(Borg):
         )
 
 
+class LibraryScreenController:
+    def __init__(self, event_dispatcher=None, logic_controller=None):
+        if event_dispatcher is not None:
+            self.event_dispatcher = event_dispatcher
+            self.event_dispatcher.add_event_listener(
+                EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
+        if logic_controller is None:
+            raise Exception('Logic controller is needed')
+        else:
+            self.logic_controller = logic_controller
+
+    def show_window(self):
+        self.window = PresentationLayer.Library.LibraryManagerWindow(self)
+        self.get_items()
+        self.window.show_all()
+
+    def get_items(self):
+        self.library = self.logic_controller.get_library_list()
+        self.window.reload_library_items(self.library)
+
+    def reload_library_items(self, event):
+        self.window.reload_library_items(event.data)
+
+    def open_new_library_window(self):
+        self.my_new_library_window = PresentationLayer.Library.AddNewLibrary(self)
+
+
 class AlarmScreenController:
     def __init__(self, event_dispatcher=None, logic_controller=None):
         if event_dispatcher is not None:
@@ -132,7 +162,7 @@ class AlarmScreenController:
             self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
         if logic_controller is None:
-            raise NameError('Logic controller is needed')
+            raise Exception('Logic controller is needed')
         else:
             self.logic_controller = logic_controller
 
@@ -157,11 +187,11 @@ class AlarmScreenController:
         self.window.reload_library_items(event.data)
 
     def open_alarm_config(self):
-        self.my_alarm = PresentationLayer.Alarm.AlarmWindow(self)
+        self.my_alarm = PresentationLayer.Alarm.AlarmConfig(self)
         self.my_alarm.reload_library_items(self.library)
 
     def modify_alarm_config(self, alarm_name):
-        self.my_alarm = PresentationLayer.Alarm.AlarmWindow(self)
+        self.my_alarm = PresentationLayer.Alarm.AlarmConfig(self)
         self.my_alarm.reload_library_items(self.library)
         self.my_alarm.load_params(self.logic_controller.get_alarm_parameters(alarm_name))
 

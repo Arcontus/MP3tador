@@ -98,7 +98,7 @@ class AlarmManager(Gtk.Window):
         a = 1
 
 
-class AlarmWindow(Gtk.Window):
+class AlarmConfig(Gtk.Window):
     def __init__(self, my_alarm_screen_controller=None):
         if my_alarm_screen_controller:
             self.my_alarm_screen_controller = my_alarm_screen_controller
