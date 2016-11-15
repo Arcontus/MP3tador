@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import gi
+import os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 
@@ -105,4 +106,75 @@ class AddNewLibrary(Gtk.Window):
         self.close()
 
     def on_btn_add_library_clicked(self, widget):
-        a = 1
+        library= FileChooserWindow()
+        library_aux = self.library+library.select_folder()
+
+        # It Check if the same songs exists on library, if not add it.
+        for i in library_aux:
+            if i not in self.library:
+                self.library.append(i)
+        self.num_items = len(self.library)
+
+        self.lbl_num_items.set_text("Canciones en la biblioteca: " + str(self.num_items))
+
+
+class FileChooserWindow(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Seleccion libreria")
+        self.library = []
+
+    def on_file_clicked(self, widget):
+        dialog = Gtk.FileChooserDialog("Selecciona un fichero", self,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+        self.add_filters(dialog)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("Open clicked")
+            print("File selected: " + dialog.get_filename())
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+        dialog.destroy()
+
+    @staticmethod
+    def add_filters(dialog):
+        filter_any = Gtk.FileFilter()
+        filter_any.set_name("Any files")
+        filter_any.add_pattern("*")
+        dialog.add_filter(filter_any)
+
+    def select_folder(self):
+        self.on_folder_clicked(None)
+        return self.library
+
+    def on_folder_clicked(self, widget):
+        dialog = Gtk.FileChooserDialog("Selecciona una carpeta", self,
+            Gtk.FileChooserAction.SELECT_FOLDER,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             "Seleccionar", Gtk.ResponseType.OK))
+        dialog.set_default_size(800, 400)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("Folder selected: " + dialog.get_filename())
+            self.directory = dialog.get_filename()
+            music = self.get_music_from_dir(dialog.get_filename())
+
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        dialog.destroy()
+
+    def get_directory(self):
+        return self.directory
+
+    def get_music_from_dir(self, directory):
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".mp3"):
+                    #print(os.path.join(root, file))
+                    self.library.append(str(os.path.join(root, file)))
+        return self.library
