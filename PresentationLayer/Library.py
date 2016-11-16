@@ -106,7 +106,7 @@ class AddNewLibrary(Gtk.Window):
         self.close()
 
     def on_btn_add_library_clicked(self, widget):
-        library= FileChooserWindow()
+        library = FileChooserWindow()
         library_aux = self.library+library.select_folder()
 
         # It Check if the same songs exists on library, if not add it.

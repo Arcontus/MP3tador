@@ -32,7 +32,16 @@ class MainDataController:
             return None
         else:
             return DataLayer.Alarm.get_alarm_by_name(name)
-    def get_alarm_parameters(self, name):
+
+    @staticmethod
+    def get_library(name):
+        if name is None:
+            return None
+        else:
+            return DataLayer.Library.get_library_by_name(name)
+
+    @staticmethod
+    def get_alarm_parameters(name):
         my_alarm = DataLayer.Alarm.get_alarm_by_name(name)
         if my_alarm:
             alarm_dic = {'name': my_alarm.get_name(), 'active': my_alarm.get_active(), 'days': my_alarm.get_days(),
@@ -42,7 +51,18 @@ class MainDataController:
                          'sunday': my_alarm.get_sunday(), 'hours': my_alarm.get_hours(), 'minutes': my_alarm.get_minutes(),
                          'library': my_alarm.get_library(), 'snooze': my_alarm.get_snooze(),
                          'min_snooze': my_alarm.get_min_snooze()}
-        return alarm_dic
+            return alarm_dic
+        return False  # Not found
+
+    @staticmethod
+    def get_library_parameters(name):
+        my_library = DataLayer.Library.get_library_by_name(name)
+        if my_library:
+            library_dic = {'name': my_library.get_name(), 'items': my_library.get_num_items(),
+                           'songs': my_library.get_songs()}
+            print library_dic
+            return library_dic
+        return False  # Not found
 
     @staticmethod
     def save_alarm(alarm_dict):

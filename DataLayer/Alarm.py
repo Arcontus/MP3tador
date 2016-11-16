@@ -9,14 +9,14 @@ def add_alarm(alarm_id):
 
 
 def rm_alarm(alarm_id):
-    if os.path.exists (alarm_dir+alarm_id.get_name()+".alarm"):
+    if os.path.exists(alarm_dir+alarm_id.get_name()+".alarm"):
         os.remove(alarm_dir+alarm_id.get_name()+".alarm")
     alarm_list.remove(alarm_id)
 
 
 def load_alarm_list():
     if not os.path.exists(alarm_dir):
-            os.makedirs(alarm_dir)
+        os.makedirs(alarm_dir)
     files = os.listdir(alarm_dir)
     for i in sorted(files):
         my_alarms = Alarm()
