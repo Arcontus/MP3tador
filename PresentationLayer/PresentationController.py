@@ -149,6 +149,9 @@ class LibraryScreenController:
     def reload_library_items(self, event):
         self.window.reload_library_items(event.data)
 
+    def save_library(self, library):
+        self.logic_controller.save_library(library)
+
     def open_new_library_window(self):
         self.my_new_library_window = PresentationLayer.Library.AddNewLibrary(self)
 

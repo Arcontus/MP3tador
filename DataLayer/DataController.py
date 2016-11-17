@@ -93,4 +93,20 @@ class MainDataController:
         else:
             return False
 
+    @staticmethod
+    def save_library(library_dict):
+        add_library = False
+        my_library = DataLayer.Alarm.get_alarm_by_name(library_dict['name'])
+        if not my_library:
+            my_library = DataLayer.Library.Library()
+            add_library = True
+        my_library.set_name(library_dict['name'])
+        my_library.add_song_list(library_dict['songs'])
+        my_library.save_params()
+        if add_library:
+            DataLayer.Library.add_library(my_library)
+            return True
+        else:
+            return False
+
 

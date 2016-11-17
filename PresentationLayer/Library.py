@@ -73,6 +73,8 @@ class AddNewLibrary(Gtk.Window):
         self.window = Gtk.Table(6, 5, True)
         self.set_border_width(20)
         self.add(self.window)
+        self.library_dic = {'name': '', 'items': 0,
+                            'songs': []}
         self.name = Gtk.Entry()
         self.library = []
 
@@ -97,7 +99,9 @@ class AddNewLibrary(Gtk.Window):
         self.show_all()
 
     def on_btn_accept_clicked(self, widget):
-        a = 1
+        self.library_dic = {'name': self.name.get_text(), 'items': len(self.library),
+                            'songs': self.library}
+
 
     def error_params(self, widget):
         a = 1

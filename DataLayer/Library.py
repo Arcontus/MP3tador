@@ -42,8 +42,6 @@ class Library:
         self.num_items = 0
         self.songs = []
         self.load_params()
-        print (self.file_name)
-        print(self.songs)
 
     def __str__(self):
         return self.file_name
@@ -55,14 +53,15 @@ class Library:
         if os.path.isfile(library_dir+self.file_name):
             my_file = open(library_dir + self.file_name, "r")
             for line in my_file:
-                if line.split(":")[0] == 'items':
-                    self.num_items = int(line.split(":")[1])
-                elif line.split(":")[0] == "cancion":
+                if line.split(":")[0] == "cancion":
                     self.songs.append(line.split(":")[1])
+            self.num_items = len(self.songs)
 
     def save_params(self):
         if not os.path.exists(library_dir):
             os.makedirs(library_dir)
+
+        self.num_items = len(self.songs)
         if self.num_items > 0:
             file = open(library_dir + self.file_name, "w")
             file.write("nombre:"+str(self.file_name)[:-4]+"\n")
@@ -78,26 +77,34 @@ class Library:
     def get_name(self):
         return self.file_name[:-4]
 
+    def set_name(self, name):
+        self.file_name = "{0}.lib".format(name)
+
+
     def get_num_items(self):
-        return self.num_items
+        return len(self.songs)
 
     def get_file_name(self):
         return self.file_name
 
     def remove_all_songs(self):
         self.songs = []
+        self.num_items = len(self.songs)
 
     def add_song(self, song):
         if song not in self.songs:
             self.songs.append(song)
+        self.num_items = len(self.songs)
 
     def add_song_list(self, list):
         for i in list:
             if i not in self.songs:
                 self.songs.append(i)
+        self.num_items = len(self.songs)
 
     def del_song(self, song):
         self.songs.remove(song)
+        self.num_items = len(self.songs)
 
     def get_songs(self):
         return self.songs

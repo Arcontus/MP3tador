@@ -104,6 +104,15 @@ class MainLogicController:
                 )
             )
 
+    def save_library(self, dict):
+        if self.data.save_library(dict):
+            self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyLibraryEvent(
+                        EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST,
+                        self.get_library_list()
+                )
+            )
+
     def get_alarm_parameters(self, name):
         return self.data.get_alarm_parameters(name)
 
