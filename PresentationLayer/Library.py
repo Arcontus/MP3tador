@@ -56,9 +56,6 @@ class LibraryManagerWindow(Gtk.Window):
     def on_btn_mdf_library_clicked(self, widget):
         a =1
 
-    def error_rm_params(self, num):
-        a =1
-
     def delete_event(self, widget, event=None):
         a =1
 
@@ -85,7 +82,7 @@ class AddNewLibrary(Gtk.Window):
         btn_library.connect("clicked", self.on_btn_add_library_clicked)
         self.window.attach(btn_library, 3,4,0,1)
 
-        self.num_items=0
+        self.num_items = 0
         self.lbl_num_items = Gtk.Label("Canciones en la biblioteca: " + str(self.num_items))
         self.window.attach(self.lbl_num_items, 1,3 ,1,2)
 
@@ -101,10 +98,7 @@ class AddNewLibrary(Gtk.Window):
     def on_btn_accept_clicked(self, widget):
         self.library_dic = {'name': self.name.get_text(), 'items': len(self.library),
                             'songs': self.library}
-
-
-    def error_params(self, widget):
-        a = 1
+        self.my_library_screen_controller.save_library(self.library_dic)
 
     def on_btn_cancel_clicked(self, widget):
         self.close()
@@ -124,14 +118,14 @@ class AddNewLibrary(Gtk.Window):
 
 class FileChooserWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Seleccion libreria")
+        Gtk.Window.__init__(self, title="Seleccion biblioteca")
         self.library = []
 
     def on_file_clicked(self, widget):
         dialog = Gtk.FileChooserDialog("Selecciona un fichero", self,
-            Gtk.FileChooserAction.OPEN,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+                                       Gtk.FileChooserAction.OPEN,
+                                       (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                        Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
         self.add_filters(dialog)
 

@@ -41,7 +41,8 @@ class Library:
 
         self.num_items = 0
         self.songs = []
-        self.load_params()
+        if self.file_name:
+            self.load_params()
 
     def __str__(self):
         return self.file_name
@@ -63,13 +64,13 @@ class Library:
 
         self.num_items = len(self.songs)
         if self.num_items > 0:
-            file = open(library_dir + self.file_name, "w")
-            file.write("nombre:"+str(self.file_name)[:-4]+"\n")
-            file.write("items:"+str(self.num_items)+"\n")
+            my_file = open(library_dir + self.file_name, "w")
+            my_file.write("nombre:"+str(self.file_name)[:-4]+"\n")
+            my_file.write("items:"+str(self.num_items)+"\n")
             for i in self.songs:
-                file.write("cancion:"+i+"\n")
-            file.close()
-            self.close()
+                my_file.write("cancion:"+i+"\n")
+            my_file.close()
+            print("file saved")
         else:
             a = 1
             ## ERROR
