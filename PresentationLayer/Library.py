@@ -59,8 +59,95 @@ class LibraryManagerWindow(Gtk.Window):
     def delete_event(self, widget, event=None):
         a =1
 
-
 class AddNewLibrary(Gtk.Window):
+    def __init__(self, my_library_screen_controller=None):
+        if my_library_screen_controller:
+            self.my_library_screen_controller = my_library_screen_controller
+        else:
+            raise NameError("AlarmManager needs alarm_screen_controller instance")
+        Gtk.Window.__init__(self, title="Agregar Biblioteca")
+        self.set_border_width(20)
+        self.grid = Gtk.Grid()
+        self.grid.set_column_homogeneous(True)
+        self.grid.set_row_homogeneous(True)
+        self.grid.set_row_spacing(20)
+        self.grid.set_column_spacing(10)
+        self.add(self.grid)
+
+        self.song_list = Gtk.ListStore(str)
+
+        self.treeview = Gtk.TreeView(model=self.song_list)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Cancion", renderer, text=0)
+        column.set_sort_column_id(0)
+        self.treeview.append_column(column)
+
+        self.buttons = list()
+        for prog_language in ["Reproducir", "Detener", "Eliminar"]:
+            button = Gtk.Button(prog_language)
+            self.buttons.append(button)
+            button.connect("clicked", self.on_selection_button_clicked)
+
+        self.scrollable_treelist = Gtk.ScrolledWindow()
+        self.scrollable_treelist.set_vexpand(True)
+        self.lbl_name = Gtk.Label("Nombre de la biblioteca")
+        self.name = Gtk.Entry()
+        self.name.set_text("biblioteca")
+        self.grid.attach(self.lbl_name, 0, 0, 2, 1)
+        self.grid.attach_next_to(self.name, self.lbl_name, Gtk.PositionType.BOTTOM, 2, 1)
+        btn_library = Gtk.Button(label="Añadir ruta")
+        btn_library.connect("clicked", self.on_btn_add_library_clicked)
+        self.grid.attach_next_to(btn_library, self.lbl_name, Gtk.PositionType.RIGHT, 2, 1)
+        self.num_items = 0
+        self.lbl_num_items = Gtk.Label("Canciones en la biblioteca: " + str(self.num_items))
+        self.grid.attach_next_to(self.lbl_num_items, self.name, Gtk.PositionType.RIGHT, 2, 1)
+
+        self.grid.attach_next_to(self.scrollable_treelist, self.name, Gtk.PositionType.BOTTOM, 5, 7)
+        self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 1, 1)
+        for i, button in enumerate(self.buttons[1:]):
+            self.grid.attach_next_to(button, self.buttons[i], Gtk.PositionType.RIGHT, 1, 1)
+
+        self.scrollable_treelist.add(self.treeview)
+
+        self.library_dic = {'name': '', 'items': 0,
+                            'songs': []}
+
+        self.library = []
+
+        btn_accept = Gtk.Button(label="Aceptar")
+        btn_accept.connect("clicked", self.on_btn_accept_clicked)
+        self.grid.attach_next_to(btn_accept, self.buttons[0], Gtk.PositionType.BOTTOM, 1, 1)
+
+        btn_cancel = Gtk.Button(label="Cancelar")
+        btn_cancel.connect("clicked", self.on_btn_cancel_clicked)
+        self.grid.attach_next_to(btn_cancel, btn_accept, Gtk.PositionType.RIGHT,1,1)
+        self.show_all()
+
+    def on_btn_accept_clicked(self, widget):
+        self.library_dic = {'name': self.name.get_text(), 'items': len(self.library),
+                            'songs': self.library}
+        self.my_library_screen_controller.save_library(self.library_dic)
+
+    def on_btn_cancel_clicked(self, widget):
+        self.close()
+
+    def on_selection_button_clicked(self, widget):
+        a = 1
+
+    def on_btn_add_library_clicked(self, widget):
+        library = FileChooserWindow()
+        library_aux = self.library+library.select_folder()
+
+        # It Check if the same songs exists on library, if not add it.
+        for i in library_aux:
+            if i not in self.library:
+                self.library.append(i)
+        self.num_items = len(self.library)
+
+        self.lbl_num_items.set_text("Canciones en la biblioteca: " + str(self.num_items))
+
+
+class AddNewLibrary2(Gtk.Window):
     def __init__(self, my_library_screen_controller=None):
         if my_library_screen_controller:
             self.my_library_screen_controller = my_library_screen_controller
