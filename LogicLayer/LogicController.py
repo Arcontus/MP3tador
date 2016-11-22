@@ -116,6 +116,9 @@ class MainLogicController:
     def get_alarm_parameters(self, name):
         return self.data.get_alarm_parameters(name)
 
+    def get_library_parameters(self, name):
+        return self.data.get_library_parameters(name)
+
     def play_song(self, event):
         self.player.play()
 

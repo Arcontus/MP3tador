@@ -55,7 +55,7 @@ class Library:
             my_file = open(library_dir + self.file_name, "r")
             for line in my_file:
                 if line.split(":")[0] == "cancion":
-                    self.songs.append(line.split(":")[1])
+                    self.songs.append(line.split(":")[1].rstrip())
             self.num_items = len(self.songs)
 
     def save_params(self):

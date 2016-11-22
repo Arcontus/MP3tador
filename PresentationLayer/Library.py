@@ -2,7 +2,8 @@
 import gi
 import os
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf
+from gi.repository import Gtk
+
 
 class LibraryManagerWindow(Gtk.Window):
     def __init__(self, my_library_screen_controller=None):
@@ -45,7 +46,7 @@ class LibraryManagerWindow(Gtk.Window):
         self.lst_library.remove_all()
 
     def on_btn_add_library_clicked(self, widget):
-        self.my_library_screen_controller.open_new_library_window()
+        self.my_library_screen_controller.open_library_config()
 
     def get_library(self):
         a =1
@@ -54,18 +55,19 @@ class LibraryManagerWindow(Gtk.Window):
         a =1
 
     def on_btn_mdf_library_clicked(self, widget):
-        a =1
+        self.my_library_screen_controller.open_library_config(self.lst_library.get_active_text())
 
     def delete_event(self, widget, event=None):
         a =1
 
-class AddNewLibrary(Gtk.Window):
-    def __init__(self, my_library_screen_controller=None):
+
+class OpenLibraryConfig(Gtk.Window):
+    def __init__(self, title, my_library_screen_controller=None):
         if my_library_screen_controller:
             self.my_library_screen_controller = my_library_screen_controller
         else:
             raise NameError("AlarmManager needs alarm_screen_controller instance")
-        Gtk.Window.__init__(self, title="Agregar Biblioteca")
+        Gtk.Window.__init__(self, title=title)
         self.set_border_width(20)
         self.grid = Gtk.Grid()
         self.grid.set_column_homogeneous(True)
@@ -74,9 +76,15 @@ class AddNewLibrary(Gtk.Window):
         self.grid.set_column_spacing(10)
         self.add(self.grid)
 
-        self.song_list = Gtk.ListStore(str)
+        self.library_dic = {'name': '', 'items': 0,
+                            'songs': []}
 
-        self.treeview = Gtk.TreeView(model=self.song_list)
+        self.library = []
+
+        self.gtk_song_list = Gtk.ListStore(str)
+        self.fill_song_list()
+
+        self.treeview = Gtk.TreeView(model=self.gtk_song_list)
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Cancion", renderer, text=0)
         column.set_sort_column_id(0)
@@ -92,7 +100,7 @@ class AddNewLibrary(Gtk.Window):
         self.scrollable_treelist.set_vexpand(True)
         self.lbl_name = Gtk.Label("Nombre de la biblioteca")
         self.name = Gtk.Entry()
-        self.name.set_text("biblioteca")
+        self.name.set_text(title)
         self.grid.attach(self.lbl_name, 0, 0, 2, 1)
         self.grid.attach_next_to(self.name, self.lbl_name, Gtk.PositionType.BOTTOM, 2, 1)
         btn_library = Gtk.Button(label="Añadir ruta")
@@ -109,11 +117,6 @@ class AddNewLibrary(Gtk.Window):
 
         self.scrollable_treelist.add(self.treeview)
 
-        self.library_dic = {'name': '', 'items': 0,
-                            'songs': []}
-
-        self.library = []
-
         btn_accept = Gtk.Button(label="Aceptar")
         btn_accept.connect("clicked", self.on_btn_accept_clicked)
         self.grid.attach_next_to(btn_accept, self.buttons[0], Gtk.PositionType.BOTTOM, 1, 1)
@@ -122,6 +125,18 @@ class AddNewLibrary(Gtk.Window):
         btn_cancel.connect("clicked", self.on_btn_cancel_clicked)
         self.grid.attach_next_to(btn_cancel, btn_accept, Gtk.PositionType.RIGHT,1,1)
         self.show_all()
+
+    def fill_song_list(self):
+        for song in sorted(self.library):
+            self.gtk_song_list.append([song])
+
+    def set_library(self, library):
+        self.library = library
+        self.recalculate()
+
+    def set_library_name(self, name):
+        self.name.set_text(name)
+        self.name.set_sensitive(False)
 
     def on_btn_accept_clicked(self, widget):
         self.library_dic = {'name': self.name.get_text(), 'items': len(self.library),
@@ -142,9 +157,12 @@ class AddNewLibrary(Gtk.Window):
         for i in library_aux:
             if i not in self.library:
                 self.library.append(i)
-        self.num_items = len(self.library)
+        self.recalculate()
 
+    def recalculate(self):
+        self.num_items = len(self.library)
         self.lbl_num_items.set_text("Canciones en la biblioteca: " + str(self.num_items))
+        self.fill_song_list()
 
 
 class AddNewLibrary2(Gtk.Window):
