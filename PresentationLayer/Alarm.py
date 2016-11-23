@@ -95,7 +95,7 @@ class AlarmManager(Gtk.Window):
         print(items)
 
     def on_click_btn_rm_alarm(self, widget):
-        a = 1
+        self.my_alarm_screen_controller.delete_alarm(self.lst_alarms.get_active_text())
 
 
 class AlarmConfig(Gtk.Window):

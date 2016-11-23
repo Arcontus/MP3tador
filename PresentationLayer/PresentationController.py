@@ -215,6 +215,9 @@ class AlarmScreenController:
     def get_next_alarm_name(self):
         return self.logic_controller.get_next_alarm_name()
 
+    def delete_alarm(self, name):
+        self.logic_controller.delete_alarm(name)
+
 
 class OptionScreenController():
     def __init__(self, event_dispatcher=None):

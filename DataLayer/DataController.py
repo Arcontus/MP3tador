@@ -111,4 +111,9 @@ class MainDataController:
         else:
             return False
 
-
+    @staticmethod
+    def delete_alarm(name):
+        if DataLayer.Alarm.rm_alarm_by_name(name):
+            print ("alarm '{}' deleted".format(name))
+            return True
+        return False

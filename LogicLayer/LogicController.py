@@ -104,6 +104,15 @@ class MainLogicController:
                 )
             )
 
+    def delete_alarm(self, name):
+        if self.data.delete_alarm(name):
+            self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyAlarmEvent(
+                        EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST,
+                        self.get_alarm_list()
+                )
+            )
+
     def save_library(self, dict):
         if self.data.save_library(dict):
             self.event_dispatcher.dispatch_event(

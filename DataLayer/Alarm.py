@@ -32,9 +32,12 @@ def get_alarm_by_name(name):
 
 
 def rm_alarm_by_name(name):
-    for i in alarm_list:
-        if i.get_name() == name:
-            rm_alarm(i)
+    my_alarm = False
+    my_alarm = get_alarm_by_name(name)
+    if my_alarm:
+        rm_alarm(my_alarm)
+        return True
+    return False
 
 
 def get_alarm_bibrary_use(name):
