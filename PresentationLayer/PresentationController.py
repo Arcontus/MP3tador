@@ -165,6 +165,9 @@ class LibraryScreenController:
             self.my_new_library_window.set_library(library)
             self.my_new_library_window.set_library_name(library_dict['name'])
 
+    def delete_library(self, name):
+        self.logic_controller.delete_library(name)
+
 
 
 

@@ -52,7 +52,7 @@ class LibraryManagerWindow(Gtk.Window):
         a =1
 
     def on_btn_rm_library_clicked(self, widget):
-        a =1
+        self.my_library_screen_controller.delete_library(self.lst_library.get_active_text())
 
     def on_btn_mdf_library_clicked(self, widget):
         self.my_library_screen_controller.open_library_config(self.lst_library.get_active_text())

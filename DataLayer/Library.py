@@ -26,6 +26,14 @@ def get_library_by_name(name):
             return i
     return False
 
+def rm_library_by_name(name):
+    my_library = False
+    my_library = get_library_by_name(name)
+    if my_library:
+        rm_library(my_library)
+        return True
+    return False
+
 
 def get_library_item_number():
     return len(library_list)

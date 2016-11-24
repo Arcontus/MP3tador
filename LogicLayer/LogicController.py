@@ -122,6 +122,15 @@ class MainLogicController:
                 )
             )
 
+    def delete_library(self, name):
+        if self.data.delete_library(name):
+            self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyLibraryEvent(
+                    EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST,
+                    self.get_library_list()
+                )
+            )
+
     def get_alarm_parameters(self, name):
         return self.data.get_alarm_parameters(name)
 
