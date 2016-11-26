@@ -111,9 +111,17 @@ class Library:
                 self.songs.append(i)
         self.num_items = len(self.songs)
 
-    def del_song(self, song):
-        self.songs.remove(song)
-        self.num_items = len(self.songs)
+    def is_song(self, name):
+        if name in self.songs:
+            return True
+        return False
+
+    def del_song(self, name):
+        if self.is_song(name):
+            self.songs.remove(name)
+            self.num_items = len(self.songs)
+            return True
+        return False
 
     def get_songs(self):
         return self.songs

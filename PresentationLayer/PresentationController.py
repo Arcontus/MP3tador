@@ -156,21 +156,20 @@ class LibraryScreenController:
         library = []
         if not title:
             title = "Nueva Biblioteca"
-            self.my_new_library_window = PresentationLayer.Library.OpenLibraryConfig(title, self)
+            self.my_new_library_window = PresentationLayer.Library.LibraryConfigWindow(title, self)
         else:
             library_dict = self.logic_controller.get_library_parameters(title)
             library = library_dict['songs']
             title = "Modificar Biblioteca"
-            self.my_new_library_window = PresentationLayer.Library.OpenLibraryConfig(title, self)
+            self.my_new_library_window = PresentationLayer.Library.LibraryConfigWindow(title, self)
             self.my_new_library_window.set_library(library)
             self.my_new_library_window.set_library_name(library_dict['name'])
 
     def delete_library(self, name):
         self.logic_controller.delete_library(name)
 
-
-
-
+    def delete_song_from_library(self, library, song):
+        self.logic_controller.delete_song_from_library(library, song)
 
 
 class AlarmScreenController:

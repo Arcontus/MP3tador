@@ -32,7 +32,7 @@ class MainLogicController:
             self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyMusicEvent.PAUSE_MUSIC, self.pause_song)
         self.clock = LogicLayer.Clock.Clock()
-        self.player = LogicLayer.MusicPlayer.MusicPlayer()
+        self.player = LogicLayer.MusicPlayer.MusicPlayer(self)
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
         self.data = DataLayer.DataController.MainDataController(event_dispatcher=self.event_dispatcher)
@@ -89,7 +89,6 @@ class MainLogicController:
         return next_name
 
     def set_player_library(self, event):
-        print ("bibliotea seleccionada"+str(event.data))
         if event.data is not None:
             self.player.load_library(event.data)
         else:
@@ -124,6 +123,15 @@ class MainLogicController:
 
     def delete_library(self, name):
         if self.data.delete_library(name):
+            self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyLibraryEvent(
+                    EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST,
+                    self.get_library_list()
+                )
+            )
+
+    def delete_song_from_library(self, library, song):
+        if self.data.delete_song_from_library(library, song):
             self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyLibraryEvent(
                     EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST,

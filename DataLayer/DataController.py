@@ -124,3 +124,11 @@ class MainDataController:
             print ("library '{}' deleted.".format(name))
             return True
         return False
+
+    @staticmethod
+    def delete_song_from_library(library, song):
+        my_library = DataLayer.Library.get_library_by_name(library)
+        if my_library:
+            return my_library.del_song(song)
+        return False
+

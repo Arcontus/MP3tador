@@ -61,7 +61,7 @@ class LibraryManagerWindow(Gtk.Window):
         a =1
 
 
-class OpenLibraryConfig(Gtk.Window):
+class LibraryConfigWindow(Gtk.Window):
     def __init__(self, title, my_library_screen_controller=None):
         if my_library_screen_controller:
             self.my_library_screen_controller = my_library_screen_controller
@@ -147,7 +147,15 @@ class OpenLibraryConfig(Gtk.Window):
         self.close()
 
     def on_selection_button_clicked(self, widget):
-        a = 1
+        button_label = widget.get_label()
+        if button_label == "Eliminar":
+            selection = self.treeview.get_selection()
+            model, rows = selection.get_selected_rows()
+            if len(rows) > 0:
+                for row in rows:
+                    self.library.remove(model[row][0])
+                    iter = model.get_iter(row)
+                    model.remove(iter)
 
     def on_btn_add_library_clicked(self, widget):
         library = FileChooserWindow()
@@ -163,62 +171,6 @@ class OpenLibraryConfig(Gtk.Window):
         self.num_items = len(self.library)
         self.lbl_num_items.set_text("Canciones en la biblioteca: " + str(self.num_items))
         self.fill_song_list()
-
-
-class AddNewLibrary2(Gtk.Window):
-    def __init__(self, my_library_screen_controller=None):
-        if my_library_screen_controller:
-            self.my_library_screen_controller = my_library_screen_controller
-        else:
-            raise NameError("AlarmManager needs alarm_screen_controller instance")
-        Gtk.Window.__init__(self, title="Agregar Biblioteca")
-        self.window = Gtk.Table(6, 5, True)
-        self.set_border_width(20)
-        self.add(self.window)
-        self.library_dic = {'name': '', 'items': 0,
-                            'songs': []}
-        self.name = Gtk.Entry()
-        self.library = []
-
-        self.name.set_text("Nombre de la biblioteca")
-        self.window.attach(self.name, 1, 3, 0, 1)
-
-        btn_library = Gtk.Button(label="Añadir ruta")
-        btn_library.connect("clicked", self.on_btn_add_library_clicked)
-        self.window.attach(btn_library, 3,4,0,1)
-
-        self.num_items = 0
-        self.lbl_num_items = Gtk.Label("Canciones en la biblioteca: " + str(self.num_items))
-        self.window.attach(self.lbl_num_items, 1,3 ,1,2)
-
-        btn_accept = Gtk.Button(label="Aceptar")
-        btn_accept.connect("clicked", self.on_btn_accept_clicked)
-        self.window.attach(btn_accept, 1,2 ,4,5)
-
-        btn_cancel = Gtk.Button(label="Cancelar")
-        btn_cancel.connect("clicked", self.on_btn_cancel_clicked)
-        self.window.attach(btn_cancel, 3,4 ,4,5)
-        self.show_all()
-
-    def on_btn_accept_clicked(self, widget):
-        self.library_dic = {'name': self.name.get_text(), 'items': len(self.library),
-                            'songs': self.library}
-        self.my_library_screen_controller.save_library(self.library_dic)
-
-    def on_btn_cancel_clicked(self, widget):
-        self.close()
-
-    def on_btn_add_library_clicked(self, widget):
-        library = FileChooserWindow()
-        library_aux = self.library+library.select_folder()
-
-        # It Check if the same songs exists on library, if not add it.
-        for i in library_aux:
-            if i not in self.library:
-                self.library.append(i)
-        self.num_items = len(self.library)
-
-        self.lbl_num_items.set_text("Canciones en la biblioteca: " + str(self.num_items))
 
 
 class FileChooserWindow(Gtk.Window):

@@ -5,43 +5,35 @@ import random
 
 
 class MusicPlayer:
-    def __init__(self):
+    def __init__(self, logic_controller):
         pygame.mixer.init()
         pygame.init()
 
-        self.name = ""
+        self.library_dic = {'name': "", 'items': 0,
+                           'songs': []}
+        self.my_logic_controller = logic_controller
         self.is_pause = False
         self.is_playing = False
-        self.music = []
         self.current_song = None
         self.next_song = None
         self.finish_song = pygame.constants.USEREVENT + 1
         GObject.timeout_add(1000, self.check_status_play)
 
-    def load_library(self, name_file):
-        if name_file is not None:
-            self.music = []
+    def load_library(self, name):
+        if name is not None:
+            self.library_dic['songs'] = []
             self.is_pause = False
             self.is_playing = False
-            lib_directory = "./bibliotecas/"
-            my_file = open(lib_directory + name_file +".lib")
-            for line in my_file:
-                if line.split(":")[0] == 'nombre':
-                    self.name = (line.split(":")[1])
-
-                elif line.split(":")[0] == "items":
-                    items = (line.split(":")[1])
-
-                elif line.split(":")[0] == 'cancion':
-                    self.music.append (line.split(":")[1][:-1])
+            self.library_dic['name'] = name
+            self.library_dic = self.my_logic_controller.get_library_parameters(self.library_dic['name'])
             self.manager_library()
         else:
             self.unload_library()
 
     def unload_library(self):
         self.stop()
-        self.music = []
-        self.name = ""
+        self.library_dic['songs'] = []
+        self.library_dic['name'] = ""
 
     def check_status_play(self):
         if self.is_playing is True:
@@ -51,7 +43,7 @@ class MusicPlayer:
         return True # keep running this event
 
     def set_library(self, music):
-        self.music = music
+        self.library_dic['songs'] = music
         for i, val in enumerate(music):
             if i is not 0:
                 if i is 1:
@@ -60,11 +52,11 @@ class MusicPlayer:
                     pygame.mixer.music.queue(val)
 
     def manager_library(self):
-        self.next_song = random.choice(self.music)
+        self.next_song = random.choice(self.library_dic['songs'])
         self.current_song = self.next_song
-        if len(self.music) > 1:
+        if len(self.library_dic['songs']) > 1:
             while self.next_song == self.current_song:
-                self.next_song = random.choice(self.music)
+                self.next_song = random.choice(self.library_dic['songs'])
         pygame.mixer.music.set_endevent(self.finish_song)
         pygame.mixer.music.load(self.current_song)
         self.set_info()
@@ -76,7 +68,7 @@ class MusicPlayer:
         self.play()
 
     def play(self):
-        if len(self.music) > 0:
+        if len(self.library_dic['songs']) > 0:
             if self.is_playing is True:
                 self.pause()
             else:

@@ -8,13 +8,14 @@ class MainWindow(Gtk.Window):
     def __init__(self, presentation_controller=None):
         if presentation_controller is not None:
             self.myMainScreenController = presentation_controller
-        self.lbl_player_info = Gtk.Label("")
         self.window = Gtk.Window.__init__(self, title="MP3tador,  v0.3") ## TODO: Implement a variable or function to do this"
         self.set_border_width(20)
         self.font_color = "black"
         self.lblhour = Gtk.Label(label="")
         self.lbldate = Gtk.Label(label="")
-        self.font_color = "black"
+        self.lbl_player_info = Gtk.Label("")
+        self.lbl_player_info.set_markup("<span size='xx-large' color='green' bgcolor='black' font='console'>Info:...</span>")
+        
 
         table = Gtk.Table(8, 5, True)
         self.add(table)
