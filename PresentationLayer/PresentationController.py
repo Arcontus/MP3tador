@@ -58,6 +58,9 @@ class MainScreenController(Borg):
         self.window.connect("delete-event", Gtk.main_quit)
         self.window.show_all()
         self.get_library_items()
+        self.console_info = PresentationLayer.Main.console_info(self.window, self)
+        self.console_info.add_msg("Hola mundo")
+        self.console_info.add_msg("Como molo")
         start_gui()
 
     def get_library_items(self):

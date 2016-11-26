@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf
+from gi.repository import Gtk, GdkPixbuf, Gdk, GObject
 
 
 class MainWindow(Gtk.Window):
@@ -13,9 +13,31 @@ class MainWindow(Gtk.Window):
         self.font_color = "black"
         self.lblhour = Gtk.Label(label="")
         self.lbldate = Gtk.Label(label="")
-        self.lbl_player_info = Gtk.Label("")
-        self.lbl_player_info.set_markup("<span size='xx-large' color='green' bgcolor='black' font='console'>Info:...</span>")
-        
+
+        self.txt_info = Gtk.Entry()
+        self.txt_info.set_text("")
+        self.txt_info.set_sensitive(False)
+        self.txt_info.set_max_length(35)
+
+        self.style_provider = Gtk.CssProvider()
+
+        css = """
+        GtkEntry{
+            color: darkgrey;
+            background-color: yellow;
+            }
+
+        .colorize {
+           background: rgba(0,0,0,1);
+           color: green;
+           font-size: xx-large;
+           padding-left: 20px;
+        }
+        """
+        self.style_provider.load_from_data(css)
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(), self.style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        self.txt_info.get_style_context().add_class("colorize")
 
         table = Gtk.Table(8, 5, True)
         self.add(table)
@@ -74,7 +96,10 @@ class MainWindow(Gtk.Window):
         table.attach(btn_pause, 2, 4, 6, 9)
         table.attach(btn_next, 4, 6, 6, 9)
         table.attach(btn_stop, 6, 8, 6, 9)
-        table.attach(self.lbl_player_info, 0, 15, 10, 12)
+        table.attach(self.txt_info, 0, 15, 10, 11)
+
+    def set_info_text(self, text):
+        self.txt_info.set_text(text)
 
     def reset_library_items(self):
         self.lst_library.remove_all()
@@ -118,4 +143,25 @@ class MainWindow(Gtk.Window):
 
     def set_date(self, event):
         self.lbldate.set_markup(str("<span variant='smallcaps'>" + event.data) + "</span>")
+
+
+class console_info():
+    def __init__(self, window, presentation_controller):
+        self.my_window = window
+        self.my_presentation_controller = presentation_controller
+        self.msg_list = [""]
+        self.iterator = 0
+        self._update_id = GObject.timeout_add(1000, self.update_msg, None)
+
+    def update_msg(self, extra):
+        if self.iterator +1 < len(self.msg_list):
+            self.iterator += 1
+        else:
+            self.iterator = 0
+        self.my_window.set_info_text(self.msg_list[self.iterator])
+        return True
+
+    def add_msg(self, message):
+        self.msg_list.append(message)
+
 
