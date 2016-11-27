@@ -32,7 +32,7 @@ class MainLogicController:
             self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyMusicEvent.PAUSE_MUSIC, self.pause_song)
         self.clock = LogicLayer.Clock.Clock()
-        self.player = LogicLayer.MusicPlayer.MusicPlayer(self)
+        self.player = LogicLayer.MusicPlayer.MusicPlayer(self, event_dispatcher)
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
         self.data = DataLayer.DataController.MainDataController(event_dispatcher=self.event_dispatcher)

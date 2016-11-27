@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 library_list = []   ## List of all library objects

@@ -59,9 +59,19 @@ class MainScreenController(Borg):
         self.window.show_all()
         self.get_library_items()
         self.console_info = PresentationLayer.Main.console_info(self.window, self)
-        self.console_info.add_msg("Hola mundo")
-        self.console_info.add_msg("Como molo")
+        self.event_dispatcher.add_event_listener(
+                EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE, self.set_info_message
+            )
+        self.event_dispatcher.add_event_listener(
+                EventDispatcher.EventDispatcher.MyInfoEvent.DELETE_MESSAGE, self.delete_info_message
+            )
         start_gui()
+
+    def set_info_message(self, event):
+        self.console_info.add_msg(event.data[0], event.data[1])
+
+    def delete_info_message(self, event):
+        self.console_info.delete_message(event.data[0])
 
     def get_library_items(self):
         library = self.logic_controller.get_library_list()

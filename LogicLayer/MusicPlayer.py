@@ -1,16 +1,23 @@
+# -*- coding: utf-8 -*-
+# coding=utf-8
+
 import pygame
 import eyeD3
-from gi.repository import GObject
 import random
+from gi.repository import GObject
+import EventDispatcher.EventDispatcher
 
 
 class MusicPlayer:
-    def __init__(self, logic_controller):
+    def __init__(self, logic_controller, event_dispatcher):
+        self.event_dispatcher = event_dispatcher
         pygame.mixer.init()
         pygame.init()
 
         self.library_dic = {'name': "", 'items': 0,
                            'songs': []}
+        self.song_dic = {'artist': "", 'name': "", 'year': 0, 'album': ""}
+        self.info_string = ["", True]
         self.my_logic_controller = logic_controller
         self.is_pause = False
         self.is_playing = False
@@ -90,18 +97,42 @@ class MusicPlayer:
         self.is_playing = False
         self.is_pause = False
         #Opciones.apagar_altavoces()
+        self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyInfoEvent(
+                    EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE,
+                    ["Reproductor de musica detenido", False]
+                )
+        )
+        self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyInfoEvent(
+                    EventDispatcher.EventDispatcher.MyInfoEvent.DELETE_MESSAGE,
+                    self.info_string
+                )
+        )
 
     def set_info(self):
+        self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyInfoEvent(
+                    EventDispatcher.EventDispatcher.MyInfoEvent.DELETE_MESSAGE,
+                    self.info_string
+                )
+        )
         tag = eyeD3.Tag()
         tag.link(self.current_song)
-        if ((tag.getTitle() is not None) and (tag.getArtist() is not None) and
-                (tag.getAlbum() is not None) and (tag.getYear() is not None)):
-            a = 1
-            #self.lbl_info.set_text(
-            #                        "Cancion: " + tag.getTitle() +
-            #                        "                    Artista: " + tag.getArtist() +
-            #                        "\nAlbum: " + tag.getAlbum() +
-            #                        "                    Ano: " + tag.getYear())
-        else:
-            a =2
-           # self.lbl_info.set_text("")
+        self.song_dic['artist'] = tag.getArtist().encode("utf-8")
+        self.song_dic['name'] = tag.getTitle().encode("utf-8")
+        self.song_dic['year'] = tag.getYear().encode("utf-8")
+        self.song_dic['album'] = tag.getAlbum().encode("utf-8")
+        self.info_string = ["Canción: {1}, Artista: {0}, Año: {2}, Album: {3}".format(self.song_dic['artist'],
+                                                                                      self.song_dic['name'],
+                                                                                      self.song_dic['year'],
+                                                                                      self.song_dic['album']),
+                            True]
+        self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyInfoEvent(
+                    EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE,
+                    self.info_string
+                )
+        )
+
+

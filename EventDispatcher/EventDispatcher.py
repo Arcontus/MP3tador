@@ -142,6 +142,11 @@ class MyMusicEvent (Event):
     NEXT_SONG = "nextSong"
 
 
+class MyInfoEvent (Event):
+    SET_NEW_MESSAGE = "setNewMessage"
+    DELETE_MESSAGE = "deleteMesssage"
+
+
 class WhoAsk( object ):
     """
     First class which ask who is listening to it
