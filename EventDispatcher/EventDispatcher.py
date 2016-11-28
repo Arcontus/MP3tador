@@ -63,10 +63,10 @@ class EventDispatcher( object ):
         """
         # Dispatch the event to all the associated listeners
         if event.type in self._events.keys():
-            listeners = self._events[ event.type ]
+            listeners = self._events[event.type]
 
             for listener in listeners:
-                listener( event )
+                listener(event)
 
     def add_event_listener(self, event_type, listener):
         """

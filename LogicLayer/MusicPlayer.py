@@ -16,8 +16,8 @@ class MusicPlayer:
 
         self.library_dic = {'name': "", 'items': 0,
                            'songs': []}
-        self.song_dic = {'artist': "", 'name': "", 'year': 0, 'album': ""}
-        self.info_string = ["", True]
+        self.current_song_dic = {'artist': "", 'name': "", 'year': 0, 'album': ""}
+        self.info_string_current_song = ["", True]
         self.my_logic_controller = logic_controller
         self.is_pause = False
         self.is_playing = False
@@ -38,7 +38,9 @@ class MusicPlayer:
             self.unload_library()
 
     def unload_library(self):
-        self.stop()
+        if self.is_playing:
+            self.stop()
+        self.unload_info()
         self.library_dic['songs'] = []
         self.library_dic['name'] = ""
 
@@ -66,7 +68,6 @@ class MusicPlayer:
                 self.next_song = random.choice(self.library_dic['songs'])
         pygame.mixer.music.set_endevent(self.finish_song)
         pygame.mixer.music.load(self.current_song)
-        self.set_info()
 
     def play_next_song(self):
         self.manager_library()
@@ -83,11 +84,25 @@ class MusicPlayer:
                     pygame.mixer.music.play()
                     #Opciones.encender_altavoces()
                     self.is_playing = True
+                    self.set_info()
+
+    def play_this_song(self, filename):
+        self.stop()
+        pygame.mixer.music.load(filename)
+        pygame.mixer.music.play()
+        self.is_playing = False
+        self.set_info()
 
     def pause(self):
         if self.is_pause is False:
             pygame.mixer.music.pause()
             self.is_pause = True
+            self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyInfoEvent(
+                    EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE,
+                    ["PAUSE  ", False]
+                    )
+                )
         else:
             pygame.mixer.music.unpause()
             self.is_pause = False
@@ -100,38 +115,43 @@ class MusicPlayer:
         self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyInfoEvent(
                     EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE,
-                    ["Reproductor de musica detenido", False]
+                    ["STOP", False]
                 )
         )
         self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyInfoEvent(
                     EventDispatcher.EventDispatcher.MyInfoEvent.DELETE_MESSAGE,
-                    self.info_string
+                    self.info_string_current_song
+                )
+        )
+
+    def unload_info(self):
+        self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyInfoEvent(
+                    EventDispatcher.EventDispatcher.MyInfoEvent.DELETE_MESSAGE,
+                    self.info_string_current_song
                 )
         )
 
     def set_info(self):
-        self.event_dispatcher.dispatch_event(
-                EventDispatcher.EventDispatcher.MyInfoEvent(
-                    EventDispatcher.EventDispatcher.MyInfoEvent.DELETE_MESSAGE,
-                    self.info_string
-                )
-        )
+        self.unload_info()
         tag = eyeD3.Tag()
         tag.link(self.current_song)
-        self.song_dic['artist'] = tag.getArtist().encode("utf-8")
-        self.song_dic['name'] = tag.getTitle().encode("utf-8")
-        self.song_dic['year'] = tag.getYear().encode("utf-8")
-        self.song_dic['album'] = tag.getAlbum().encode("utf-8")
-        self.info_string = ["Canción: {1}, Artista: {0}, Año: {2}, Album: {3}".format(self.song_dic['artist'],
-                                                                                      self.song_dic['name'],
-                                                                                      self.song_dic['year'],
-                                                                                      self.song_dic['album']),
-                            True]
+        self.current_song_dic['artist'] = tag.getArtist().encode("utf-8")
+        self.current_song_dic['name'] = tag.getTitle().encode("utf-8")
+        self.current_song_dic['year'] = tag.getYear().encode("utf-8")
+        self.current_song_dic['album'] = tag.getAlbum().encode("utf-8")
+        self.info_string_current_song = ["Canción: {1}, Artista: {0}, Año: {2}, Album: {3}".format(self.current_song_dic['artist'],
+                                                                                                   self.current_song_dic['name'],
+                                                                                                   self.current_song_dic['year'],
+                                                                                                   self.current_song_dic['album']),
+                                         True]
+        tag.link(self.next_song)
+
         self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyInfoEvent(
                     EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE,
-                    self.info_string
+                    self.info_string_current_song
                 )
         )
 

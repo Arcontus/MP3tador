@@ -68,6 +68,7 @@ class LibraryConfigWindow(Gtk.Window):
         else:
             raise NameError("AlarmManager needs alarm_screen_controller instance")
         Gtk.Window.__init__(self, title=title)
+        self.connect('delete-event', self.delete_event)
         self.set_border_width(20)
         self.grid = Gtk.Grid()
         self.grid.set_column_homogeneous(True)
@@ -146,6 +147,9 @@ class LibraryConfigWindow(Gtk.Window):
     def on_btn_cancel_clicked(self, widget):
         self.close()
 
+    def delete_event(self, widget, event=None):
+        self.my_library_screen_controller.reload_libraries()
+
     def on_selection_button_clicked(self, widget):
         button_label = widget.get_label()
         if button_label == "Eliminar":
@@ -156,6 +160,16 @@ class LibraryConfigWindow(Gtk.Window):
                     self.library.remove(model[row][0])
                     iter = model.get_iter(row)
                     model.remove(iter)
+
+        if button_label == "Reproducir":
+            selection = self.treeview.get_selection()
+            model, rows = selection.get_selected_rows()
+            if len(rows) > 0:
+                for row in rows:
+                    self.my_library_screen_controller.play_this_song(model[row][0])
+
+        if button_label == "Detener":
+            self.my_library_screen_controller.stop_song()
 
     def on_btn_add_library_clicked(self, widget):
         library = FileChooserWindow()

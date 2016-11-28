@@ -162,8 +162,22 @@ class LibraryScreenController:
     def reload_library_items(self, event):
         self.window.reload_library_items(event.data)
 
+    def reload_libraries(self):
+        self.logic_controller.reload_libraries()
+
     def save_library(self, library):
         self.logic_controller.save_library(library)
+
+    def play_this_song(self, filename):
+        self.logic_controller.play_this_song(filename)
+
+    def stop_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.STOP_MUSIC,
+            )
+        )
+
 
     def open_library_config(self, title=None):
         library = []
