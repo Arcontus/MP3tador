@@ -10,6 +10,7 @@ that is used only by LogicController.
 
 __author__ = "David Pozos Ceron"
 
+import re
 import DataLayer.DataController
 import LogicLayer.Clock
 import LogicLayer.MusicPlayer
@@ -90,18 +91,20 @@ class MainLogicController:
 
     def set_player_library(self, event):
         if event.data is not None:
-            self.player.load_library(event.data)
+            if self.validate_filename(event.data):
+                self.player.load_library(event.data)
         else:
             self.player.unload_library()
 
     def save_alarm(self, dict):
-        if self.data.save_alarm(dict):
-            self.event_dispatcher.dispatch_event(
-                EventDispatcher.EventDispatcher.MyAlarmEvent(
-                        EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST,
-                        self.get_alarm_list()
+        if self.validate_filename(dict['name']):
+            if self.data.save_alarm(dict):
+                self.event_dispatcher.dispatch_event(
+                    EventDispatcher.EventDispatcher.MyAlarmEvent(
+                            EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST,
+                            self.get_alarm_list()
+                    )
                 )
-            )
 
     def delete_alarm(self, name):
         if self.data.delete_alarm(name):
@@ -113,13 +116,14 @@ class MainLogicController:
             )
 
     def save_library(self, dict):
-        if self.data.save_library(dict):
-            self.event_dispatcher.dispatch_event(
-                EventDispatcher.EventDispatcher.MyLibraryEvent(
-                        EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST,
-                        self.get_library_list()
+        if self.validate_filename(dict['name']):
+            if self.data.save_library(dict):
+                self.event_dispatcher.dispatch_event(
+                    EventDispatcher.EventDispatcher.MyLibraryEvent(
+                            EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST,
+                            self.get_library_list()
+                    )
                 )
-            )
 
     def reload_libraries(self):
         self.event_dispatcher.dispatch_event(
@@ -167,6 +171,13 @@ class MainLogicController:
 
     def next_song(self, event):
         self.player.play_next_song()
+
+    @staticmethod
+    def validate_filename(filename):
+        if filename:
+            if re.match(r'[A-Za-z0-9_\-\\]', filename):
+                return True
+        return False
 
 
 
