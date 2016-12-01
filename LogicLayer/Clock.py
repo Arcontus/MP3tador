@@ -35,7 +35,7 @@ class Clock():
         return self._time.now().hour
 
     def get_week_day(self):
-        return self._time.now().weekday()  #0 Lunes 6 Domingo
+        return self._time.now().weekday()  #0 Monday 6 Sunday
 
     def get_date_formated(self):
         data = self._time.now().strftime("%A, %d-%m-%Y")
@@ -75,3 +75,52 @@ class Cronometer():
     def _get_time_formated(self):
         time = self._time - self.start_time
         return time
+
+
+class Alarm:
+    def __init__(self, logic_controller, clock):
+        self.my_logic_controller = logic_controller
+        self.clock  = clock
+        self.alarm_list = self.my_logic_controller.get_alarm_list()
+        print("mis alarmas: "+ str(self.alarm_list))
+
+    def check_time(self, alarm):
+        if alarm['minutes'] == self.clock.get_minutes() and alarm['hours'] == self.clock.get_horurs():
+            return True
+        return False
+
+    def check_day(self, alarm):
+        day = self.clock.get_week_day()
+        if day == 0 and alarm['monday']:
+            return True
+        if day == 1 and alarm['tuesday']:
+            return True
+        if day == 2 and alarm['wednesday']:
+            return True
+        if day == 3 and alarm['thursday']:
+            return True
+        if day == 4 and alarm['friday']:
+            return True
+        if day == 5 and alarm['saturday']:
+            return True
+        if day == 6 and alarm['sunday']:
+            return True
+        return False
+
+    def check_alarms(self):
+        for alarm_name in self.alarm_list:
+            alarm = self.my_logic_controller.get_alarm_parameters(alarm_name)
+            if alarm['active']:
+                if alarm['days']:
+                    if self.check_time(alarm):
+                        # sonar alarma
+                        print("sonando alarma")
+                else:
+                    if self.check_day(alarm):
+                        if self.check_time(alarm):
+                            # sonar alarma
+                            print("sonando alarma")
+
+
+
+

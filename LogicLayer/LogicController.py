@@ -32,11 +32,13 @@ class MainLogicController:
                 EventDispatcher.EventDispatcher.MyMusicEvent.NEXT_SONG, self.next_song)
             self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyMusicEvent.PAUSE_MUSIC, self.pause_song)
+        self.data = DataLayer.DataController.MainDataController(event_dispatcher=self.event_dispatcher)
         self.clock = LogicLayer.Clock.Clock()
+        self.alarm = LogicLayer.Clock.Alarm(self, self.clock)
         self.player = LogicLayer.MusicPlayer.MusicPlayer(self, event_dispatcher)
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
-        self.data = DataLayer.DataController.MainDataController(event_dispatcher=self.event_dispatcher)
+
 
     def update_time(self, extra):
         # Here the code to check every second
@@ -52,6 +54,7 @@ class MainLogicController:
         if self.last_minute_check is not current_minute:
             self.last_minute_check = current_minute
             # Here the code to check every minute
+            self.alarm.check_alarms()
             self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyDateEvent(
                         EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_DATE,

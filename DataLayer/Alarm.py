@@ -141,7 +141,7 @@ class Alarm():
                     else:
                         self.sunday = False
 
-                elif line.split(":")[0] == "hour":
+                elif line.split(":")[0] == "hours":
                     self.hours= int(line.split(":")[1])
 
                 elif line.split(":")[0] == "minutes":
@@ -172,7 +172,7 @@ class Alarm():
         fichero.write("friday:" + str(self.friday) + "\n")
         fichero.write("saturday:" + str(self.saturday) + "\n")
         fichero.write("sunday:" + str(self.sunday) + "\n")
-        fichero.write("hora:" + str(self.hours) + "\n")
+        fichero.write("hours:" + str(self.hours) + "\n")
         fichero.write("minutes:" + str(self.minutes) + "\n")
         fichero.write("library:" + str(self.library) + "\n")
         fichero.write("snooze:"+str(self.snooze)+"\n")
