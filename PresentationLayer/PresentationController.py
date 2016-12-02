@@ -65,6 +65,7 @@ class MainScreenController(Borg):
         self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyInfoEvent.DELETE_MESSAGE, self.delete_info_message
             )
+        self.logic_controller.get_display_messages()
         start_gui()
 
     def set_info_message(self, event):

@@ -34,8 +34,8 @@ class MainLogicController:
                 EventDispatcher.EventDispatcher.MyMusicEvent.PAUSE_MUSIC, self.pause_song)
         self.data = DataLayer.DataController.MainDataController(event_dispatcher=self.event_dispatcher)
         self.clock = LogicLayer.Clock.Clock()
-        self.alarm = LogicLayer.Clock.Alarm(self, self.clock)
-        self.player = LogicLayer.MusicPlayer.MusicPlayer(self, event_dispatcher)
+        self.alarm = LogicLayer.Clock.Alarm(self, self.clock, self.event_dispatcher)
+        self.player = LogicLayer.MusicPlayer.MusicPlayer(self, self.event_dispatcher)
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
 
@@ -174,6 +174,9 @@ class MainLogicController:
 
     def next_song(self, event):
         self.player.play_next_song()
+
+    def get_display_messages(self):
+        self.alarm.resend_info_message()
 
     @staticmethod
     def validate_filename(filename):

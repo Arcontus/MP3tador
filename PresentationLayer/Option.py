@@ -26,6 +26,12 @@ class OptionWindow(Gtk.Window):
         self.lbl_power_speakers = Gtk.Label(label="Encender Altavoces (Solo para Raspberry)")
         self.sw_power_speakers.connect("notify::active", self.on_sw_power_speakers)
 
+        self.lbl_auto_stop_alarm = Gtk.Label(label="Apagar alarmas tras")
+        adj_hours = Gtk.Adjustment(0, 0, 23, 1, 0, 0)
+        self.spb_hours = Gtk.SpinButton()
+        self.spb_hours.set_adjustment(adj_hours)
+        self.lbl_auto_stop_alarm_hours = Gtk.Label(label="horas")
+
         self.load_options()
 
         self.btn_guardar = Gtk.Button(label="Guardar")
@@ -33,6 +39,9 @@ class OptionWindow(Gtk.Window):
 
         self.window.attach(self.lbl_power_speakers, 0,3, 0,1)
         self.window.attach(self.sw_power_speakers, 3,4, 0,1)
+        self.window.attach(self.lbl_auto_stop_alarm, 1,3 ,1,2)
+        self.window.attach(self.spb_hours,3,4, 1,2)
+        self.window.attach(self.lbl_auto_stop_alarm_hours, 4,5, 1,2)
         self.window.attach(self.lst_GPIO_pinout, 4, 5, 0,1)
         self.window.attach(self.btn_guardar, 1,2, 2,3)
         self.show_all()

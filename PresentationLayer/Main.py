@@ -24,11 +24,6 @@ class MainWindow(Gtk.Window):
         self.style_provider = Gtk.CssProvider()
 
         css = """
-        GtkEntry{
-            color: darkgrey;
-            background-color: yellow;
-            }
-
         .colorize {
            background: rgba(0,0,0,1);
            color: green;
@@ -159,7 +154,7 @@ class console_info():
         self.iterator = 0
         self._update_id = GObject.timeout_add(80, self.update_msg, None)
         self.txt_completed = 0
-        self.wait_msg = 15
+        self.wait_msg = 20
 
     def update_msg(self, extra):
         if len(self.msg_list):
@@ -198,8 +193,8 @@ class console_info():
             self.msg_list.append(msg_dict)
         else:
             self.msg_list.insert(self.iterator +1, msg_dict)
-            self.txt_completed = len(self.msg_list[self.iterator]['message'])
-            self.wait_msg = 0
+            if len(self.msg_list) == 0:
+                self.txt_completed = len(self.msg_list[self.iterator]['message'])
 
     def delete_message(self, message):
         if len(self.msg_list):

@@ -6,7 +6,7 @@
 # Event and EventDispatcher classes
 # -----------------------------------------------------------------------------
 
-class Event( object ):
+class Event(object):
     """
     Generic event to use with EventDispatcher.
     """
@@ -33,7 +33,7 @@ class Event( object ):
         return self._data
 
 
-class EventDispatcher( object ):
+class EventDispatcher(object):
     """
     Generic event dispatcher which listen and dispatch events
     """
@@ -53,7 +53,7 @@ class EventDispatcher( object ):
         """
         # Check for event type and for the listener
         if event_type in self._events.keys():
-            return listener in self._events[ event_type ]
+            return listener in self._events[event_type]
         else:
             return False
 
@@ -73,12 +73,10 @@ class EventDispatcher( object ):
         Add an event listener for an event type
         """
         # Add listener to the event type
-        if not self.has_listener( event_type, listener ):
-            listeners = self._events.get( event_type, [] )
-
+        if not self.has_listener(event_type, listener):
+            listeners = self._events.get(event_type, [])
             listeners.append( listener )
-
-            self._events[ event_type ] = listeners
+            self._events[event_type] = listeners
 
     def remove_event_listener(self, event_type, listener):
         """
@@ -108,7 +106,7 @@ class EventDispatcher( object ):
 # a RESPOND event
 # -----------------------------------------------------------------------------
 
-class MyEvent( Event ):
+class MyEvent(Event):
     """
     When subclassing Event class the only thing you must do is to define
     a list of class level constants which defines the event types and the

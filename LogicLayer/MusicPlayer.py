@@ -115,7 +115,7 @@ class MusicPlayer:
         self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyInfoEvent(
                     EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE,
-                    ["STOP", False]
+                    ["STOP   ", False]
                 )
         )
         self.event_dispatcher.dispatch_event(
