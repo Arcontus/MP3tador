@@ -14,6 +14,7 @@ import re
 import DataLayer.DataController
 import LogicLayer.Clock
 import LogicLayer.MusicPlayer
+import LogicLayer.Alarm
 import EventDispatcher.EventDispatcher
 from gi.repository import GObject
 
@@ -34,7 +35,7 @@ class MainLogicController:
                 EventDispatcher.EventDispatcher.MyMusicEvent.PAUSE_MUSIC, self.pause_song)
         self.data = DataLayer.DataController.MainDataController(event_dispatcher=self.event_dispatcher)
         self.clock = LogicLayer.Clock.Clock()
-        self.alarm = LogicLayer.Clock.Alarm(self, self.clock, self.event_dispatcher)
+        self.alarm = LogicLayer.Alarm.Alarm(self, self.clock, self.event_dispatcher)
         self.player = LogicLayer.MusicPlayer.MusicPlayer(self, self.event_dispatcher)
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
@@ -99,6 +100,13 @@ class MainLogicController:
         else:
             self.player.unload_library()
 
+    def set_player_library_by_name(self, name):
+        if name is not None:
+            if self.validate_filename(name):
+                self.player.load_library(name)
+        else:
+            self.player.unload_library()
+
     def save_alarm(self, dict):
         if self.validate_filename(dict['name']):
             if self.data.save_alarm(dict):
@@ -160,7 +168,7 @@ class MainLogicController:
     def get_library_parameters(self, name):
         return self.data.get_library_parameters(name)
 
-    def play_song(self, event):
+    def play_song(self, event=None):
         self.player.play()
 
     def play_this_song(self, filename):

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import gi
+import random
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf
-
+from gi.repository import Gtk, GdkPixbuf, GObject
 
 
 class AlarmManager(Gtk.Window):
@@ -307,3 +307,68 @@ class AlarmConfig(Gtk.Window):
 
     def on_click_cancel(self, button):
         self.close()
+
+
+class sound_alarm(Gtk.Window):
+    def __init__(self, alarm):
+        self.window = Gtk.Window.__init__(self)
+        self.connect('delete-event', self.delete_event)
+        self.set_modal(True)
+        self.set_decorated(False)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_border_width(20)
+        self.table = Gtk.Table(11, 7, True)
+        #self.notebook = Gtk.Notebook()
+        self.add(self.table)
+        #self.add(self.notebook)
+        self.code1 = []
+        self.code2 = self.code1
+        self.alarm = {'name': '', 'active': False, 'days': False, 'monday': False, 'tuesday': False,
+                      'wednesday': False, 'thursday': False, 'friday': False, 'saturday': False, 'sunday': False,
+                      'hours': 0, 'minutes': 0, 'library': "", 'snooze': False, 'min_snooze': 5}
+        #self.alarm = alarm
+        self.set_name(self.alarm['name'])
+
+        self.snooze = self.alarm['snooze']
+        self.min_snooze = self.alarm['min_snooze']
+        if self.snooze:
+            self.btn_snooze = Gtk.Button()
+            self.btn_snooze.connect("clicked", self.on_btn_snooze_clicked)
+            self.lbl_btn_snooze = "Snooze "+str(self.min_snooze)+" Min\n"
+            self.btn_snooze.set_label(self.lbl_btn_snooze)
+            self.table.attach(self.btn_snooze, 0,2, 4,6)
+        self.lst_sw_deactivate = []
+        self.lst_lbl_deactivate = []
+        for i in range(8):
+            self.lst_sw_deactivate.append(Gtk.Switch())
+            self.lst_lbl_deactivate.append(Gtk.Label(label=i))
+            self.lst_sw_deactivate[i].connect("notify::active", self.on_sw_deact_activated)
+            if (i < 4):
+                self.table.attach(self.lst_sw_deactivate[i], i, i + 1, 7, 8)
+            else:
+                self.table.attach(self.lst_sw_deactivate[i], i - 4, i - 3, 9, 10)
+        self.lbl_combination1 = Gtk.Label()
+        self.lbl_combination2 = Gtk.Label()
+        self.new_combination()
+
+        self.table.attach(self.lbl_combination1, 1, 4, 10, 11)
+        self.table.attach(self.lbl_combination2, 1, 4, 11, 12)
+
+#        self.update_id = GObject.timeout_add(1000, self.update_hora_timeout, None)
+
+        self.show_all()
+
+    def delete_event(self):
+        a = 1
+        # Eliminamos el gobject
+        # Paramos el reproductor
+        # Recargamos bibliotecas
+        # Eliminamos nuestra ventana
+
+
+    def on_sw_deact_activated(self):
+        a = 1
+
+    def new_combination(self):
+        return None
+
