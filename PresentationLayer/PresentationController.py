@@ -47,6 +47,8 @@ class MainScreenController(Borg):
                 EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_DATE, self.set_date)
             self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
+            self.event_dispatcher.add_event_listener(
+                EventDispatcher.EventDispatcher.MyAlarmEvent.SOUND_ALARM, self.sound_alarm)
         if logic_controller is None:
             raise NameError('Logic controller is needed')
         else:
@@ -89,6 +91,12 @@ class MainScreenController(Borg):
             self.my_alarm = AlarmScreenController(event_dispatcher=self.event_dispatcher,
                                                   logic_controller=self.logic_controller)
         self.my_alarm.show_window()
+
+    def sound_alarm(self, event):
+        if self.my_alarm is None:
+            self.my_alarm = AlarmScreenController(event_dispatcher=self.event_dispatcher,
+                                                  logic_controller=self.logic_controller)
+        self.my_alarm.sound_alarm(event.data)
 
     def open_option_manager(self):
         if self.my_option is None:
@@ -179,7 +187,6 @@ class LibraryScreenController:
             )
         )
 
-
     def open_library_config(self, title=None):
         library = []
         if not title:
@@ -212,6 +219,7 @@ class AlarmScreenController:
             raise Exception('Logic controller is needed')
         else:
             self.logic_controller = logic_controller
+        self.my_sound_alarm = None
 
     def show_window(self):
         self.window = PresentationLayer.Alarm.AlarmManager(self)
@@ -241,6 +249,15 @@ class AlarmScreenController:
         self.my_alarm = PresentationLayer.Alarm.AlarmConfig(self)
         self.my_alarm.reload_library_items(self.library)
         self.my_alarm.load_params(self.logic_controller.get_alarm_parameters(alarm_name))
+
+    def sound_alarm(self, alarm):
+        if not self.my_sound_alarm:
+            self.my_sound_alarm = PresentationLayer.Alarm.SoundAlarm(self, alarm)
+        else:
+            self.my_sound_alarm.add_new_alarm(alarm)
+
+    def deactivate_alarm(self, alarm_name):
+        self.logic_controller.deactivate_alarm(alarm_name)
 
     def get_next_alarm_name(self):
         return self.logic_controller.get_next_alarm_name()

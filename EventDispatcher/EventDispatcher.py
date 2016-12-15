@@ -125,6 +125,7 @@ class MyDateEvent (Event):
 class MyAlarmEvent (Event):
     SET_ALARM_LIST = "setAlarmList"
     GET_ALARM_LIST = "getAlarmList"
+    SOUND_ALARM = "soundAlarm"
 
 
 class MyLibraryEvent (Event):

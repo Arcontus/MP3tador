@@ -186,6 +186,9 @@ class MainLogicController:
     def get_display_messages(self):
         self.alarm.resend_info_message()
 
+    def deactivate_alarm(self, alarm_name):
+        self.alarm.deactivate_alarm(alarm_name)
+
     @staticmethod
     def validate_filename(filename):
         if filename:
