@@ -331,7 +331,7 @@ class SoundAlarm(Gtk.Window):
         self.show_all()
 
     def create_alarm_page(self, alarm):
-        my_page = AlarmPage(alarm)
+        my_page = AlarmPage(self, alarm)
         self.alarm_list.append(alarm)
         self.alarm_pages.append(my_page)
         self.notebook.append_page(my_page.get_table(), Gtk.Label(alarm['name']))
@@ -340,22 +340,31 @@ class SoundAlarm(Gtk.Window):
     def add_new_alarm(self, alarm):
         self.create_alarm_page(alarm)
 
+    def delete_alarm_page(self, my_page):
+        if my_page in self.alarm_pages:
+            self.notebook.remove_page(self.alarm_pages.index(my_page))
+            self.alarm_pages.remove(my_page)
+            self.notebook.show_all()
+            self.delete_event()
+
     def delete_event(self, widget=None, other=None):
         for alarm in self.alarm_list:
             print("deleting" + alarm['name'])
             self.my_alarm_screen_controller.deactivate_alarm(alarm['name'])
+        if not len(self.alarm_pages):
+            self.destroy()
         # Eliminamos el gobject
         # Paramos el reproductor
         # Recargamos bibliotecas
         # Eliminamos nuestra ventana
 
 class AlarmPage():
-    def __init__(self, alarm):
+    def __init__(self, parent_window, alarm):
         self.table = Gtk.Table(11, 7, True)
         self.table.set_border_width(20)
         code1 = []
         code2 = code1
-        print("sound alarm "+ alarm['name'])
+        self.my_parent_window = parent_window
         self.my_alarm = alarm
         self.lst_sw_deactivate = []
         self.lst_lbl_deactivate = []
@@ -371,7 +380,8 @@ class AlarmPage():
                 self.table.attach(self.lst_sw_deactivate[i], i - 4, i - 3, 9, 10)
         self.lbl_combination1 = Gtk.Label()
         self.lbl_combination2 = Gtk.Label()
-        self.txt_combinacion1 = ""
+        self.txt_combination1 = ""
+        self.txt_combination2 = self.txt_combination1
         self.new_combination()
         self.txt_info = Gtk.Entry()
         self.txt_info.set_text("Alarma {}".format(alarm['name']))
@@ -387,8 +397,26 @@ class AlarmPage():
     def get_table(self):
         return self.table
 
-    def on_sw_deact_activated(self, widget=None):
-        a = 1
+    def on_sw_deact_activated(self, switch, widget=None):
+        if switch.get_active():
+            self.code2[int(self.get_switch_number_from_label(switch))] = 1
+        else:
+            self.code2[int(self.get_switch_number_from_label(switch))] = 0
+        self.txt_combination2 = "Combinacion introducida: {0}".format(self.code2)
+        self.lbl_combination2.set_text(self.txt_combination2)
+        print(self.code1)
+        print(self.code2)
+        if self.code1 == self.code2:
+            self.delete_event()
+
+    def get_switch_number_from_label(self, switch):
+        position = self.get_switch_position_from_list(switch)
+        return self.lst_lbl_deactivate[position].get_text()
+
+    def get_switch_position_from_list(self, switch):
+        for i in range(8):
+            if self.lst_sw_deactivate[i] == switch:
+                return i
 
     def new_combination(self):
         random.shuffle(self.lst_lbl_deactivate)
@@ -406,3 +434,5 @@ class AlarmPage():
         self.txt_combination1 = "Combinacion de desbloqueo: "+str(self.code1)
         self.lbl_combination1.set_text(self.txt_combination1)
 
+    def delete_event(self):
+        self.my_parent_window.delete_alarm_page(self)
