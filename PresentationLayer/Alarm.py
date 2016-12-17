@@ -322,6 +322,7 @@ class SoundAlarm(Gtk.Window):
         self.notebook.set_scrollable(True)
         self.add(self.notebook)
         self.alarm_list = []
+        self.alarm_pages = []
         self.create_alarm_page(alarm)
 
 #        self.update_id = GObject.timeout_add(1000, self.update_hora_timeout, None)
@@ -330,36 +331,10 @@ class SoundAlarm(Gtk.Window):
         self.show_all()
 
     def create_alarm_page(self, alarm):
-        table = Gtk.Table(11, 7, True)
+        my_page = AlarmPage(alarm)
         self.alarm_list.append(alarm)
-        code1 = []
-        code2 = code1
-        print("sound alarm "+ alarm['name'])
-        my_alarm = alarm
-        lst_sw_deactivate = []
-        lst_lbl_deactivate = []
-        for i in range(8):
-            lst_sw_deactivate.append(Gtk.Switch())
-            lst_lbl_deactivate.append(Gtk.Label(label=i))
-            lst_sw_deactivate[i].connect("notify::active", self.on_sw_deact_activated)
-            if (i < 4):
-                table.attach(lst_sw_deactivate[i], i, i + 1, 7, 8)
-            else:
-                table.attach(lst_sw_deactivate[i], i - 4, i - 3, 9, 10)
-        lbl_combination1 = Gtk.Label()
-        lbl_combination2 = Gtk.Label()
-
-        txt_info = Gtk.Entry()
-        txt_info.set_text("BLA")
-        txt_info.set_sensitive(False)
-        self.info_max_leng = 34
-        #self.txt_info.set_max_length(self.info_max_leng)
-        txt_info.get_style_context().add_class("colorize")
-
-        table.attach(txt_info, 1, 6, 1, 2)
-        table.attach(lbl_combination1, 1, 4, 10, 11)
-        table.attach(lbl_combination2, 1, 4, 11, 12)
-        self.notebook.append_page(table, Gtk.Label(my_alarm['name']))
+        self.alarm_pages.append(my_page)
+        self.notebook.append_page(my_page.get_table(), Gtk.Label(alarm['name']))
         self.notebook.show_all()
 
     def add_new_alarm(self, alarm):
@@ -374,10 +349,60 @@ class SoundAlarm(Gtk.Window):
         # Recargamos bibliotecas
         # Eliminamos nuestra ventana
 
+class AlarmPage():
+    def __init__(self, alarm):
+        self.table = Gtk.Table(11, 7, True)
+        self.table.set_border_width(20)
+        code1 = []
+        code2 = code1
+        print("sound alarm "+ alarm['name'])
+        self.my_alarm = alarm
+        self.lst_sw_deactivate = []
+        self.lst_lbl_deactivate = []
+        self.code1 = []
+        self.code2 = []
+        for i in range(8):
+            self.lst_sw_deactivate.append(Gtk.Switch())
+            self.lst_lbl_deactivate.append(Gtk.Label(label=i))
+            self.lst_sw_deactivate[i].connect("notify::active", self.on_sw_deact_activated)
+            if (i < 4):
+                self.table.attach(self.lst_sw_deactivate[i], i, i + 1, 7, 8)
+            else:
+                self.table.attach(self.lst_sw_deactivate[i], i - 4, i - 3, 9, 10)
+        self.lbl_combination1 = Gtk.Label()
+        self.lbl_combination2 = Gtk.Label()
+        self.txt_combinacion1 = ""
+        self.new_combination()
+        self.txt_info = Gtk.Entry()
+        self.txt_info.set_text("Alarma {}".format(alarm['name']))
+        self.txt_info.set_sensitive(False)
+        self.info_max_leng = 34
+        #self.txt_info.set_max_length(self.info_max_leng)
+        self.txt_info.get_style_context().add_class("colorize")
+
+        self.table.attach(self.txt_info, 1, 6, 1, 2)
+        self.table.attach(self.lbl_combination1, 1, 4, 10, 11)
+        self.table.attach(self.lbl_combination2, 1, 4, 11, 12)
+
+    def get_table(self):
+        return self.table
 
     def on_sw_deact_activated(self, widget=None):
         a = 1
 
     def new_combination(self):
-        return None
+        random.shuffle(self.lst_lbl_deactivate)
+        for i in range(8):
+            self.code2.append(0)
+            if (i < 4):
+                self.table.attach(self.lst_lbl_deactivate[i], i,i+1, 6,7)
+            else:
+                self.table.attach(self.lst_lbl_deactivate[i], i-4,i-3, 8,9)
+        for i in range(random.randint(4,5)):
+            self.code1.append(1)
+        for i in range(8-len(self.code1)):
+            self.code1.append(0)
+        random.shuffle(self.code1)
+        self.txt_combination1 = "Combinacion de desbloqueo: "+str(self.code1)
+        self.lbl_combination1.set_text(self.txt_combination1)
 
