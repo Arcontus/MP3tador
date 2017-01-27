@@ -3,6 +3,8 @@ import gi
 import random
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf, GObject
+from PresentationLayer.ConsoleInfo import ConsoleInfo
+import EventDispatcher.EventDispatcher
 
 
 class AlarmManager(Gtk.Window):
@@ -310,7 +312,7 @@ class AlarmConfig(Gtk.Window):
 
 
 class SoundAlarm(Gtk.Window):
-    def __init__(self, my_alarm_screen_controller, alarm):
+    def __init__(self, my_alarm_screen_controller, alarm, event_dispatcher):
         self.window = Gtk.Window.__init__(self)
         self.connect('delete-event', self.delete_event)
         self.set_modal(True)
@@ -318,6 +320,7 @@ class SoundAlarm(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_border_width(20)
         self.my_alarm_screen_controller = my_alarm_screen_controller
+        self.event_dispatcher = event_dispatcher
         self.notebook = Gtk.Notebook()
         self.notebook.set_scrollable(True)
         self.add(self.notebook)
@@ -325,13 +328,13 @@ class SoundAlarm(Gtk.Window):
         self.alarm_pages = []
         self.create_alarm_page(alarm)
 
-#        self.update_id = GObject.timeout_add(1000, self.update_hora_timeout, None)
+        #self.update_id = GObject.timeout_add(1000, self.update_hora_timeout, None)
         self.fullscreen()
 
         self.show_all()
 
     def create_alarm_page(self, alarm):
-        my_page = AlarmPage(self, alarm)
+        my_page = AlarmPage(self, alarm, self.event_dispatcher)
         self.alarm_list.append(alarm)
         self.alarm_pages.append(my_page)
         self.notebook.append_page(my_page.get_table(), Gtk.Label(alarm['name']))
@@ -349,7 +352,7 @@ class SoundAlarm(Gtk.Window):
 
     def delete_event(self, widget=None, other=None):
         for alarm in self.alarm_list:
-            print("deleting" + alarm['name'])
+            print("deactivated: " + alarm['name'])
             self.my_alarm_screen_controller.deactivate_alarm(alarm['name'])
         if not len(self.alarm_pages):
             self.destroy()
@@ -358,14 +361,24 @@ class SoundAlarm(Gtk.Window):
         # Recargamos bibliotecas
         # Eliminamos nuestra ventana
 
-class AlarmPage():
-    def __init__(self, parent_window, alarm):
+
+class AlarmPage(ConsoleInfo):
+    def __init__(self, parent_window, alarm, event_dispatcher):
+        ConsoleInfo.__init__(self)
+        self.lblhour = Gtk.Label(label="")
+        self.lbldate = Gtk.Label(label="")
         self.table = Gtk.Table(11, 7, True)
         self.table.set_border_width(20)
         code1 = []
         code2 = code1
         self.my_parent_window = parent_window
         self.my_alarm = alarm
+        self.event_dispatcher = event_dispatcher
+        self.event_dispatcher.add_event_listener(
+            EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_HOUR, self.set_hour)
+        self.event_dispatcher.add_event_listener(
+            EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_DATE, self.set_date)
+        self.font_color = "black"
         self.lst_sw_deactivate = []
         self.lst_lbl_deactivate = []
         self.code1 = []
@@ -383,14 +396,14 @@ class AlarmPage():
         self.txt_combination1 = ""
         self.txt_combination2 = self.txt_combination1
         self.new_combination()
-        self.txt_info = Gtk.Entry()
-        self.txt_info.set_text("Alarma {}".format(alarm['name']))
-        self.txt_info.set_sensitive(False)
-        self.info_max_leng = 34
+        self.add_msg("Alarma {}".format(alarm['name']))
+
+        #self.info_max_leng = 34
         #self.txt_info.set_max_length(self.info_max_leng)
-        self.txt_info.get_style_context().add_class("colorize")
 
         self.table.attach(self.txt_info, 1, 6, 1, 2)
+        self.table.attach(self.lbldate, 0, 5, 2, 3)
+        self.table.attach(self.lblhour, 0, 5, 3, 7)
         self.table.attach(self.lbl_combination1, 1, 4, 10, 11)
         self.table.attach(self.lbl_combination2, 1, 4, 11, 12)
 
@@ -436,3 +449,9 @@ class AlarmPage():
 
     def delete_event(self):
         self.my_parent_window.delete_alarm_page(self)
+
+    def set_hour(self, event):
+        self.lblhour.set_markup(str("<span font='50' foreground='"+self.font_color+"'>Hora Actual: "+event.data)+"</span>")
+
+    def set_date(self, event):
+        self.lbldate.set_markup(str("<span variant='smallcaps'>" + event.data) + "</span>")

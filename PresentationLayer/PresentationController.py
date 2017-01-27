@@ -60,7 +60,7 @@ class MainScreenController(Borg):
         self.window.connect("delete-event", Gtk.main_quit)
         self.window.show_all()
         self.get_library_items()
-        self.console_info = PresentationLayer.Main.console_info(self.window, self)
+
         self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE, self.set_info_message
             )
@@ -71,10 +71,10 @@ class MainScreenController(Borg):
         start_gui()
 
     def set_info_message(self, event):
-        self.console_info.add_msg(event.data[0], event.data[1])
+        self.window.add_msg(event.data[0], event.data[1])
 
     def delete_info_message(self, event):
-        self.console_info.delete_message(event.data[0])
+        self.window.delete_message(event.data[0])
 
     def get_library_items(self):
         library = self.logic_controller.get_library_list()
@@ -252,7 +252,7 @@ class AlarmScreenController:
 
     def sound_alarm(self, alarm):
         if not self.my_sound_alarm:
-            self.my_sound_alarm = PresentationLayer.Alarm.SoundAlarm(self, alarm)
+            self.my_sound_alarm = PresentationLayer.Alarm.SoundAlarm(self, alarm, self.event_dispatcher)
         else:
             self.my_sound_alarm.add_new_alarm(alarm)
 
@@ -274,9 +274,5 @@ class OptionScreenController():
     def show_all(self):
         self.window = PresentationLayer.Option.OptionWindow(my_option_screen_controller=self)
         self.window.show_all()
-
-
-
-
 
 
