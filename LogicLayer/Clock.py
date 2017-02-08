@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 
@@ -47,6 +47,7 @@ class Cronometer():
     def __init__(self):
         # make it private
         self.state = 1
+        self.delta_time = datetime.now()
         self.start_time = datetime.now()
         self.update()
 
@@ -76,3 +77,10 @@ class Cronometer():
     def _get_time_formated(self):
         time = self._time - self.start_time
         return time
+
+    def set_delta_time(self, minutes):
+        minute = timedelta(minutes=1)
+        self.delta_time = self.get_time_now()+(minute * minutes)
+
+    def get_delta_time(self, ):
+        return self.delta_time - self.get_time_now()

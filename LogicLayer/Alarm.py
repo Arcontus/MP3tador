@@ -1,4 +1,5 @@
 import EventDispatcher.EventDispatcher
+from LogicLayer.Clock import Cronometer
 
 
 class Alarm:
@@ -9,12 +10,14 @@ class Alarm:
         self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST, self.reload_alarm_items)
         self.alarm_actives = 0
+        self.crono_list = []
         self.message = ""
         self.message_new = self.message
         self.sound_alarms = []
         self.sound_alarms_message_new = []
         self.sound_alarms_message = self.sound_alarms_message_new
         self.set_alarm_list(self.my_logic_controller.get_alarm_list())
+
 
     def check_time(self, alarm):
         if alarm['minutes'] == self.clock.get_minutes() and alarm['hours'] == self.clock.get_horurs():
@@ -47,7 +50,6 @@ class Alarm:
                 self.alarm_actives += 1
                 if alarm['days'] or self.check_day(alarm):
                     if self.check_time(alarm):
-                        # sonar alarma
                         self.event_dispatcher.dispatch_event(
                             EventDispatcher.EventDispatcher.MyAlarmEvent(
                                 EventDispatcher.EventDispatcher.MyAlarmEvent.SOUND_ALARM,
@@ -57,7 +59,19 @@ class Alarm:
                         self.my_logic_controller.set_player_library_by_name(alarm['library'])
                         self.my_logic_controller.play_song()
                         self.sound_alarms.append(alarm)
+        # Check the cronometers
         self.alarm_info()
+
+    def check_cronometers(self):
+        if len(self.crono_list) > 0:
+            for crono in self.crono_list:
+                crono['cronometer_snooze'].update()
+                self.event_dispatcher.dispatch_event(
+                        EventDispatcher.EventDispatcher.MyInfoEvent(
+                                EventDispatcher.EventDispatcher.MyAlarmEvent.SET_CRONOMETER,
+                                [crono['name'], crono['cronometer_snooze'].get_delta_time()]
+                )
+            )
 
     def set_alarm_list(self, list):
         self.alarm_list = list
@@ -72,9 +86,33 @@ class Alarm:
         self.alarm_info()
 
     def deactivate_alarm(self, name):
-        if name in self.sound_alarms:
-            self.sound_alarms.remove(self.my_logic_controller.get_alarm_parameters(name))
-            self.alarm_info()
+        for iterator in self.sound_alarms:
+            if name == iterator['name']:
+                self.sound_alarms.remove(self.my_logic_controller.get_alarm_parameters(name))
+                for item in self.crono_list:
+                    if item['name'] == name:
+                        self.crono_list.remove(item)
+                self.my_logic_controller.stop_song(None)
+                self.alarm_info()
+
+    def find_crono_list(self, name):
+        return [element for element in self.crono_list if element['name'] == name]
+
+    def snooze_alarm(self, name):
+        crono_alarm = {'name':"", 'alarm':None, 'cronometer_snooze':None}
+        for iterator in self.sound_alarms:
+            if name == iterator['name']:
+                crono_alarm['name'] = name
+                crono_alarm['alarm'] = iterator
+                crono_alarm['cronometer_snooze'] = Cronometer()
+                crono_alarm['cronometer_snooze'].set_delta_time(iterator['min_snooze'])
+                crono_search = self.find_crono_list(name)
+                if crono_search:
+                    crono_search[0]['cronometer_snooze'].set_delta_time(iterator['min_snooze'])
+                else:
+                    self.crono_list.append(crono_alarm)
+                self.my_logic_controller.stop_song(None)
+                print(len(self.crono_list))
 
     def alarm_info(self):
         self.message_new = "Alarmas activas: {0}".format(self.alarm_actives)

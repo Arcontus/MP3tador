@@ -259,11 +259,49 @@ class AlarmScreenController:
     def deactivate_alarm(self, alarm_name):
         self.logic_controller.deactivate_alarm(alarm_name)
 
+    def snooze_alarm(self, alarm_name):
+        self.logic_controller.snooze_alarm(alarm_name)
+
     def get_next_alarm_name(self):
         return self.logic_controller.get_next_alarm_name()
 
     def delete_alarm(self, name):
         self.logic_controller.delete_alarm(name)
+
+    def set_library_player(self, library):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.SET_LIBRARY,
+                library)
+        )
+
+    def play_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.PLAY_MUSIC,
+            )
+        )
+
+    def stop_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.STOP_MUSIC,
+            )
+        )
+
+    def pause_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.PAUSE_MUSIC,
+            )
+        )
+
+    def next_song(self):
+        self.event_dispatcher.dispatch_event(
+            EventDispatcher.EventDispatcher.MyMusicEvent(
+                EventDispatcher.EventDispatcher.MyMusicEvent.NEXT_SONG,
+            )
+        )
 
 
 class OptionScreenController():

@@ -3,6 +3,7 @@ import gi
 import random
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf, GObject
+from datetime import datetime
 from PresentationLayer.ConsoleInfo import ConsoleInfo
 import EventDispatcher.EventDispatcher
 
@@ -326,6 +327,7 @@ class SoundAlarm(Gtk.Window):
         self.add(self.notebook)
         self.alarm_list = []
         self.alarm_pages = []
+        self.alarm_ringing_list = []
         self.create_alarm_page(alarm)
 
         #self.update_id = GObject.timeout_add(1000, self.update_hora_timeout, None)
@@ -340,6 +342,7 @@ class SoundAlarm(Gtk.Window):
         self.notebook.append_page(my_page.get_table(), Gtk.Label(alarm['name']))
         self.notebook.show_all()
 
+
     def add_new_alarm(self, alarm):
         self.create_alarm_page(alarm)
 
@@ -348,7 +351,14 @@ class SoundAlarm(Gtk.Window):
             self.notebook.remove_page(self.alarm_pages.index(my_page))
             self.alarm_pages.remove(my_page)
             self.notebook.show_all()
+            self.my_alarm_screen_controller.deactivate_alarm(my_page.get_alarm_name())
+            print("deactivated: " + my_page.get_alarm_name())
+            self.alarm_list.remove(my_page.get_alarm())
+        if not (len(self.alarm_pages)):
             self.delete_event()
+
+    def snooze_alarm(self, alarm_name):
+        self.my_alarm_screen_controller.snooze_alarm(alarm_name)
 
     def delete_event(self, widget=None, other=None):
         for alarm in self.alarm_list:
@@ -378,7 +388,13 @@ class AlarmPage(ConsoleInfo):
             EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_HOUR, self.set_hour)
         self.event_dispatcher.add_event_listener(
             EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_DATE, self.set_date)
+        self.event_dispatcher.add_event_listener(
+                EventDispatcher.EventDispatcher.MyAlarmEvent.SET_CRONOMETER, self.set_snooze_crono)
         self.font_color = "black"
+        self.btn_snooze = Gtk.Button()
+        self.lbl_btn_snooze = "Snooze {} Min".format(self.my_alarm['min_snooze'])
+        self.btn_snooze.set_label(self.lbl_btn_snooze)
+        self.btn_snooze.connect("clicked", self.on_btn_snooze_clicked)
         self.lst_sw_deactivate = []
         self.lst_lbl_deactivate = []
         self.code1 = []
@@ -396,19 +412,29 @@ class AlarmPage(ConsoleInfo):
         self.txt_combination1 = ""
         self.txt_combination2 = self.txt_combination1
         self.new_combination()
-        self.add_msg("Alarma {}".format(alarm['name']))
+        self.add_msg("Alarma {}".format(self.my_alarm['name']))
 
         #self.info_max_leng = 34
         #self.txt_info.set_max_length(self.info_max_leng)
 
         self.table.attach(self.txt_info, 1, 6, 1, 2)
         self.table.attach(self.lbldate, 0, 5, 2, 3)
-        self.table.attach(self.lblhour, 0, 5, 3, 7)
+        self.table.attach(self.lblhour, 0, 5, 3, 5)
+        self.table.attach(self.btn_snooze, 0, 3, 5, 6)
         self.table.attach(self.lbl_combination1, 1, 4, 10, 11)
         self.table.attach(self.lbl_combination2, 1, 4, 11, 12)
 
     def get_table(self):
         return self.table
+
+    def get_library(self):
+        return self.my_alarm['library']
+
+    def get_alarm_name(self):
+        return self.my_alarm['name']
+
+    def get_alarm(self):
+        return self.my_alarm
 
     def on_sw_deact_activated(self, switch, widget=None):
         if switch.get_active():
@@ -436,10 +462,10 @@ class AlarmPage(ConsoleInfo):
         for i in range(8):
             self.code2.append(0)
             if (i < 4):
-                self.table.attach(self.lst_lbl_deactivate[i], i,i+1, 6,7)
+                self.table.attach(self.lst_lbl_deactivate[i], i, i+1, 6, 7)
             else:
-                self.table.attach(self.lst_lbl_deactivate[i], i-4,i-3, 8,9)
-        for i in range(random.randint(4,5)):
+                self.table.attach(self.lst_lbl_deactivate[i], i-4, i-3, 8, 9)
+        for i in range(random.randint(4, 5)):
             self.code1.append(1)
         for i in range(8-len(self.code1)):
             self.code1.append(0)
@@ -448,6 +474,10 @@ class AlarmPage(ConsoleInfo):
         self.lbl_combination1.set_text(self.txt_combination1)
 
     def delete_event(self):
+        self.event_dispatcher.remove_event_listener(
+                EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_HOUR, self.set_hour)
+        self.event_dispatcher.remove_event_listener(
+                EventDispatcher.EventDispatcher.MyDateEvent.MAIN_WINDOW_SET_DATE, self.set_date)
         self.my_parent_window.delete_alarm_page(self)
 
     def set_hour(self, event):
@@ -455,3 +485,13 @@ class AlarmPage(ConsoleInfo):
 
     def set_date(self, event):
         self.lbldate.set_markup(str("<span variant='smallcaps'>" + event.data) + "</span>")
+
+    def set_snooze_crono(self, event):
+        if event.data[0] == self.my_alarm['name']:
+            self.btn_snooze.set_label(self.lbl_btn_snooze + "\n Próxima activación en: " + str(event.data[1])[:-7])
+
+    def on_btn_snooze_clicked(self, widget=None):
+        self.my_parent_window.snooze_alarm(self.my_alarm['name'])
+
+
+
