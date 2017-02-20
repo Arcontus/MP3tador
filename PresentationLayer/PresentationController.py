@@ -271,6 +271,9 @@ class AlarmScreenController:
     def delete_alarm(self, name):
         self.logic_controller.delete_alarm(name)
 
+    def quick_alarm(self, library, time):
+        self.logic_controller.quick_alarm(library, time)
+
     def set_library_player(self, library):
         self.event_dispatcher.dispatch_event(
             EventDispatcher.EventDispatcher.MyMusicEvent(

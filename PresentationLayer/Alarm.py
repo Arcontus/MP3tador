@@ -55,16 +55,16 @@ class AlarmManager(Gtk.Window):
         table.attach(self.lst_library, 4, 7, 7, 8)
 
     def on_click_btn_add_quick_allarm15(self, widget):
-        a = 1
+        self.my_alarm_screen_controller.quick_alarm(self.lst_library.get_active_text(), 15)
 
     def on_click_btn_add_quick_allarm30(self, widget):
-        a = 1
+        self.my_alarm_screen_controller.quick_alarm(self.lst_library.get_active_text(), 30)
 
     def on_click_btn_add_quick_allarm45(self, widget):
-        a = 1
+        self.my_alarm_screen_controller.quick_alarm(self.lst_library.get_active_text(), 45)
 
     def on_click_btn_add_quick_allarm1(self, widget):
-        a = 1
+        self.my_alarm_screen_controller.quick_alarm(self.lst_library.get_active_text(), 60)
 
     def reset_alarm_items(self):
         self.lst_alarms.remove_all()

@@ -17,6 +17,13 @@ class Alarm:
         self.sound_alarms_message_new = []
         self.sound_alarms_message = self.sound_alarms_message_new
         self.set_alarm_list(self.my_logic_controller.get_alarm_list())
+        self.my_quick_alarm = {'name': "", 'active': True, 'days': False,
+                     'monday': True, 'tuesday': True,
+                     'wednesday': True, 'thursday': True,
+                     'friday': True, 'saturday': True,
+                     'sunday': True, 'hours': "00", 'minutes': "00",
+                     'library': "", 'snooze': True,
+                     'min_snooze': 10}
 
 
     def check_time(self, alarm):
@@ -97,7 +104,11 @@ class Alarm:
     def deactivate_alarm(self, name):
         for iterator in self.sound_alarms:
             if name == iterator['name']:
-                self.sound_alarms.remove(self.my_logic_controller.get_alarm_parameters(name))
+                if self.my_logic_controller.get_alarm_parameters(name):
+                    self.sound_alarms.remove(self.my_logic_controller.get_alarm_parameters(name))
+                else:
+                    self.sound_alarms.remove(self.my_quick_alarm)
+
                 for item in self.crono_list:
                     if item['name'] == name:
                         self.crono_list.remove(item)
@@ -122,6 +133,24 @@ class Alarm:
                     self.crono_list.append(crono_alarm)
                 self.my_logic_controller.stop_song(None)
                 print(len(self.crono_list))
+
+    def quick_alarm(self, library, time):
+        name = "Alarma rapida"
+        self.my_quick_alarm['name'] = name
+        self.my_quick_alarm['library'] = library
+        self.my_quick_alarm['min_snooze'] = 10
+
+        self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyAlarmEvent(
+                        EventDispatcher.EventDispatcher.MyAlarmEvent.SOUND_ALARM,
+                        self.my_quick_alarm)
+        )
+        self.sound_alarms.append(self.my_quick_alarm)
+        self.my_quick_alarm['min_snooze'] = time
+        self.snooze_alarm(name)
+        self.my_quick_alarm['min_snooze'] = 10
+
+
 
     def alarm_info(self):
         self.message_new = "Alarmas activas: {0}".format(self.alarm_actives)

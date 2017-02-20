@@ -194,6 +194,9 @@ class MainLogicController:
     def snooze_alarm(self, alarm_name):
         self.alarm.snooze_alarm(alarm_name)
 
+    def quick_alarm(self, library, time):
+        self.alarm.quick_alarm(library, time)
+
     @staticmethod
     def validate_filename(filename):
         if filename:
