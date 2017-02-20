@@ -256,6 +256,9 @@ class AlarmScreenController:
         else:
             self.my_sound_alarm.add_new_alarm(alarm)
 
+    def delete_my_sound_alarm(self):
+        self.my_sound_alarm = None
+
     def deactivate_alarm(self, alarm_name):
         self.logic_controller.deactivate_alarm(alarm_name)
 

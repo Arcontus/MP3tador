@@ -66,12 +66,21 @@ class Alarm:
         if len(self.crono_list) > 0:
             for crono in self.crono_list:
                 crono['cronometer_snooze'].update()
-                self.event_dispatcher.dispatch_event(
-                        EventDispatcher.EventDispatcher.MyInfoEvent(
-                                EventDispatcher.EventDispatcher.MyAlarmEvent.SET_CRONOMETER,
-                                [crono['name'], crono['cronometer_snooze'].get_delta_time()]
-                )
-            )
+                if crono['cronometer_snooze'].get_delta_time() is not None:
+                    self.event_dispatcher.dispatch_event(EventDispatcher.EventDispatcher.MyInfoEvent(
+                            EventDispatcher.EventDispatcher.MyAlarmEvent.SET_CRONOMETER,
+                            [crono['name'],
+                             crono['cronometer_snooze'].get_delta_time()])
+                    )
+                else:
+                    self.event_dispatcher.dispatch_event(EventDispatcher.EventDispatcher.MyInfoEvent(
+                            EventDispatcher.EventDispatcher.MyAlarmEvent.SET_CRONOMETER,
+                            [crono['name'],
+                             None])
+                    )
+                    self.my_logic_controller.set_player_library_by_name(crono['alarm']['library'])
+                    self.my_logic_controller.play_song()
+                    self.crono_list.remove(crono)
 
     def set_alarm_list(self, list):
         self.alarm_list = list

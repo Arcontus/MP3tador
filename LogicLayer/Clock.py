@@ -83,4 +83,7 @@ class Cronometer():
         self.delta_time = self.get_time_now()+(minute * minutes)
 
     def get_delta_time(self, ):
-        return self.delta_time - self.get_time_now()
+        if self.delta_time > self.get_time_now():
+            return self.delta_time - self.get_time_now()
+        else:
+            return None

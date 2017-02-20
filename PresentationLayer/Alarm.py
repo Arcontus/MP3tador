@@ -365,6 +365,7 @@ class SoundAlarm(Gtk.Window):
             print("deactivated: " + alarm['name'])
             self.my_alarm_screen_controller.deactivate_alarm(alarm['name'])
         if not len(self.alarm_pages):
+            self.my_alarm_screen_controller.delete_my_sound_alarm()
             self.destroy()
         # Eliminamos el gobject
         # Paramos el reproductor
@@ -391,10 +392,12 @@ class AlarmPage(ConsoleInfo):
         self.event_dispatcher.add_event_listener(
                 EventDispatcher.EventDispatcher.MyAlarmEvent.SET_CRONOMETER, self.set_snooze_crono)
         self.font_color = "black"
-        self.btn_snooze = Gtk.Button()
-        self.lbl_btn_snooze = "Snooze {} Min".format(self.my_alarm['min_snooze'])
-        self.btn_snooze.set_label(self.lbl_btn_snooze)
-        self.btn_snooze.connect("clicked", self.on_btn_snooze_clicked)
+        if self.my_alarm['snooze']:
+            self.btn_snooze = Gtk.Button()
+            self.lbl_btn_snooze = "Snooze {} Min".format(self.my_alarm['min_snooze'])
+            self.btn_snooze.set_label(self.lbl_btn_snooze)
+            self.btn_snooze.connect("clicked", self.on_btn_snooze_clicked)
+            self.table.attach(self.btn_snooze, 0, 3, 5, 6)
         self.lst_sw_deactivate = []
         self.lst_lbl_deactivate = []
         self.code1 = []
@@ -420,7 +423,7 @@ class AlarmPage(ConsoleInfo):
         self.table.attach(self.txt_info, 1, 6, 1, 2)
         self.table.attach(self.lbldate, 0, 5, 2, 3)
         self.table.attach(self.lblhour, 0, 5, 3, 5)
-        self.table.attach(self.btn_snooze, 0, 3, 5, 6)
+
         self.table.attach(self.lbl_combination1, 1, 4, 10, 11)
         self.table.attach(self.lbl_combination2, 1, 4, 11, 12)
 
@@ -488,7 +491,11 @@ class AlarmPage(ConsoleInfo):
 
     def set_snooze_crono(self, event):
         if event.data[0] == self.my_alarm['name']:
-            self.btn_snooze.set_label(self.lbl_btn_snooze + "\n Próxima activación en: " + str(event.data[1])[:-7])
+            result = event.data[1]
+            if result:
+                self.btn_snooze.set_label(self.lbl_btn_snooze + "\n Próxima activación en: " + str(event.data[1])[:-7])
+            else:
+                self.btn_snooze.set_label(self.lbl_btn_snooze + "\n")
 
     def on_btn_snooze_clicked(self, widget=None):
         self.my_parent_window.snooze_alarm(self.my_alarm['name'])
