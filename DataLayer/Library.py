@@ -9,6 +9,8 @@ def add_library(library):
 
 
 def rm_library(library):
+    if os.path.exists(library_dir+library.get_name()+".lib"):
+        os.remove(library_dir+library.get_name()+".lib")
     library_list.remove(library)
 
 
@@ -26,6 +28,7 @@ def get_library_by_name(name):
         if i.get_name() == name:
             return i
     return False
+
 
 def rm_library_by_name(name):
     my_library = False

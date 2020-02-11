@@ -28,10 +28,10 @@ class LibraryManagerWindow(Gtk.Window):
         self.btn_mdf_library = Gtk.Button(label="Modificar")
         self.btn_mdf_library.connect("clicked", self.on_btn_mdf_library_clicked)
 
-        window.attach(self.btn_add_library, 2,5,0,1)
+        window.attach(self.btn_add_library, 2, 5, 0, 1)
         window.attach(self.lst_library, 2, 5, 2, 3)
-        window.attach(self.btn_rm_library, 0,1,2,3)
-        window.attach(self.btn_mdf_library, 6,7 ,2,3)
+        window.attach(self.btn_rm_library, 0, 1, 2, 3)
+        window.attach(self.btn_mdf_library, 6, 7, 2, 3)
 
     def reload_library_items(self, items):
         self.reset_library_items()
@@ -77,8 +77,7 @@ class LibraryConfigWindow(Gtk.Window):
         self.grid.set_column_spacing(10)
         self.add(self.grid)
 
-        self.library_dic = {'name': '', 'items': 0,
-                            'songs': []}
+        self.library_dic = {'name': '', 'items': 0, 'songs': []}
 
         self.library = []
 

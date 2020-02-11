@@ -9,10 +9,11 @@ import re
 try:
     import RPi.GPIO as GPIO
 except RuntimeError:
-    print("Error importing RPi.GPIO!")
+    print("Error importing RPi.GPIO library!")
     print("It is correct if it isn't run on a Raspberry pi.")
     print("If is run on Raspberry, try to run 'sudo python Principal.py'")
     print("This program need superuser privileges to manage GPIO.")
+    print("RPi.GPIO library can controls the power to the speakers. If you needn't this feature, don't worry.")
 
 from time import sleep
 
