@@ -61,11 +61,14 @@ class MusicPlayer:
                     pygame.mixer.music.queue(val)
 
     def manager_library(self):
-        self.next_song = random.choice(self.library_dic['songs'])
-        self.current_song = self.next_song
+        if len(self.library_dic['songs']) > 0:
+            self.next_song = random.choice(self.library_dic['songs'])
+            self.current_song = self.next_song
+
         if len(self.library_dic['songs']) > 1:
             while self.next_song == self.current_song:
                 self.next_song = random.choice(self.library_dic['songs'])
+
         pygame.mixer.music.set_endevent(self.finish_song)
         pygame.mixer.music.load(self.current_song)
 
@@ -139,8 +142,16 @@ class MusicPlayer:
         tag.link(self.current_song)
         self.current_song_dic['artist'] = tag.getArtist().encode("utf-8")
         self.current_song_dic['name'] = tag.getTitle().encode("utf-8")
-        self.current_song_dic['year'] = tag.getYear().encode("utf-8")
-        self.current_song_dic['album'] = tag.getAlbum().encode("utf-8")
+        if tag.getYear():
+            self.current_song_dic['year'] = tag.getYear().encode("utf-8")
+        else:
+            self.current_song_dic['year'] = "Year?"
+
+        if tag.getAlbum():
+            self.current_song_dic['album'] = tag.getAlbum().encode("utf-8")
+        else:
+            self.current_song_dic['album'] = "Album?"
+
         self.info_string_current_song = ["Canción: {1}, Artista: {0}, Año: {2}, Album: {3}".format(self.current_song_dic['artist'],
                                                                                                    self.current_song_dic['name'],
                                                                                                    self.current_song_dic['year'],

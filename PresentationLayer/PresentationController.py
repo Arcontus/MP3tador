@@ -100,7 +100,8 @@ class MainScreenController(Borg):
 
     def open_option_manager(self):
         if self.my_option is None:
-            self.my_option = OptionScreenController(event_dispatcher=self.event_dispatcher)
+            self.my_option = OptionScreenController(event_dispatcher=self.event_dispatcher,
+                                                    logic_controller=self.logic_controller)
         self.my_option.show_all()
 
     def set_hour(self, hour):
@@ -236,10 +237,12 @@ class AlarmScreenController:
         self.logic_controller.save_alarm(alarm)
 
     def reload_alarm_items(self, event):
-        self.window.reload_alarm_items(event.data)
+        if self.window:
+            self.window.reload_alarm_items(event.data)
 
     def reload_library_items(self, event):
-        self.window.reload_library_items(event.data)
+        if self.window:
+            self.window.reload_library_items(event.data)
 
     def open_alarm_config(self):
         self.my_alarm = PresentationLayer.Alarm.AlarmConfig(self)
@@ -311,12 +314,19 @@ class AlarmScreenController:
 
 
 class OptionScreenController():
-    def __init__(self, event_dispatcher=None):
+    def __init__(self, event_dispatcher=None, logic_controller=None):
         if event_dispatcher is not None:
             self.event_dispatcher = event_dispatcher
+        if logic_controller is None:
+            raise Exception('Logic controller is needed')
+        else:
+            self.logic_controller = logic_controller
 
     def show_all(self):
         self.window = PresentationLayer.Option.OptionWindow(my_option_screen_controller=self)
         self.window.show_all()
+
+    def save_options(self):
+        print("Pending save")
 
 

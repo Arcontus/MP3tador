@@ -67,6 +67,7 @@ class LibraryConfigWindow(Gtk.Window):
             self.my_library_screen_controller = my_library_screen_controller
         else:
             raise NameError("AlarmManager needs alarm_screen_controller instance")
+
         Gtk.Window.__init__(self, title=title)
         self.connect('delete-event', self.delete_event)
         self.set_border_width(20)
@@ -144,10 +145,12 @@ class LibraryConfigWindow(Gtk.Window):
         self.my_library_screen_controller.save_library(self.library_dic)
 
     def on_btn_cancel_clicked(self, widget):
+
         self.close()
 
     def delete_event(self, widget, event=None):
-        self.my_library_screen_controller.reload_libraries()
+        #self.my_library_screen_controller.reload_libraries()
+        a = 21;
 
     def on_selection_button_clicked(self, widget):
         button_label = widget.get_label()

@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import gi
+from LogicLayer.GPIO import power_speakers_GPIO
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 import PresentationLayer.PresentationController
 
 class OptionWindow(Gtk.Window):
     def __init__(self, my_option_screen_controller=None):
-        if my_option_screen_controller is not None:
+        if my_option_screen_controller:
             self.my_option_screen_controller = my_option_screen_controller
+        else:
+            raise NameError("OptionWindow needs option_screen_controller instance")
         Gtk.Window.__init__(self, title="Opciones")
         self.window = Gtk.Table(1, 1, True)
         self.set_border_width(20)
@@ -22,7 +25,7 @@ class OptionWindow(Gtk.Window):
         self.lst_GPIO_pinout.set_active(2)
         self.lst_GPIO_pinout.connect("changed", self.on_lst_GPIO_pinout)
 
-        self.sw_power_speakers= Gtk.Switch()
+        self.sw_power_speakers = Gtk.Switch()
         self.lbl_power_speakers = Gtk.Label(label="Encender Altavoces (Solo para Raspberry)")
         self.sw_power_speakers.connect("notify::active", self.on_sw_power_speakers)
 
@@ -46,18 +49,25 @@ class OptionWindow(Gtk.Window):
         self.window.attach(self.btn_guardar, 1,2, 2,3)
         self.show_all()
 
+
     def on_btn_guardar_clicked(self, widget):
-        a = 1
+        self.save_options()
+
 
     def load_options(self):
-        a =1
+        ## Fix IT!!!! it need to check if exists a option save or load defaults
+        power_speakers_GPIO = 12
+        self.lst_GPIO_pinout.set_active(self.get_GPIO_pinout_lst_position_by_num(power_speakers_GPIO))
+
 
     def save_options(self):
-        a = 1
+        self.my_option_screen_controller.save_options()
+
 
     def add_GPIO_pinout(self):
         for i in self.GPIO_pinout_list:
             self.lst_GPIO_pinout.append_text(i)
+
 
     def get_GPIO_pinout_lst_position_by_num(self, num):
         posicion = 0
@@ -67,14 +77,15 @@ class OptionWindow(Gtk.Window):
             posicion = posicion + 1
         return False
 
+
     def on_lst_GPIO_pinout(self, widget):
         self.on_sw_power_speakers(widget, widget)
 
 
     def on_sw_power_speakers(self, widget, gparam):
-        global power_speakers
-        global power_speakers_GPIO
+
+
         power_speakers = self.sw_power_speakers.get_active()
-        if (power_speakers == True):
+        if power_speakers:
             power_speakers_GPIO = self.lst_GPIO_pinout.get_active_text()[5:]
             self.get_GPIO_pinout_lst_position_by_num(power_speakers_GPIO)
