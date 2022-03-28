@@ -9,6 +9,7 @@ __author__ = "David Pozos Ceron"
 
 import DataLayer.Library
 import DataLayer.Alarm
+import DataLayer.Options
 
 
 class MainDataController:
@@ -17,6 +18,7 @@ class MainDataController:
             self.event_dispatcher = event_dispatcher
         DataLayer.Library.load_library_list()
         DataLayer.Alarm.load_alarm_list()
+        DataLayer.Options.load_options()
 
     @staticmethod
     def get_alarm_list():
@@ -25,6 +27,10 @@ class MainDataController:
     @staticmethod
     def get_library_list():
         return DataLayer.Library.get_library_list()
+
+    @staticmethod
+    def get_options():
+        return DataLayer.Options.options
 
     @staticmethod
     def get_alarm(name):
@@ -60,7 +66,7 @@ class MainDataController:
         if my_library:
             library_dic = {'name': my_library.get_name(), 'items': my_library.get_num_items(),
                            'songs': my_library.get_songs()}
-            print library_dic
+            print(library_dic)
             return library_dic
         return False  # Not found
 
@@ -110,6 +116,13 @@ class MainDataController:
             return True
         else:
             return False
+
+    @staticmethod
+    def save_options(options_dict):
+        my_options = DataLayer.Options.Options()
+        my_options.set_is_enable_GPIO(options_dict['is_enable_GPIO'])
+        my_options.set_GPIO(options_dict['GPIO'])
+        my_options.save_params()
 
     @staticmethod
     def delete_alarm(name):

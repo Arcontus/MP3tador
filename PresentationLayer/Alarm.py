@@ -301,7 +301,7 @@ class AlarmConfig(Gtk.Window):
         self.alarm['library'] = str(self.lst_library.get_active_text())
         self.alarm['snooze'] = self.sw_snooze.get_active()
         self.alarm['min_snooze'] = self.spb_snooze.get_value_as_int()
-        print self.alarm
+        print (self.alarm)
         self.my_alarm_screen_controller.save_alarm(self.alarm)
 
 

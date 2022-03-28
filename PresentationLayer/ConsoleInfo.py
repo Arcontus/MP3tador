@@ -15,7 +15,7 @@ class ConsoleInfo(object):
         self.txt_info.set_text("")
         self.txt_info.set_sensitive(False)
 
-        css = """
+        css = b"""
         .colorize {
            background: rgba(0,0,0,1);
            color: green;
@@ -43,10 +43,10 @@ class ConsoleInfo(object):
 
                 if self.txt_completed > self.get_info_max_leng():
                     my_str = str(self.msg_list[self.iterator]['message'][self.txt_completed - self.get_info_max_leng():self.txt_completed])
-                    self.my_utf8 = my_str.decode("utf-8", errors='ignore')
+                    self.my_utf8 = my_str
                 else:
                     my_str = self.msg_list[self.iterator]['message'][:self.txt_completed]
-                    self.my_utf8 =my_str.decode("utf-8", errors='ignore')
+                    self.my_utf8 =my_str
                 self.set_info_text(self.my_utf8)
 
             else:

@@ -146,6 +146,9 @@ class MyInfoEvent (Event):
     SET_NEW_MESSAGE = "setNewMessage"
     DELETE_MESSAGE = "deleteMesssage"
 
+class MyOptionEvent (Event):
+    SET_OPTIONS = "setOptions"
+
 
 class WhoAsk( object ):
     """

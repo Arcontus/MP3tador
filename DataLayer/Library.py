@@ -15,7 +15,6 @@ def rm_library(library):
 
 
 def load_library_list():
-    library_list = []
     if not os.path.exists(library_dir):
         os.makedirs(library_dir)
     files = os.listdir(library_dir)

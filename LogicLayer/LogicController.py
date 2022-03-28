@@ -79,6 +79,10 @@ class MainLogicController:
             list_names.append(i.get_name())
         return list_names
 
+    def get_options(self):
+        return self.data.get_options()
+
+
     # This method read the list of alarm names, and compare with his pattern.
     # If the pattern exists, it try with patern(n) where (n) is the next free number.
     def get_next_alarm_name(self):
@@ -138,6 +142,15 @@ class MainLogicController:
                     )
                 )
 
+    def save_options(self, options):
+        if self.data.save_options(options):
+            self.event_dispatcher.dispatch_event(
+                EventDispatcher.EventDispatcher.MyOptionEvent(
+                    EventDispatcher.EventDispatcher.MyOptionEvent.SET_OPTIONS,
+                    self.get_options()
+                )
+            )
+              
     def reload_libraries(self):
         self.event_dispatcher.dispatch_event(
             EventDispatcher.EventDispatcher.MyLibraryEvent(

@@ -2,7 +2,7 @@
 # coding=utf-8
 
 import pygame
-import eyeD3
+import eyed3
 import random
 from gi.repository import GObject
 import EventDispatcher.EventDispatcher
@@ -16,7 +16,7 @@ class MusicPlayer:
 
         self.library_dic = {'name': "", 'items': 0,
                            'songs': []}
-        self.current_song_dic = {'artist': "", 'name': "", 'year': 0, 'album': ""}
+        self.current_song_dic = {'artist': "", 'name': "", 'album': ""}
         self.info_string_current_song = ["", True]
         self.my_logic_controller = logic_controller
         self.is_pause = False
@@ -54,8 +54,8 @@ class MusicPlayer:
     def set_library(self, music):
         self.library_dic['songs'] = music
         for i, val in enumerate(music):
-            if i is not 0:
-                if i is 1:
+            if i != 0:
+                if i == 1:
                     pygame.mixer.music.load(val)
                 else:
                     pygame.mixer.music.queue(val)
@@ -138,26 +138,30 @@ class MusicPlayer:
 
     def set_info(self):
         self.unload_info()
-        tag = eyeD3.Tag()
-        tag.link(self.current_song)
-        self.current_song_dic['artist'] = tag.getArtist().encode("utf-8")
-        self.current_song_dic['name'] = tag.getTitle().encode("utf-8")
-        if tag.getYear():
-            self.current_song_dic['year'] = tag.getYear().encode("utf-8")
+        audio_file = eyed3.load(self.current_song)
+        print(audio_file.tag)
+        if not audio_file.tag:
+            audio_file.initTag()
+        if audio_file.tag.artist:
+            self.current_song_dic['artist'] = audio_file.tag.artist
         else:
-            self.current_song_dic['year'] = "Year?"
+            self.current_song_dic['artist'] = "UNKNOWN"
 
-        if tag.getAlbum():
-            self.current_song_dic['album'] = tag.getAlbum().encode("utf-8")
+        if audio_file.tag.title:
+            self.current_song_dic['name'] = audio_file.tag.title
         else:
-            self.current_song_dic['album'] = "Album?"
+            self.current_song_dic['name'] = "UNKNOWN"
 
-        self.info_string_current_song = ["Canción: {1}, Artista: {0}, Año: {2}, Album: {3}".format(self.current_song_dic['artist'],
-                                                                                                   self.current_song_dic['name'],
-                                                                                                   self.current_song_dic['year'],
-                                                                                                   self.current_song_dic['album']),
-                                         True]
-        tag.link(self.next_song)
+        if audio_file.tag.album:
+            self.current_song_dic['album'] = audio_file.tag.album
+        else:
+            self.current_song_dic['album'] = "UNKNOWN"
+
+        self.info_string_current_song = ["Canción: {1}, Artista: {0}, Album: {2}".format(
+            self.current_song_dic['artist'],
+            self.current_song_dic['name'],
+            self.current_song_dic['album']),
+            True]
 
         self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyInfoEvent(
