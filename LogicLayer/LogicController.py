@@ -15,6 +15,7 @@ import DataLayer.DataController
 import LogicLayer.Clock
 import LogicLayer.MusicPlayer
 import LogicLayer.Alarm
+import LogicLayer.GPIO
 import EventDispatcher.EventDispatcher
 from gi.repository import GObject
 
@@ -150,7 +151,7 @@ class MainLogicController:
                     self.get_options()
                 )
             )
-              
+
     def reload_libraries(self):
         self.event_dispatcher.dispatch_event(
             EventDispatcher.EventDispatcher.MyLibraryEvent(
@@ -209,6 +210,17 @@ class MainLogicController:
 
     def quick_alarm(self, library, time):
         self.alarm.quick_alarm(library, time)
+
+    def switch_on_speakers(self):
+        if self.data.get_options()["is_enable_GPIO"]:
+            #Start speakers
+            LogicLayer.GPIO.encender_altavoces()
+
+    def switch_off_speakers(self):
+        if self.data.get_options()["is_enable_GPIO"]:
+            # Stop speakers
+            LogicLayer.GPIO.apagar_altavoces()
+
 
     @staticmethod
     def validate_filename(filename):

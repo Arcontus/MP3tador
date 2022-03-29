@@ -193,51 +193,28 @@ class AlarmConfig(Gtk.Window):
 
     def update_sensitives(self):
         # Comprobamos el status de la alarm
-        if self.sw_active.get_active():
-            self.lbl_days.set_sensitive(True)
-            self.sw_days.set_sensitive(True)
-            self.lbl_hours.set_sensitive(True)
-            self.spb_hours.set_sensitive(True)
-            self.lbl_minutes.set_sensitive(True)
-            self.spb_minutes.set_sensitive(True)
-            self.sw_snooze.set_sensitive(True)
-            if self.sw_days.get_active():
-                self.chk_monday.set_sensitive(False)
-                self.chk_tuesday.set_sensitive(False)
-                self.chk_wednesday.set_sensitive(False)
-                self.chk_thursday.set_sensitive(False)
-                self.chk_friday.set_sensitive(False)
-                self.chk_saturday.set_sensitive(False)
-                self.chk_sunday.set_sensitive(False)
-            else:
-                self.chk_monday.set_sensitive(True)
-                self.chk_tuesday.set_sensitive(True)
-                self.chk_wednesday.set_sensitive(True)
-                self.chk_thursday.set_sensitive(True)
-                self.chk_friday.set_sensitive(True)
-                self.chk_saturday.set_sensitive(True)
-                self.chk_sunday.set_sensitive(True)
-            if self.sw_snooze.get_active():
-                self.spb_snooze.set_sensitive(True)
-            else:
-                self.spb_snooze.set_sensitive(False)
-        else:
-            self.spb_snooze.set_sensitive(False)
-            self.lbl_days.set_sensitive(False)
-            self.sw_days.set_sensitive(False)
-            self.chk_monday.set_sensitive(False)
-            self.chk_tuesday.set_sensitive(False)
-            self.chk_wednesday.set_sensitive(False)
-            self.chk_thursday.set_sensitive(False)
-            self.chk_friday.set_sensitive(False)
-            self.chk_saturday.set_sensitive(False)
-            self.chk_sunday.set_sensitive(False)
-            self.lbl_hours.set_sensitive(False)
-            self.spb_hours.set_sensitive(False)
-            self.lbl_minutes.set_sensitive(False)
-            self.spb_minutes.set_sensitive(False)
-            self.sw_snooze.set_sensitive(False)
-            self.spb_snooze.set_sensitive(False)
+        sw_active = self.sw_active.get_active()
+        self.lbl_days.set_sensitive(sw_active)
+        self.sw_days.set_sensitive(sw_active)
+        self.lbl_hours.set_sensitive(sw_active)
+        self.spb_hours.set_sensitive(sw_active)
+        self.lbl_minutes.set_sensitive(sw_active)
+        self.spb_minutes.set_sensitive(sw_active)
+        self.sw_snooze.set_sensitive(sw_active)
+
+        sw_days = self.sw_days.get_active()
+        self.chk_monday.set_sensitive(sw_days and sw_active)
+        self.chk_tuesday.set_sensitive(sw_days and sw_active)
+        self.chk_wednesday.set_sensitive(sw_days and sw_active)
+        self.chk_thursday.set_sensitive(sw_days and sw_active)
+        self.chk_friday.set_sensitive(sw_days and sw_active)
+        self.chk_saturday.set_sensitive(sw_days and sw_active)
+        self.chk_sunday.set_sensitive(sw_days and sw_active)
+
+        sw_snooze = self.sw_snooze.get_active()
+        self.spb_snooze.set_sensitive(sw_snooze)
+
+
 
     def on_sw_days_activated(self, switch, gparam):
         self.update_sensitives()

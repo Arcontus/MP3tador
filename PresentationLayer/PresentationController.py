@@ -19,8 +19,6 @@ import PresentationLayer.Option
 import EventDispatcher.EventDispatcher
 
 
-
-
 def start_gui():
     Gtk.main()
 
@@ -323,10 +321,18 @@ class OptionScreenController():
             self.logic_controller = logic_controller
 
     def show_all(self):
-        self.window = PresentationLayer.Option.OptionWindow(my_option_screen_controller=self)
+        self.window = PresentationLayer.Option.OptionWindow(self)
+        self.get_options()
         self.window.show_all()
 
-    def save_options(self):
-        print("Pending save")
+    def get_options(self):
+        self.options = self.logic_controller.get_options()
+        self.window.load_options(self.options)
+
+    def load_options(self):
+        return self.logic_controller.get_options()
+
+    def save_options(self, options_dict):
+        self.logic_controller.save_options(options_dict)
 
 

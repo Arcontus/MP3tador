@@ -86,6 +86,7 @@ class MusicPlayer:
                 if self.is_pause is False:
                     pygame.mixer.music.play()
                     #Opciones.encender_altavoces()
+                    self.my_logic_controller.switch_on_speakers()
                     self.is_playing = True
                     self.set_info()
 
@@ -115,6 +116,7 @@ class MusicPlayer:
         self.is_playing = False
         self.is_pause = False
         #Opciones.apagar_altavoces()
+        self.my_logic_controller.switch_off_speakers()
         self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyInfoEvent(
                     EventDispatcher.EventDispatcher.MyInfoEvent.SET_NEW_MESSAGE,
