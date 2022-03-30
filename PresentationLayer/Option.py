@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import gi
-from LogicLayer.GPIO import power_speakers_GPIO
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 import PresentationLayer.PresentationController

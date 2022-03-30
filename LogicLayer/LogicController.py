@@ -38,6 +38,7 @@ class MainLogicController:
         self.clock = LogicLayer.Clock.Clock()
         self.player = LogicLayer.MusicPlayer.MusicPlayer(self, self.event_dispatcher)
         self.alarm = LogicLayer.Alarm.Alarm(self, self.clock, self.event_dispatcher)
+        self.GPIO_controller = LogicLayer.GPIO.GPIOController()
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
 
@@ -214,12 +215,12 @@ class MainLogicController:
     def switch_on_speakers(self):
         if self.data.get_options()["is_enable_GPIO"]:
             #Start speakers
-            LogicLayer.GPIO.encender_altavoces()
+            self.GPIO_controller.encender_altavoces()
 
     def switch_off_speakers(self):
         if self.data.get_options()["is_enable_GPIO"]:
             # Stop speakers
-            LogicLayer.GPIO.apagar_altavoces()
+            self.GPIO_controller.apagar_altavoces()
 
 
     @staticmethod

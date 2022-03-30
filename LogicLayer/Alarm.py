@@ -27,7 +27,7 @@ class Alarm:
 
 
     def check_time(self, alarm):
-        if alarm['minutes'] == self.clock.get_minutes() and alarm['hours'] == self.clock.get_horurs():
+        if alarm['minutes'] == self.clock.get_minutes() and alarm['hours'] == self.clock.get_hours():
             return True
         return False
 

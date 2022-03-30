@@ -141,7 +141,7 @@ class MusicPlayer:
     def set_info(self):
         self.unload_info()
         audio_file = eyed3.load(self.current_song)
-        print(audio_file.tag)
+
         if not audio_file.tag:
             audio_file.initTag()
         if audio_file.tag.artist:

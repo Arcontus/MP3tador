@@ -1,14 +1,11 @@
 from datetime import datetime, timedelta
 
 
-
-class Clock():
+class Clock:
     def __init__(self):
         # make it private
-
+        self._time = None
         self.update()
-        # clock hands
-        # self._update_id = GObject.timeout_add(200, self.update)
 
     def update(self):
         # update the time
@@ -32,7 +29,7 @@ class Clock():
     def get_minutes(self):
         return self._time.now().minute
 
-    def get_horurs(self):
+    def get_hours(self):
         return self._time.now().hour
 
     def get_week_day(self):
@@ -55,7 +52,7 @@ class Cronometer():
         # update the time
         self._time = datetime.now()
 
-        if self.state is 1:
+        if self.state == 1:
             return True  # keep running this event
         else:
             return False
