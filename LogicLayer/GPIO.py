@@ -74,28 +74,23 @@ class GPIOController:
             # Something else, not a pi.
             return None
 
-    ## Load option parameters.
-    def cargar_parametros(self, gpio_num):
-        self.GPIO_num = gpio_num
-        self.platform = self.platform_detect()
-        print(self.platform)
-
     ## Power on speakers with GPIO Relay
     def encender_altavoces(self):
+        print("Encendiendo altavoces")
         if self.platform != "OTHER":
             # The script as below using BCM GPIO 00..nn numbers
             GPIO.setmode(GPIO.BCM)
             # Set relay pins as output
             GPIO.setup(self.GPIO_num, GPIO.OUT)
             GPIO.output(self.GPIO_num, True)
-            print("Encendiendo altavoces")
 
     ## Power down speakers with GPIO Relay
     def apagar_altavoces(self):
+        print("Apagando altavoces")
         if self.platform != "OTHER":
             # The script as below using BCM GPIO 00..nn numbers
             GPIO.setmode(GPIO.BCM)
             # Set relay pins as output
             GPIO.setup(self.GPIO_num, GPIO.OUT)
             GPIO.output(self.GPIO_num, False)
-            print("Apagando altavoces")
+

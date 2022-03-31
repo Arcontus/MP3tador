@@ -30,7 +30,7 @@ class MainDataController:
 
     @staticmethod
     def get_options():
-        return DataLayer.Options.options
+        return DataLayer.Options.get_options()
 
     @staticmethod
     def get_alarm(name):

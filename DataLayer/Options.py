@@ -7,6 +7,9 @@ options = {
     "is_enable_GPIO": False
 }
 
+def get_options():
+    load_options()
+    return options
 
 def load_options():
     if not os.path.exists(option_dir):
@@ -18,6 +21,7 @@ def load_options():
     else:
         opt = Options()
         opt.save_params()
+        opt.load()
 
 
 def save_options():
@@ -32,7 +36,6 @@ class Options:
         self.load_params()
 
     def load_params(self):
-        print("Loading params *****")
         if os.path.isfile(option_file):
             file = open(option_file, "r")
             for line in file:

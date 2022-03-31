@@ -50,16 +50,13 @@ class OptionWindow(Gtk.Window):
         self.show_all()
 
     def on_btn_guardar_clicked(self, widget):
-        self.save_options()
+        self.my_option_screen_controller.save_options(self.options)
 
     def load_options(self, option_dic):
         self.options = option_dic
         self.sw_power_speakers.set_active(self.options["is_enable_GPIO"])
         self.lst_GPIO_pinout.set_active(self.get_GPIO_pinout_lst_position_by_num(self.options["GPIO"]))
         self.update_sensitives()
-
-    def save_options(self):
-        self.my_option_screen_controller.save_options(self.options)
 
     def add_GPIO_pinout(self):
         for i in self.GPIO_pinout_list:
@@ -74,15 +71,13 @@ class OptionWindow(Gtk.Window):
         return False
 
     def on_lst_GPIO_pinout(self, widget):
+        self.options["GPIO"] = self.lst_GPIO_pinout.get_active_text()[5:]
         self.update_sensitives()
         self.on_sw_power_speakers(widget, widget)
 
     def on_sw_power_speakers(self, widget, gparam):
         self.options["is_enable_GPIO"] = self.sw_power_speakers.get_active()
         self.update_sensitives()
-
-        if self.options["is_enable_GPIO"]:
-            self.options["GPIO"] = self.lst_GPIO_pinout.get_active_text()[5:]
         #     self.get_GPIO_pinout_lst_position_by_num(self.options["GPIO"])
 
     def update_sensitives(self):

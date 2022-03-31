@@ -39,9 +39,9 @@ class MainLogicController:
         self.player = LogicLayer.MusicPlayer.MusicPlayer(self, self.event_dispatcher)
         self.alarm = LogicLayer.Alarm.Alarm(self, self.clock, self.event_dispatcher)
         self.GPIO_controller = LogicLayer.GPIO.GPIOController()
+        self.GPIO_controller.GPIO_num = self.data.get_options()["GPIO"]
         self.last_minute_check = -1
         self._update_id = GObject.timeout_add(1000, self.update_time, None)
-
 
     def update_time(self, extra):
         # Here the code to check every second
@@ -83,7 +83,6 @@ class MainLogicController:
 
     def get_options(self):
         return self.data.get_options()
-
 
     # This method read the list of alarm names, and compare with his pattern.
     # If the pattern exists, it try with patern(n) where (n) is the next free number.
@@ -146,6 +145,7 @@ class MainLogicController:
 
     def save_options(self, options):
         if self.data.save_options(options):
+            self.GPIO_controller.GPIO_num = options['GPIO']
             self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyOptionEvent(
                     EventDispatcher.EventDispatcher.MyOptionEvent.SET_OPTIONS,
@@ -221,7 +221,6 @@ class MainLogicController:
         if self.data.get_options()["is_enable_GPIO"]:
             # Stop speakers
             self.GPIO_controller.apagar_altavoces()
-
 
     @staticmethod
     def validate_filename(filename):

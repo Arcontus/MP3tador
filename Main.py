@@ -16,8 +16,8 @@ dispatcher = EventDispatcher.EventDispatcher.EventDispatcher()
 main_logic = LogicLayer.LogicController.MainLogicController(event_dispatcher=dispatcher)
 
 # alarm = {'name': 'prueba', 'active': False, 'days': False, 'monday': False, 'tuesday': False,
-#                       'wednesday': False, 'thursday': False, 'friday': False, 'saturday': False, 'sunday': False,
-#                       'hours': 0, 'minutes': 0, 'library': "Anna", 'snooze': False, 'min_snooze': 5}
+#                        'wednesday': False, 'thursday': False, 'friday': False, 'saturday': False, 'sunday': False,
+#                        'hours': 0, 'minutes': 0, 'library': "Anna", 'snooze': False, 'min_snooze': 5}
 # alarm2 = {'name': 'prueba2', 'active': False, 'days': False, 'monday': False, 'tuesday': False,
 #                       'wednesday': False, 'thursday': False, 'friday': False, 'saturday': False, 'sunday': False,
 #                       'hours': 0, 'minutes': 0, 'library': "Anna", 'snooze': False, 'min_snooze': 5}

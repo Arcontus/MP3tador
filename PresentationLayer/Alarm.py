@@ -228,6 +228,7 @@ class AlarmConfig(Gtk.Window):
     def load_params(self, alarm_dict):
         self.alarm = alarm_dict
         self.ent_name.set_text(self.alarm['name'])
+        self.ent_name.set_sensitive(False)
         self.sw_active.set_active(self.alarm['active'])
         self.sw_days.set_active(self.alarm['days'])
         self.chk_monday.set_active(self.alarm['monday'])
