@@ -124,7 +124,7 @@ class LibraryConfigWindow(Gtk.Window):
         self.lbl_num_items = Gtk.Label("Canciones en la biblioteca: " + str(self.num_items))
         self.grid.attach_next_to(self.lbl_num_items, self.name, Gtk.PositionType.RIGHT, 2, 1)
 
-        self.grid.attach_next_to(self.scrollable_treelist, self.name, Gtk.PositionType.BOTTOM, 5, 7)
+        self.grid.attach_next_to(self.scrollable_treelist, self.name, Gtk.PositionType.BOTTOM, 5, 5)
         self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 1, 1)
         for i, button in enumerate(self.buttons[1:]):
             self.grid.attach_next_to(button, self.buttons[i], Gtk.PositionType.RIGHT, 1, 1)
