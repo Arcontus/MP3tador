@@ -84,6 +84,15 @@ class MainLogicController:
     def get_options(self):
         return self.data.get_options()
 
+    def check_if_libary_is_linked(self, name):
+        my_alarm_list = self.get_alarm_list()
+        for alarm_name in my_alarm_list:
+            my_alarm = self.get_alarm_parameters(alarm_name)
+            if my_alarm['library'] == name:
+                return True
+        return False
+
+
     # This method read the list of alarm names, and compare with his pattern.
     # If the pattern exists, it try with patern(n) where (n) is the next free number.
     def get_next_alarm_name(self):

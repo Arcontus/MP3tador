@@ -18,6 +18,7 @@ class LibraryManagerWindow(Gtk.Window):
         self.add(window)
         self.connect('delete-event', self.delete_event)
         self.lst_library = Gtk.ComboBoxText()
+        self.lst_library.connect("changed", self.on_library_changed)
 
         self.btn_add_library = Gtk.Button(label="Nueva biblioteca")
         self.btn_add_library.connect("clicked", self.on_btn_add_library_clicked)
@@ -28,10 +29,13 @@ class LibraryManagerWindow(Gtk.Window):
         self.btn_mdf_library = Gtk.Button(label="Modificar")
         self.btn_mdf_library.connect("clicked", self.on_btn_mdf_library_clicked)
 
+        self.lbl_is_used = Gtk.Label(label="no vinculada")
+
         window.attach(self.btn_add_library, 2, 5, 0, 1)
         window.attach(self.lst_library, 2, 5, 2, 3)
         window.attach(self.btn_rm_library, 0, 1, 2, 3)
         window.attach(self.btn_mdf_library, 6, 7, 2, 3)
+        window.attach(self.lbl_is_used, 1, 2, 2, 3)
 
     def reload_library_items(self, items):
         self.reset_library_items()
@@ -48,17 +52,26 @@ class LibraryManagerWindow(Gtk.Window):
     def on_btn_add_library_clicked(self, widget):
         self.my_library_screen_controller.open_library_config()
 
-    def get_library(self):
-        a =1
-
     def on_btn_rm_library_clicked(self, widget):
         self.my_library_screen_controller.delete_library(self.lst_library.get_active_text())
 
     def on_btn_mdf_library_clicked(self, widget):
         self.my_library_screen_controller.open_library_config(self.lst_library.get_active_text())
 
-    def delete_event(self, widget, event=None):
-        a =1
+    def check_if_libary_is_linked(self):
+        is_linked = self.my_library_screen_controller.check_if_libary_is_linked(self.lst_library.get_active_text())
+        if is_linked:
+            self.lbl_is_used.set_text("Vinculada")
+            self.btn_rm_library.set_sensitive(False)
+        else:
+            self.lbl_is_used.set_text("No vinculada")
+            self.btn_rm_library.set_sensitive(True)
+
+    def on_library_changed(self, a):
+        self.check_if_libary_is_linked()
+
+    def delete_event(self, b, c):
+        a = 1;
 
 
 class LibraryConfigWindow(Gtk.Window):

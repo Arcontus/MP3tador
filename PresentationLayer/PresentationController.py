@@ -166,6 +166,7 @@ class LibraryScreenController:
     def get_items(self):
         self.library = self.logic_controller.get_library_list()
         self.window.reload_library_items(self.library)
+        self.window.check_if_libary_is_linked()
 
     def reload_library_items(self, event):
         self.window.reload_library_items(event.data)
@@ -204,6 +205,9 @@ class LibraryScreenController:
 
     def delete_song_from_library(self, library, song):
         self.logic_controller.delete_song_from_library(library, song)
+
+    def check_if_libary_is_linked(self, name):
+        return self.logic_controller.check_if_libary_is_linked(name)
 
 
 class AlarmScreenController:
