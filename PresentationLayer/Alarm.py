@@ -357,7 +357,7 @@ class AlarmPage(ConsoleInfo):
         ConsoleInfo.__init__(self)
         self.lblhour = Gtk.Label(label="")
         self.lbldate = Gtk.Label(label="")
-        self.table = Gtk.Table(11, 7, True)
+        self.table = Gtk.Table(10, 4, True)
         self.table.set_border_width(20)
         code1 = []
         code2 = code1
@@ -376,7 +376,7 @@ class AlarmPage(ConsoleInfo):
             self.lbl_btn_snooze = "Snooze {} Min".format(self.my_alarm['min_snooze'])
             self.btn_snooze.set_label(self.lbl_btn_snooze)
             self.btn_snooze.connect("clicked", self.on_btn_snooze_clicked)
-            self.table.attach(self.btn_snooze, 4, 6, 2, 4)
+            self.table.attach(self.btn_snooze, 2, 4, 2, 4)
         self.lst_sw_deactivate = []
         self.lst_lbl_deactivate = []
         self.code1 = []
@@ -399,9 +399,9 @@ class AlarmPage(ConsoleInfo):
         #self.info_max_leng = 34
         #self.txt_info.set_max_length(self.info_max_leng)
 
-        self.table.attach(self.txt_info, 0, 6, 0, 1)
-        self.table.attach(self.lbldate, 0, 5, 1, 2)
-        self.table.attach(self.lblhour, 0, 3, 2, 4)
+        self.table.attach(self.txt_info, 0, 4, 0, 1)
+        self.table.attach(self.lbldate, 0, 2, 1, 2)
+        self.table.attach(self.lblhour, 0, 2, 2, 4)
 
         self.table.attach(self.lbl_combination1, 1, 4, 8, 9)
         self.table.attach(self.lbl_combination2, 1, 4, 9, 10)
@@ -463,10 +463,9 @@ class AlarmPage(ConsoleInfo):
         self.my_parent_window.delete_alarm_page(self)
 
     def set_hour(self, event):
-        self.lblhour.set_markup(str("<span font='50' foreground='"+self.font_color+"'>Hora Actual: "+event.data)+"</span>")
+        self.lblhour.set_markup(str("<span font='20' foreground='"+self.font_color+"'>Hora Actual: "+event.data)+"</span>")
 
     def set_date(self, event):
-        print("**************" + event.data)
         self.lbldate.set_markup(str("<span variant='smallcaps'>"+event.data)+"</span>")
 
     def set_snooze_crono(self, event):
