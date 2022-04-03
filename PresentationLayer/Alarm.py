@@ -318,6 +318,7 @@ class SoundAlarm(Gtk.Window):
         self.alarm_list.append(alarm)
         self.alarm_pages.append(my_page)
         self.notebook.append_page(my_page.get_table(), Gtk.Label(alarm['name']))
+        #my_page.set_date(self.my_alarm_screen_controller.ge)
         self.notebook.show_all()
 
 
@@ -375,7 +376,7 @@ class AlarmPage(ConsoleInfo):
             self.lbl_btn_snooze = "Snooze {} Min".format(self.my_alarm['min_snooze'])
             self.btn_snooze.set_label(self.lbl_btn_snooze)
             self.btn_snooze.connect("clicked", self.on_btn_snooze_clicked)
-            self.table.attach(self.btn_snooze, 0, 3, 5, 6)
+            self.table.attach(self.btn_snooze, 4, 6, 2, 4)
         self.lst_sw_deactivate = []
         self.lst_lbl_deactivate = []
         self.code1 = []
@@ -385,9 +386,9 @@ class AlarmPage(ConsoleInfo):
             self.lst_lbl_deactivate.append(Gtk.Label(label=i))
             self.lst_sw_deactivate[i].connect("notify::active", self.on_sw_deact_activated)
             if (i < 4):
-                self.table.attach(self.lst_sw_deactivate[i], i, i + 1, 7, 8)
+                self.table.attach(self.lst_sw_deactivate[i], i, i + 1, 5, 6)
             else:
-                self.table.attach(self.lst_sw_deactivate[i], i - 4, i - 3, 9, 10)
+                self.table.attach(self.lst_sw_deactivate[i], i - 4, i - 3, 7, 8)
         self.lbl_combination1 = Gtk.Label()
         self.lbl_combination2 = Gtk.Label()
         self.txt_combination1 = ""
@@ -398,12 +399,12 @@ class AlarmPage(ConsoleInfo):
         #self.info_max_leng = 34
         #self.txt_info.set_max_length(self.info_max_leng)
 
-        self.table.attach(self.txt_info, 1, 6, 1, 2)
-        self.table.attach(self.lbldate, 0, 5, 2, 3)
-        self.table.attach(self.lblhour, 0, 5, 3, 5)
+        self.table.attach(self.txt_info, 0, 6, 0, 1)
+        self.table.attach(self.lbldate, 0, 5, 1, 2)
+        self.table.attach(self.lblhour, 0, 3, 2, 4)
 
-        self.table.attach(self.lbl_combination1, 1, 4, 10, 11)
-        self.table.attach(self.lbl_combination2, 1, 4, 11, 12)
+        self.table.attach(self.lbl_combination1, 1, 4, 8, 9)
+        self.table.attach(self.lbl_combination2, 1, 4, 9, 10)
 
     def get_table(self):
         return self.table
@@ -443,9 +444,9 @@ class AlarmPage(ConsoleInfo):
         for i in range(8):
             self.code2.append(0)
             if (i < 4):
-                self.table.attach(self.lst_lbl_deactivate[i], i, i+1, 6, 7)
+                self.table.attach(self.lst_lbl_deactivate[i], i, i+1, 4, 5)
             else:
-                self.table.attach(self.lst_lbl_deactivate[i], i-4, i-3, 8, 9)
+                self.table.attach(self.lst_lbl_deactivate[i], i-4, i-3, 6, 7)
         for i in range(random.randint(4, 5)):
             self.code1.append(1)
         for i in range(8-len(self.code1)):
@@ -465,7 +466,8 @@ class AlarmPage(ConsoleInfo):
         self.lblhour.set_markup(str("<span font='50' foreground='"+self.font_color+"'>Hora Actual: "+event.data)+"</span>")
 
     def set_date(self, event):
-        self.lbldate.set_markup(str("<span variant='smallcaps'>" + event.data) + "</span>")
+        print("**************" + event.data)
+        self.lbldate.set_markup(str("<span variant='smallcaps'>"+event.data)+"</span>")
 
     def set_snooze_crono(self, event):
         if event.data[0] == self.my_alarm['name']:
