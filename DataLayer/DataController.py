@@ -122,6 +122,8 @@ class MainDataController:
         my_options = DataLayer.Options.Options()
         my_options.set_is_enable_GPIO(options_dict['is_enable_GPIO'])
         my_options.set_GPIO(options_dict['GPIO'])
+        my_options.set_is_enable_auto_stop(options_dict['is_enable_auto_stop'])
+        my_options.set_auto_stop_after_minutes(options_dict['auto_stop_after_minutes'])
         my_options.save_params()
 
     @staticmethod

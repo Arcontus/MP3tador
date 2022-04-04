@@ -32,9 +32,10 @@ class OptionWindow(Gtk.Window):
         self.sw_power_speakers.connect("notify::active", self.on_sw_power_speakers)
 
         self.lbl_auto_stop_alarm = Gtk.Label(label="Apagar alarmas tras")
-        adj_hours = Gtk.Adjustment(0, 0, 23, 1, 0, 0)
+        adj_hours = Gtk.Adjustment(0, 10, 240, 15, 0, 0)
         self.spb_hours = Gtk.SpinButton()
         self.spb_hours.set_adjustment(adj_hours)
+        self.spb_hours.connect("value_changed", self.on_spb_hours_change)
         self.lbl_auto_stop_alarm_hours = Gtk.Label(label="horas")
 
         self.btn_guardar = Gtk.Button(label="Guardar")
@@ -56,6 +57,7 @@ class OptionWindow(Gtk.Window):
         self.options = option_dic
         self.sw_power_speakers.set_active(self.options["is_enable_GPIO"])
         self.lst_GPIO_pinout.set_active(self.get_GPIO_pinout_lst_position_by_num(self.options["GPIO"]))
+        self.spb_hours.set_text(str(self.options["auto_stop_after_minutes"]))
         self.update_sensitives()
 
     def add_GPIO_pinout(self):
@@ -83,3 +85,6 @@ class OptionWindow(Gtk.Window):
     def update_sensitives(self):
         # Comprobamos el status del switch GPIO
         self.lst_GPIO_pinout.set_sensitive(self.options["is_enable_GPIO"])
+
+    def on_spb_hours_change(self, val1=None, val2=None):
+        self.options["auto_stop_after_minutes"] = self.spb_hours.get_text()
