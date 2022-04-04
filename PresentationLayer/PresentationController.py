@@ -151,17 +151,21 @@ class LibraryScreenController:
     def __init__(self, event_dispatcher=None, logic_controller=None):
         if event_dispatcher is not None:
             self.event_dispatcher = event_dispatcher
-            self.event_dispatcher.add_event_listener(
-                EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
         if logic_controller is None:
             raise Exception('Logic controller is needed')
         else:
             self.logic_controller = logic_controller
 
     def show_window(self):
+        self.event_dispatcher.add_event_listener(
+            EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
         self.window = PresentationLayer.Library.LibraryManagerWindow(self)
         self.get_items()
         self.window.show_all()
+
+    def close_window(self):
+        self.event_dispatcher.remove_event_listener(
+            EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
 
     def get_items(self):
         self.library = self.logic_controller.get_library_list()
@@ -210,14 +214,12 @@ class LibraryScreenController:
         return self.logic_controller.check_if_libary_is_linked(name)
 
 
+
+
 class AlarmScreenController:
     def __init__(self, event_dispatcher=None, logic_controller=None):
         if event_dispatcher is not None:
             self.event_dispatcher = event_dispatcher
-            self.event_dispatcher.add_event_listener(
-                EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST, self.reload_alarm_items)
-            self.event_dispatcher.add_event_listener(
-                EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
         if logic_controller is None:
             raise Exception('Logic controller is needed')
         else:
@@ -225,9 +227,19 @@ class AlarmScreenController:
         self.my_sound_alarm = None
 
     def show_window(self):
+        self.event_dispatcher.add_event_listener(
+            EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST, self.reload_alarm_items)
+        self.event_dispatcher.add_event_listener(
+            EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
         self.window = PresentationLayer.Alarm.AlarmManager(self)
         self.get_items()
         self.window.show_all()
+
+    def close_window(self):
+        self.event_dispatcher.remove_event_listener(
+            EventDispatcher.EventDispatcher.MyAlarmEvent.SET_ALARM_LIST, self.reload_alarm_items)
+        self.event_dispatcher.remove_event_listener(
+            EventDispatcher.EventDispatcher.MyLibraryEvent.SET_LIBRARY_LIST, self.reload_library_items)
 
     def get_items(self):
         self.library = self.logic_controller.get_library_list()

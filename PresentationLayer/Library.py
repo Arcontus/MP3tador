@@ -71,7 +71,7 @@ class LibraryManagerWindow(Gtk.Window):
         self.check_if_libary_is_linked()
 
     def delete_event(self, b, c):
-        a = 1;
+        self.my_library_screen_controller.close_window()
 
 
 class LibraryConfigWindow(Gtk.Window):
@@ -153,12 +153,13 @@ class LibraryConfigWindow(Gtk.Window):
         self.name.set_sensitive(False)
 
     def on_btn_accept_clicked(self, widget):
-        self.library_dic = {'name': self.name.get_text(), 'items': len(self.library),
-                            'songs': self.library}
-        self.my_library_screen_controller.save_library(self.library_dic)
+        if len(self.library) > 0:
+            self.library_dic = {'name': self.name.get_text(), 'items': len(self.library),
+                                'songs': self.library}
+            self.my_library_screen_controller.save_library(self.library_dic)
+            self.close()
 
     def on_btn_cancel_clicked(self, widget):
-
         self.close()
 
     def delete_event(self, widget, event=None):
