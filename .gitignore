@@ -1,9 +1,9 @@
-Grand Magus/
 *.pyc
 *.mp3
+*.alarm
+*.lib
+*.opt
 .idea/
-Once/
-alarmas/
-bibliotecas/
-opciones.txt
-/opciones/options.opt
+alarms/
+libraries/
+options/

@@ -13,7 +13,7 @@ class OptionWindow(Gtk.Window):
 
         self.options = {'GPIO': 12, 'is_enable_GPIO': False}
 
-        Gtk.Window.__init__(self, title="Opciones")
+        Gtk.Window.__init__(self, title="Options")
         self.window = Gtk.Table(1, 1, True)
         self.set_border_width(20)
         self.add(self.window)
@@ -28,17 +28,17 @@ class OptionWindow(Gtk.Window):
         self.lst_GPIO_pinout.connect("changed", self.on_lst_GPIO_pinout)
 
         self.sw_power_speakers = Gtk.Switch()
-        self.lbl_power_speakers = Gtk.Label(label="Encender Altavoces (Solo para Raspberry)")
+        self.lbl_power_speakers = Gtk.Label(label="Switch On Speakers (Only for Raspberry)")
         self.sw_power_speakers.connect("notify::active", self.on_sw_power_speakers)
 
-        self.lbl_auto_stop_alarm = Gtk.Label(label="Apagar alarmas tras")
+        self.lbl_auto_stop_alarm = Gtk.Label(label="Switch off alarm after")
         adj_hours = Gtk.Adjustment(0, 10, 240, 15, 0, 0)
         self.spb_hours = Gtk.SpinButton()
         self.spb_hours.set_adjustment(adj_hours)
         self.spb_hours.connect("value_changed", self.on_spb_hours_change)
-        self.lbl_auto_stop_alarm_hours = Gtk.Label(label="horas")
+        self.lbl_auto_stop_alarm_hours = Gtk.Label(label="hours")
 
-        self.btn_guardar = Gtk.Button(label="Guardar")
+        self.btn_guardar = Gtk.Button(label="Save")
         self.btn_guardar.connect("clicked", self.on_btn_guardar_clicked)
 
         self.window.attach(self.lbl_power_speakers, 0,3, 0,1)

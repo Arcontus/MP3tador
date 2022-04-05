@@ -159,7 +159,7 @@ class MusicPlayer:
         else:
             self.current_song_dic['album'] = "UNKNOWN"
 
-        self.info_string_current_song = ["Canción: {1}, Artista: {0}, Album: {2}".format(
+        self.info_string_current_song = ["Song: {1}, Artist: {0}, Album: {2}".format(
             self.current_song_dic['artist'],
             self.current_song_dic['name'],
             self.current_song_dic['album']),

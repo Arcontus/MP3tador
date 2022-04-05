@@ -14,7 +14,7 @@ class AlarmManager(Gtk.Window):
             self.my_alarm_screen_controller = my_alarm_screen_controller
         else:
             raise NameError("AlarmManager needs alarm_screen_controller instance")
-        self.window = Gtk.Window.__init__(self, title="Menu de alarmas")
+        self.window = Gtk.Window.__init__(self, title="Alarm Menu")
 
         table = Gtk.Table(6, 4, True)
         self.add(table)
@@ -22,15 +22,15 @@ class AlarmManager(Gtk.Window):
         self.lst_alarms = Gtk.ComboBoxText()
         self.alarm_button_list = []
 
-        self.btn_add_alarm = Gtk.Button.new_with_label("Agregar nueva alarma")
+        self.btn_add_alarm = Gtk.Button.new_with_label("Add new alarm")
         self.btn_add_alarm.connect("clicked", self.on_click_btn_add_alarm)
-        self.btn_modify = Gtk.Button.new_with_label("Modificar")
-        self.btn_modify.connect("clicked", self.on_click_modificar)
-        self.btn_rm_alarm = Gtk.Button.new_with_label("Eliminar")
+        self.btn_modify = Gtk.Button.new_with_label("Modify")
+        self.btn_modify.connect("clicked", self.on_click_modify)
+        self.btn_rm_alarm = Gtk.Button.new_with_label("Delete")
         self.btn_rm_alarm.connect("clicked", self.on_click_btn_rm_alarm)
 
-        self.lbl_fast_alarm = Gtk.Label(label="Alarma rapida")
-        self.lbl_library = Gtk.Label(label="Biblioteca")
+        self.lbl_fast_alarm = Gtk.Label(label="Quick alarm")
+        self.lbl_library = Gtk.Label(label="Library")
         self.btn_add_quick_allarm15 = Gtk.Button.new_with_label("15 Min")
         self.btn_add_quick_allarm15.connect("clicked", self.on_click_btn_add_quick_allarm15)
         self.btn_add_quick_allarm30 = Gtk.Button.new_with_label("30 Min")
@@ -78,7 +78,7 @@ class AlarmManager(Gtk.Window):
     def add_library_item(self, item):
         self.lst_library.append_text(item)
 
-    def on_click_modificar(self, widget):
+    def on_click_modify(self, widget):
         self.my_alarm_screen_controller.modify_alarm_config(self.lst_alarms.get_active_text())
 
     def on_click_btn_add_alarm(self, widget):
@@ -120,42 +120,42 @@ class AlarmConfig(Gtk.Window):
         self.set_border_width(20)
         self.add(table)
 
-        lbl_name = Gtk.Label("Nombre")
+        lbl_name = Gtk.Label("Name")
         self.ent_name = Gtk.Entry()
         self.ent_name.set_text(self.alarm_name)
 
-        lbl_active = Gtk.Label("Activa")
+        lbl_active = Gtk.Label("Activate")
         self.sw_active = Gtk.Switch()
         self.sw_active.connect("notify::active", self.on_sw_active_activated)
 
-        self.lbl_days = Gtk.Label("Todos los dias")
+        self.lbl_days = Gtk.Label("All days")
         self.sw_days = Gtk.Switch()
         self.sw_days.connect("notify::active", self.on_sw_days_activated)
 
-        self.chk_monday = Gtk.CheckButton().new_with_label("Lunes")
-        self.chk_tuesday = Gtk.CheckButton().new_with_label("Martes")
-        self.chk_wednesday = Gtk.CheckButton().new_with_label("Miercoles")
-        self.chk_thursday = Gtk.CheckButton().new_with_label("Jueves")
-        self.chk_friday = Gtk.CheckButton().new_with_label("Viernes")
-        self.chk_saturday = Gtk.CheckButton().new_with_label("Sabado")
-        self.chk_sunday = Gtk.CheckButton().new_with_label("Domingo")
+        self.chk_monday = Gtk.CheckButton().new_with_label("Monday")
+        self.chk_tuesday = Gtk.CheckButton().new_with_label("Tuesday")
+        self.chk_wednesday = Gtk.CheckButton().new_with_label("Thursday")
+        self.chk_thursday = Gtk.CheckButton().new_with_label("Wednesday")
+        self.chk_friday = Gtk.CheckButton().new_with_label("Friday")
+        self.chk_saturday = Gtk.CheckButton().new_with_label("Saturday")
+        self.chk_sunday = Gtk.CheckButton().new_with_label("Sunday")
 
-        self.lbl_hours = Gtk.Label("Horas")
+        self.lbl_hours = Gtk.Label("Hours")
         adj_hours = Gtk.Adjustment(0, 0, 23, 1, 0, 0)
         self.spb_hours = Gtk.SpinButton()
         self.spb_hours.set_adjustment(adj_hours)
 
-        self.lbl_minutes = Gtk.Label("Minutos")
+        self.lbl_minutes = Gtk.Label("Minutes")
         adj_minutes = Gtk.Adjustment(0, 0, 59, 1, 0, 0)
         self.spb_minutes = Gtk.SpinButton()
         self.spb_minutes.set_adjustment(adj_minutes)
 
-        self.btn_save = Gtk.Button.new_with_label("Guardar")
+        self.btn_save = Gtk.Button.new_with_label("Save")
         self.btn_save.connect("clicked", self.on_click_save)
-        self.btn_cancel = Gtk.Button.new_with_label("Cancelar")
+        self.btn_cancel = Gtk.Button.new_with_label("Cancel")
         self.btn_cancel.connect("clicked", self.on_click_cancel)
 
-        self.lbl_snooze = Gtk.Label("Dormitar")
+        self.lbl_snooze = Gtk.Label("Snooze")
         self.sw_snooze = Gtk.Switch()
         self.sw_snooze.connect("notify::active", self.on_sw_snooze_activated)
         self.spb_snooze = Gtk.SpinButton()
@@ -394,7 +394,7 @@ class AlarmPage(ConsoleInfo):
         self.txt_combination1 = ""
         self.txt_combination2 = self.txt_combination1
         self.new_combination()
-        self.add_msg("Alarma {}".format(self.my_alarm['name']))
+        self.add_msg("Alarm {}".format(self.my_alarm['name']))
 
         #self.info_max_leng = 34
         #self.txt_info.set_max_length(self.info_max_leng)
@@ -423,7 +423,7 @@ class AlarmPage(ConsoleInfo):
             self.code2[int(self.get_switch_number_from_label(switch))] = 1
         else:
             self.code2[int(self.get_switch_number_from_label(switch))] = 0
-        self.txt_combination2 = "Combinacion introducida: {0}".format(self.code2)
+        self.txt_combination2 = "Combination entered: {0}".format(self.code2)
         self.lbl_combination2.set_text(self.txt_combination2)
         print(self.code1)
         print(self.code2)
@@ -452,7 +452,7 @@ class AlarmPage(ConsoleInfo):
         for i in range(8-len(self.code1)):
             self.code1.append(0)
         random.shuffle(self.code1)
-        self.txt_combination1 = "Combinacion de desbloqueo: "+str(self.code1)
+        self.txt_combination1 = "Unlock Combination: "+str(self.code1)
         self.lbl_combination1.set_text(self.txt_combination1)
 
     def delete_event(self):
@@ -463,7 +463,7 @@ class AlarmPage(ConsoleInfo):
         self.my_parent_window.delete_alarm_page(self)
 
     def set_hour(self, event):
-        self.lblhour.set_markup(str("<span font='20' foreground='"+self.font_color+"'>Hora Actual: "+event.data)+"</span>")
+        self.lblhour.set_markup(str("<span font='20' foreground='"+self.font_color+"'>Current hour: "+event.data)+"</span>")
 
     def set_date(self, event):
         self.lbldate.set_markup(str("<span variant='smallcaps'>"+event.data)+"</span>")
@@ -472,7 +472,7 @@ class AlarmPage(ConsoleInfo):
         if event.data[0] == self.my_alarm['name']:
             result = event.data[1]
             if result:
-                self.btn_snooze.set_label(self.lbl_btn_snooze + "\n Próxima activación en: " + str(event.data[1])[:-7])
+                self.btn_snooze.set_label(self.lbl_btn_snooze + "\n Next activation: " + str(event.data[1])[:-7])
             else:
                 self.btn_snooze.set_label(self.lbl_btn_snooze + "\n")
 

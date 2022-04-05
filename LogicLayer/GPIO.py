@@ -7,10 +7,11 @@ try:
     import RPi.GPIO as GPIO
 except RuntimeError:
     print("Error importing RPi.GPIO library!")
-    print("It is correct if it isn't run on a Raspberry pi.")
-    print("If is run on Raspberry, try to run 'sudo python Main.py'")
+    print("It is correct if it isn't running in a Raspberry pi.")
+    print("If it is running on Raspberry, try to run 'sudo python Main.py'")
     print("This program need superuser privileges to manage GPIO.")
-    print("RPi.GPIO library can controls the power to the speakers. If you needn't this feature, don't worry.")
+    print("RPi.GPIO library can controls the energy power for an external amplifier for the speakers.")
+    print("If you don't need this feature, don't worry abbout.")
 
 
 class GPIOController:
@@ -75,8 +76,8 @@ class GPIOController:
             return None
 
     ## Power on speakers with GPIO Relay
-    def encender_altavoces(self):
-        print("Encendiendo altavoces")
+    def switch_on_speakers(self):
+        print("Switch on speakers")
         if self.platform != "OTHER":
             # The script as below using BCM GPIO 00..nn numbers
             GPIO.setmode(GPIO.BCM)
@@ -85,8 +86,8 @@ class GPIOController:
             GPIO.output(self.GPIO_num, True)
 
     ## Power down speakers with GPIO Relay
-    def apagar_altavoces(self):
-        print("Apagando altavoces")
+    def switch_off_speakers(self):
+        print("Switch off speakers")
         if self.platform != "OTHER":
             # The script as below using BCM GPIO 00..nn numbers
             GPIO.setmode(GPIO.BCM)

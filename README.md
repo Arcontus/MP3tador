@@ -1,45 +1,45 @@
 # MP3tador
-Aplicación diseñada para ser utilizada como despertador MP3.
+MP3tador is an application designed as a MP3 Wake up clock.
 
 
 # Preview
 
-Pantalla principal
+Main screen
 ------------------
 ![Preview](http://i.imgur.com/7jbkR6v.png)
 
-Menú de alarmas
+Alarm menu
 ---------------
 ![Preview](http://i.imgur.com/t8rv8Ai.png)
 
-Opciones de las alarmas
+Alarm options
 -----------------------
 ![Preview](http://i.imgur.com/esTu7sT.png)
 
-Sonando una alarma
+Listening an alarm
 ------------------
 ![Preview](http://i.imgur.com/j0UZpdH.png)
 
 
-#Video explicación
+#Video explanation SPANISH (Old version)
 https://youtu.be/nYv1LNTW3rA
+
+#Video explanation ENGLISH
+...TODO...
 
 
 # Todo
-	* Fotos del proyecto con Raspberry pi 2 + Pantalla táctil 5" + Altavoces PC/Cadena de música.
-	* Lanzar script para encender/apagar altavoces: Mediante los puertos GPIO de la raspberry pi, 
-	queremos conectar y desconectar un enchufe donde colocaremos nuestros altavoces mediante un
-	relay.
+    * Pictures of the project with Raspberry pi 2 + 5" touch screen + Speakers / Amplifier.
 
 
-# Nota Legal
-El AUTOR no garantiza la fiabilidad del programa ni del sistema, ni se hacen responsables de cualquier 
-tipo de daños que pudieran ser ocasionados por lo que la utilización de este programa por parte del 
-Usuario se lleva a cabo por su propia cuenta y riesgo.
+# Legal notes
+The AUTHOR does not guarantee the reliability of the program or the system, nor are they responsible for any
+type of damage that could be caused by what the use of this program by the
+User is carried out at their own risk and expense.
 
-La manipulación de ciertos componentes puede dar lugar a la perdida de garantía de estos. La Manipulación 
-de estos componentes por parte del Usuario se lleva a cabo por su propia cuenta y riesgo.
+The manipulation of certain components can lead to the loss of their guarantee. The manipulation
+of these components by the User is carried out at his own risk.
 
 
-# Creditos
+# Credits
 2016 David Pozos <dpozosc@gmail.com>

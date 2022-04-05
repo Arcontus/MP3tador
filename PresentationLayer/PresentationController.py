@@ -194,12 +194,12 @@ class LibraryScreenController:
     def open_library_config(self, title=None):
         library = []
         if not title:
-            title = "Nueva Biblioteca"
+            title = "New Library"
             self.my_new_library_window = PresentationLayer.Library.LibraryConfigWindow(title, self)
         else:
             library_dict = self.logic_controller.get_library_parameters(title)
             library = library_dict['songs']
-            title = "Modificar Biblioteca"
+            title = "Modify Library"
             self.my_new_library_window = PresentationLayer.Library.LibraryConfigWindow(title, self)
             self.my_new_library_window.set_library(library)
             self.my_new_library_window.set_library_name(library_dict['name'])

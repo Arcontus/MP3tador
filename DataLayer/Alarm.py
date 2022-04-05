@@ -1,7 +1,7 @@
 import os
 
 alarm_list = []   ## List of all alarm objects
-alarm_dir = "./alarmas/"
+alarm_dir = "./alarms/"
 
 
 def add_alarm(alarm_id):
@@ -53,7 +53,7 @@ def get_alarm_list():
 class Alarm():
     def __init__(self):
         self.name = ""
-        self.lib_dir =  "./biblioteca/"
+        self.lib_dir =  "./libraries/"
         self.myfile = ""
         self.active = False
         self.days = False

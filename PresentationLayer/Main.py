@@ -19,10 +19,10 @@ class MainWindow(Gtk.Window, ConsoleInfo):
 
         table = Gtk.Table(8, 5, True)
         self.add(table)
-        btn_alarm = Gtk.Button(label="Alarmas")     ## TODO: Implement a variable or function to do this"
+        btn_alarm = Gtk.Button(label="Alarms")     ## TODO: Implement a variable or function to do this"
         btn_alarm.connect("clicked", self.on_btn_alarm_clicked)
 
-        btn_option = Gtk.Button(label="Opciones")
+        btn_option = Gtk.Button(label="Options")
         btn_option.connect("clicked", self.on_btn_option_clicked)
 
         self.lst_library = Gtk.ComboBoxText()
@@ -60,7 +60,7 @@ class MainWindow(Gtk.Window, ConsoleInfo):
         btn_next.set_image(img_next)
         btn_next.set_always_show_image (True)
 
-        btn_library = Gtk.Button(label="Biblioteca")
+        btn_library = Gtk.Button(label="Library")
         btn_library.connect("clicked", self.on_btn_biblioteca_clicked)
 
         table.attach(self.lbldate, 0, 8, 0, 1)

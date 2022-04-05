@@ -11,8 +11,8 @@ class LibraryManagerWindow(Gtk.Window):
             self.my_library_screen_controller = my_library_screen_controller
         else:
             raise NameError("LibraryManager needs library_screen_controller instance")
-        self.window = Gtk.Window.__init__(self, title="Menu de bibliotecas")
-        Gtk.Window.__init__(self, title="Biblioteca")
+        self.window = Gtk.Window.__init__(self, title="Library menu")
+        Gtk.Window.__init__(self, title="Library")
         window = Gtk.Table(1, 1, True)
         self.set_border_width(20)
         self.add(window)
@@ -20,16 +20,16 @@ class LibraryManagerWindow(Gtk.Window):
         self.lst_library = Gtk.ComboBoxText()
         self.lst_library.connect("changed", self.on_library_changed)
 
-        self.btn_add_library = Gtk.Button(label="Nueva biblioteca")
+        self.btn_add_library = Gtk.Button(label="New library")
         self.btn_add_library.connect("clicked", self.on_btn_add_library_clicked)
 
-        self.btn_rm_library = Gtk.Button(label="Eliminar")
+        self.btn_rm_library = Gtk.Button(label="Delete")
         self.btn_rm_library.connect("clicked", self.on_btn_rm_library_clicked)
 
-        self.btn_mdf_library = Gtk.Button(label="Modificar")
+        self.btn_mdf_library = Gtk.Button(label="Modify")
         self.btn_mdf_library.connect("clicked", self.on_btn_mdf_library_clicked)
 
-        self.lbl_is_used = Gtk.Label(label="no vinculada")
+        self.lbl_is_used = Gtk.Label(label="not linked")
 
         window.attach(self.btn_add_library, 2, 5, 0, 1)
         window.attach(self.lst_library, 2, 5, 2, 3)
@@ -61,10 +61,10 @@ class LibraryManagerWindow(Gtk.Window):
     def check_if_libary_is_linked(self):
         is_linked = self.my_library_screen_controller.check_if_libary_is_linked(self.lst_library.get_active_text())
         if is_linked:
-            self.lbl_is_used.set_text("Vinculada")
+            self.lbl_is_used.set_text("Linked")
             self.btn_rm_library.set_sensitive(False)
         else:
-            self.lbl_is_used.set_text("No vinculada")
+            self.lbl_is_used.set_text("Not linked")
             self.btn_rm_library.set_sensitive(True)
 
     def on_library_changed(self, a):
@@ -100,28 +100,28 @@ class LibraryConfigWindow(Gtk.Window):
 
         self.treeview = Gtk.TreeView(model=self.gtk_song_list)
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Cancion", renderer, text=0)
+        column = Gtk.TreeViewColumn("Song", renderer, text=0)
         column.set_sort_column_id(0)
         self.treeview.append_column(column)
 
         self.buttons = list()
-        for prog_language in ["Reproducir", "Detener", "Eliminar"]:
+        for prog_language in ["Play", "Stop", "Delete"]:
             button = Gtk.Button(prog_language)
             self.buttons.append(button)
             button.connect("clicked", self.on_selection_button_clicked)
 
         self.scrollable_treelist = Gtk.ScrolledWindow()
         self.scrollable_treelist.set_vexpand(True)
-        self.lbl_name = Gtk.Label("Nombre de la biblioteca")
+        self.lbl_name = Gtk.Label("Library name")
         self.name = Gtk.Entry()
         self.name.set_text(title)
         self.grid.attach(self.lbl_name, 0, 0, 2, 1)
         self.grid.attach_next_to(self.name, self.lbl_name, Gtk.PositionType.BOTTOM, 2, 1)
-        btn_library = Gtk.Button(label="Añadir ruta")
+        btn_library = Gtk.Button(label="Add path")
         btn_library.connect("clicked", self.on_btn_add_library_clicked)
         self.grid.attach_next_to(btn_library, self.lbl_name, Gtk.PositionType.RIGHT, 2, 1)
         self.num_items = 0
-        self.lbl_num_items = Gtk.Label("Canciones en la biblioteca: " + str(self.num_items))
+        self.lbl_num_items = Gtk.Label("Library songs: " + str(self.num_items))
         self.grid.attach_next_to(self.lbl_num_items, self.name, Gtk.PositionType.RIGHT, 2, 1)
 
         self.grid.attach_next_to(self.scrollable_treelist, self.name, Gtk.PositionType.BOTTOM, 5, 5)
@@ -131,11 +131,11 @@ class LibraryConfigWindow(Gtk.Window):
 
         self.scrollable_treelist.add(self.treeview)
 
-        btn_accept = Gtk.Button(label="Aceptar")
+        btn_accept = Gtk.Button(label="Accept")
         btn_accept.connect("clicked", self.on_btn_accept_clicked)
         self.grid.attach_next_to(btn_accept, self.buttons[0], Gtk.PositionType.BOTTOM, 1, 1)
 
-        btn_cancel = Gtk.Button(label="Cancelar")
+        btn_cancel = Gtk.Button(label="Cancel")
         btn_cancel.connect("clicked", self.on_btn_cancel_clicked)
         self.grid.attach_next_to(btn_cancel, btn_accept, Gtk.PositionType.RIGHT,1,1)
         self.show_all()
@@ -168,7 +168,7 @@ class LibraryConfigWindow(Gtk.Window):
 
     def on_selection_button_clicked(self, widget):
         button_label = widget.get_label()
-        if button_label == "Eliminar":
+        if button_label == "Delete":
             selection = self.treeview.get_selection()
             model, rows = selection.get_selected_rows()
             if len(rows) > 0:
@@ -177,14 +177,14 @@ class LibraryConfigWindow(Gtk.Window):
                     iter = model.get_iter(row)
                     model.remove(iter)
 
-        if button_label == "Reproducir":
+        if button_label == "Play":
             selection = self.treeview.get_selection()
             model, rows = selection.get_selected_rows()
             if len(rows) > 0:
                 for row in rows:
                     self.my_library_screen_controller.play_this_song(model[row][0])
 
-        if button_label == "Detener":
+        if button_label == "Stop":
             self.my_library_screen_controller.stop_song()
 
     def on_btn_add_library_clicked(self, widget):
@@ -199,17 +199,17 @@ class LibraryConfigWindow(Gtk.Window):
 
     def recalculate(self):
         self.num_items = len(self.library)
-        self.lbl_num_items.set_text("Canciones en la biblioteca: " + str(self.num_items))
+        self.lbl_num_items.set_text("Library songs: " + str(self.num_items))
         self.fill_song_list()
 
 
 class FileChooserWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Seleccion biblioteca")
+        Gtk.Window.__init__(self, title="Library selection")
         self.library = []
 
     def on_file_clicked(self, widget):
-        dialog = Gtk.FileChooserDialog("Selecciona un fichero", self,
+        dialog = Gtk.FileChooserDialog("Chose a file", self,
                                        Gtk.FileChooserAction.OPEN,
                                        (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                         Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
@@ -236,7 +236,7 @@ class FileChooserWindow(Gtk.Window):
         return self.library
 
     def on_folder_clicked(self, widget):
-        dialog = Gtk.FileChooserDialog("Selecciona una carpeta", self,
+        dialog = Gtk.FileChooserDialog("Select a folder", self,
             Gtk.FileChooserAction.SELECT_FOLDER,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              "Seleccionar", Gtk.ResponseType.OK))

@@ -1,6 +1,6 @@
 import os
 
-option_dir = "./opciones/"
+option_dir = "./options/"
 option_file = option_dir + "options.opt"
 options = {
     "GPIO": 12,

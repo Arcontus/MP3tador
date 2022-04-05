@@ -135,7 +135,7 @@ class Alarm:
                 print(len(self.crono_list))
 
     def quick_alarm(self, library, time):
-        name = "Alarma rapida"
+        name = "Quick alarm"
         self.my_quick_alarm['name'] = name
         self.my_quick_alarm['library'] = library
         self.my_quick_alarm['min_snooze'] = 10
@@ -150,10 +150,8 @@ class Alarm:
         self.snooze_alarm(name)
         self.my_quick_alarm['min_snooze'] = 10
 
-
-
     def alarm_info(self):
-        self.message_new = "Alarmas activas: {0}".format(self.alarm_actives)
+        self.message_new = "Active alarms: {0}".format(self.alarm_actives)
         if self.message_new != self.message:
             self.event_dispatcher.dispatch_event(
                 EventDispatcher.EventDispatcher.MyInfoEvent(
@@ -170,7 +168,7 @@ class Alarm:
             self.message = self.message_new
         if len(self.sound_alarms) > 0:
             for alarm in self.sound_alarms:
-                self.sound_alarms_message_new.append("Sonando alarma: {0}".format(alarm['name']))
+                self.sound_alarms_message_new.append("Listening alarm: {0}".format(alarm['name']))
 
         if self.sound_alarms_message != self.sound_alarms_message_new:
             for message in self.sound_alarms_message:

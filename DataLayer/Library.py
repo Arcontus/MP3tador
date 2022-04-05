@@ -2,7 +2,7 @@
 import os
 
 library_list = []   ## List of all library objects
-library_dir = "./bibliotecas/"
+library_dir = "./libraries/"
 
 def add_library(library):
     library_list.append(library)
@@ -65,7 +65,7 @@ class Library:
         if os.path.isfile(library_dir+self.file_name):
             my_file = open(library_dir + self.file_name, "r")
             for line in my_file:
-                if line.split(":")[0] == "cancion":
+                if line.split(":")[0] == "song":
                     self.songs.append(line.split(":")[1].rstrip())
             self.num_items = len(self.songs)
 
@@ -76,10 +76,10 @@ class Library:
         self.num_items = len(self.songs)
         if self.num_items > 0:
             my_file = open(library_dir + self.file_name, "w")
-            my_file.write("nombre:"+str(self.file_name)[:-4]+"\n")
+            my_file.write("name:"+str(self.file_name)[:-4]+"\n")
             my_file.write("items:"+str(self.num_items)+"\n")
             for i in self.songs:
-                my_file.write("cancion:"+i+"\n")
+                my_file.write("song:"+i+"\n")
             my_file.close()
             print("file saved")
         else:

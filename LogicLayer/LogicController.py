@@ -224,12 +224,12 @@ class MainLogicController:
     def switch_on_speakers(self):
         if self.data.get_options()["is_enable_GPIO"]:
             #Start speakers
-            self.GPIO_controller.encender_altavoces()
+            self.GPIO_controller.switch_on_speakers()
 
     def switch_off_speakers(self):
         if self.data.get_options()["is_enable_GPIO"]:
             # Stop speakers
-            self.GPIO_controller.apagar_altavoces()
+            self.GPIO_controller.switch_off_speakers()
 
     @staticmethod
     def validate_filename(filename):
